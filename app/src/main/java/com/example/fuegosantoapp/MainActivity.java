@@ -1,10 +1,17 @@
 package com.example.fuegosantoapp;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.os.Build;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
+   Toolbar toolbar;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,6 +22,11 @@ public class MainActivity extends AppCompatActivity {
         /*getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);*/
 
+         //Crear logica del toolbar y asignarle un titulo
+         toolbar=(Toolbar) findViewById(R.id.toolbar_inicio);
+         setSupportActionBar(toolbar);
+         //toolbar.setTitle("Fuego Santo");
+         toolbar.setSubtitle("Dios les bendiga");
 
     }
 }
