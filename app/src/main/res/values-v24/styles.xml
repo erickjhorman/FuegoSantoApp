@@ -6,11 +6,15 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
-
 </style>
 
 <style name="pantalla_bienvenido" parent="Theme.MaterialComponents.Light.NoActionBar">
     <item name="android:windowBackground">@drawable/pantalla_bienvenido</item>
 </style>
+
+    <style name="barra_navegacion" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:scrollbarThumbVertical">@color/transparent</item>
+
+    </style>
 
 </resources>
