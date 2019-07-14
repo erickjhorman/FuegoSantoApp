@@ -3,25 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/image_count"
-        android:layout_width="398dp"
-        android:layout_height="247dp"
-        android:layout_marginTop="25dp"
-        android:gravity="center"
-        android:text="Hello World"
-        android:textColor="@color/Red"
-        android:textSize="50dp"
-        android:textStyle="bold" />
-
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="422dp"
-        android:layout_height="362dp"
+        android:layout_width="match_parent"
+        android:layout_height="540dp"
         android:layout_marginTop="25dp" />
-
-
-
-
 </LinearLayout>
