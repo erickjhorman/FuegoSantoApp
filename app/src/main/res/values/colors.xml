@@ -7,8 +7,9 @@
     <color name="white">#ffffff</color>
     <color name="Red">#FF0000</color>
     <color name="transparent">#00FCFCFC</color>
-
-
+    <color name="green">#4caf50</color>
+    <color name="grey">#616161</color>
+    <color name="black">#ffffff</color>
 
 
 </resources>

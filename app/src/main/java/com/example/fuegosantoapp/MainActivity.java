@@ -9,12 +9,23 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
 import com.example.fuegosantoapp.fragmentos.Fragmento_Mensaje;
 import com.example.fuegosantoapp.fragmentos.Fragmento_articulo;
@@ -22,7 +33,21 @@ import com.example.fuegosantoapp.fragmentos.Fragmento_biblia;
 import com.example.fuegosantoapp.fragmentos.Fragmento_favoritos;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    //Edit texts for the database
+    private EditText editTextCorreo;
+    private Button buttonRegistrar;
+    private ProgressDialog progressDialog;
+
+
+
 
     private DrawerLayout drawer; //Variable to make the funcionality of the navbar
     Toolbar toolbar;
@@ -66,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new Fragmento_articulo()).commit();
 
         }*/
+
+        //Declaring the variables for the suscription
+        editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
+        buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
+        progressDialog = new ProgressDialog(this);
+        buttonRegistrar.setOnClickListener(this);
     }
 
     @Override
@@ -149,4 +180,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+
+    //Method to create a subscription of any user
+    public void suscripcionUsuario(){
+        final String email = editTextCorreo.getText().toString().trim();
+
+
+         //To create the conexion to the database through
+        progressDialog.setMessage("Registrando usuario...");
+        progressDialog.show();
+        StringRequest stringRequest  =  new StringRequest(Request.Method.POST,
+                Constants.URL_REGISTER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject (response);
+                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                 progressDialog.hide();
+                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("email" , email);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+    //To get the accion of the button
+    @Override
+    public void onClick(View view) {
+        if(view == buttonRegistrar)
+        suscripcionUsuario();
+    }
 }
