@@ -7,17 +7,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.transition.Slide;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.AuthenticationRequiredException;
 import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -39,7 +44,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //Edit texts for the database
     private EditText editTextCorreo;
@@ -54,20 +60,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ViewPager viewPager;
     CustomSwipeAdapter adapter;
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
+        //pager = findViewById(R.id.view_pager);
+
         adapter = new CustomSwipeAdapter(this);
+
+
+        viewPager.setAdapter(adapter);
         viewPager.setAdapter(adapter);
 
         //Crear logica del toolbar y asignarle un titulo
         toolbar = (Toolbar) findViewById(R.id.toolbar_inicio);
         setSupportActionBar(toolbar);
-        //toolbar.setTitle("Fuego Santo");
+        toolbar.setTitle("Fuego Santo");
         toolbar.setSubtitle("Dios les bendiga");
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        toolbar.setSubtitleTextColor(0xFFFFFFFF);
         toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
 
         //Crar funcionalidad del toolbar que abre y cierra la barra de navegacion
@@ -94,10 +109,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Declaring the variables for the suscription
         editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
-        buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
+        //buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
         progressDialog = new ProgressDialog(this);
-        buttonRegistrar.setOnClickListener(this);
+        //buttonRegistrar.setOnClickListener(this);
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -223,9 +240,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //To get the accion of the button
+
+  /*
     @Override
+
+
     public void onClick(View view) {
         if(view == buttonRegistrar)
         suscripcionUsuario();
     }
+
+*/
+
+
 }

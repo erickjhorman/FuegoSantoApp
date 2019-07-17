@@ -16,7 +16,7 @@ import com.example.fuegosantoapp.R;
 
 public class CustomSwipeAdapter extends PagerAdapter {
 
-    private  int [] image_resources = {R.drawable.sample_1,R.drawable.sample_2,R.drawable.sample_3,R.drawable.sample_4, R.drawable.sample_5,R.drawable.sample_6,R.drawable.sample_8};
+    private  int [] image_resources = {R.drawable.sample_1,R.drawable.sample_2,R.drawable.sample_3,R.drawable.sample_4, R.drawable.sample_5,R.drawable.sample_6};
     private Context ctx;
     private LayoutInflater  layoutInflater;
 
