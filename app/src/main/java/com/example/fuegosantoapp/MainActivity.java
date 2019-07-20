@@ -32,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
+import com.example.fuegosantoapp.activities.ProfileActivity;
 import com.example.fuegosantoapp.activities.loginActivity;
 import com.example.fuegosantoapp.fragmentos.Fragmento_Mensaje;
 import com.example.fuegosantoapp.fragmentos.Fragmento_articulo;
@@ -69,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         //pager = findViewById(R.id.view_pager);
+
+
+
+
 
         adapter = new CustomSwipeAdapter(this);
 

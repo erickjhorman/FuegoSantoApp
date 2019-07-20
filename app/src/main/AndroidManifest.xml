@@ -17,8 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.loginActivity"></activity>
-        <!-- <activity android:name=".activities.pantallaInicio" android:theme="@style/Theme.AppCompat.Light.NoActionBar"> -->
+        <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.loginActivity" /> <!-- <activity android:name=".activities.pantallaInicio" android:theme="@style/Theme.AppCompat.Light.NoActionBar"> -->
         <activity
             android:name=".activities.pantallaInicio"
             android:theme="@style/pantalla_bienvenido">

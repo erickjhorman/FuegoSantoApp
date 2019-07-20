@@ -56,5 +56,16 @@ SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME
          editor.apply();
          return true;
     }
+
+    public  void getUsername(){
+
+    }
+
+    public String getUserEmail(){
+        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_SUBSCRIPTOR_EMAIL, null);
+    }
+
+
 }
 

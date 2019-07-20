@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -17,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.fuegosantoapp.Constants;
+import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.RequestHandler;
 import com.example.fuegosantoapp.SharedPrefManager;
@@ -28,14 +31,24 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class loginActivity extends AppCompatActivity implements View.OnClickListener {
+public class loginActivity extends AppCompatActivity implements  View.OnClickListener   {
 
     private EditText editTextCorreo;
     private Button buttonlogin;
     private ProgressDialog progressDialog;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if(SharedPrefManager.getInstance(this).isLoggedIn()){
+            finish();
+            startActivity(new Intent(this, ProfileActivity.class));
+            return;
+        }
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -45,6 +58,7 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
         progressDialog = new ProgressDialog (this);
         progressDialog.setMessage("Por favor espere...");
         buttonlogin.setOnClickListener(this);
+
 
     }
 
@@ -68,11 +82,8 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
                                                 obj.getInt("id"),
                                                 obj.getString("email")
                                         );
-                                Toast.makeText(
-                                        getApplicationContext(),
-                                        "Usuario logeado ",
-                                        Toast.LENGTH_LONG
-                                ).show();
+                               startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                               finish();
                             } else {
                                 Toast.makeText(
                                         getApplicationContext(),
@@ -116,6 +127,17 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if (view == buttonlogin)
             subscriptorLogin();
-           /* startActivity(new Intent(this, loginActivity.class));*/
+            startActivity(new Intent(this, loginActivity.class));
     }
+
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+       if(item.getItemId()==R.id.backArrowLogin){
+           startActivity(new Intent(this, MainActivity.class));
+           finish();
+       }
+        return true;
+    }
+    */
 }

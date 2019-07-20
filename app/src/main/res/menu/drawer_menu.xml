@@ -11,6 +11,12 @@
             android:title="inicio " />
 
         <item
+
+            android:icon="@drawable/ic_baseline_account_circle_24px"
+            android:title="Cuenta "/>
+
+
+        <item
             android:id="@+id/nav_mensajes"
             android:icon="@drawable/ic_mail_navbar"
             android:title="Mensajes " />
