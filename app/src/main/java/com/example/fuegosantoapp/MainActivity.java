@@ -11,6 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.AuthenticationRequiredException;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -30,26 +32,26 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
+import com.example.fuegosantoapp.activities.loginActivity;
 import com.example.fuegosantoapp.fragmentos.Fragmento_Mensaje;
 import com.example.fuegosantoapp.fragmentos.Fragmento_articulo;
 import com.example.fuegosantoapp.fragmentos.Fragmento_biblia;
 import com.example.fuegosantoapp.fragmentos.Fragmento_favoritos;
 import com.google.android.material.navigation.NavigationView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     //Edit texts for the database
     private EditText editTextCorreo;
     private Button buttonRegistrar;
+    private Button buttonlogin;
     private ProgressDialog progressDialog;
-
+    private TextView textViewLogin;
 
 
 
@@ -107,9 +109,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Declaring the variables for the suscription
         editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
+        textViewLogin = (TextView) findViewById(R.id.textViewLogin);
+
         buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
         progressDialog = new ProgressDialog(this);
         buttonRegistrar.setOnClickListener(this);
+        textViewLogin.setOnClickListener(this);
+
     }
 
 
@@ -250,6 +256,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onClick(View view) {
         if(view == buttonRegistrar)
         suscripcionUsuario();
+        if (view == textViewLogin)
+         startActivity(new Intent(this, loginActivity.class));
+
     }
 
 

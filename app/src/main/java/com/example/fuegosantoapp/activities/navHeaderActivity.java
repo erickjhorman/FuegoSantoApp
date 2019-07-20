@@ -1,23 +1,22 @@
 package com.example.fuegosantoapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.fuegosantoapp.R;
-import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class loginActivity extends AppCompatActivity implements View.OnClickListener {
+import com.example.fuegosantoapp.R;
+
+public class navHeaderActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonlogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.nav_header);
 
         buttonlogin = (Button) findViewById(R.id.buttonlogin);
         buttonlogin.setOnClickListener(this);
@@ -29,4 +28,7 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
         if (view == buttonlogin)
             startActivity(new Intent(this, loginActivity.class));
     }
+
+
+
 }

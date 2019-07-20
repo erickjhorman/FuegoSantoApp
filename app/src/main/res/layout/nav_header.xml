@@ -27,14 +27,14 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:layout_width="99dp"
-        android:layout_height="45dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="170dp"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginLeft="102dp"
+        android:layout_marginTop="14dp"
         android:paddingTop="10dp"
         android:text="BIENVENIDO"
         android:textColor="@color/white" />
@@ -45,13 +45,12 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="157dp"
-        android:layout_marginLeft="157dp"
-        android:layout_marginTop="57dp"
+        android:layout_marginStart="146dp"
+        android:layout_marginLeft="146dp"
+        android:layout_marginTop="48dp"
         android:paddingTop="10dp"
         android:text="Ingresa para poder comentar las publicaciones "
         android:textColor="@color/white" />
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonlogin"
@@ -59,8 +58,9 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="120dp"
-        android:text="Ingresar a Fuego santo "
-        />
+        android:text="Ingresar a Fuego santo "/>
+
+
 
 
 </RelativeLayout>

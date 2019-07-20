@@ -40,8 +40,38 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:hint="Ingresa tu correo"
-            android:inputType="textEmailAddress"
-            />
+            android:inputType="textEmailAddress"/>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonlogin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="380dp"
+            android:layout_marginRight="27dp"
+            android:layout_marginLeft="27dp"
+            android:textAlignment="center"
+            android:text="Ingresar"/>
+
+
+
+        <TextView
+            android:id="@+id/textViewLogin"
+            android:layout_width="310dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="239dp"
+            android:text="No se mi correo"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+
 
 
 
