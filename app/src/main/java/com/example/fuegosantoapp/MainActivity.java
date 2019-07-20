@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.transition.Slide;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.AuthenticationRequiredException;
@@ -45,7 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , View.OnClickListener {
 
     //Edit texts for the database
     private EditText editTextCorreo;
@@ -109,9 +107,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Declaring the variables for the suscription
         editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
-        //buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
+        buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
         progressDialog = new ProgressDialog(this);
-        //buttonRegistrar.setOnClickListener(this);
+        buttonRegistrar.setOnClickListener(this);
     }
 
 
@@ -165,6 +163,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
+
+
             case R.id.nav_mensajes:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new Fragmento_Mensaje()).commit();
@@ -234,14 +234,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
 
+        /*
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
-
+        */
+        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     //To get the accion of the button
 
-  /*
+
     @Override
 
 
@@ -250,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         suscripcionUsuario();
     }
 
-*/
+
 
 
 }

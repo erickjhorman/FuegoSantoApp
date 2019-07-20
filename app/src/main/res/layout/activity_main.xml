@@ -35,7 +35,7 @@
             <RelativeLayout
                 android:id="@+id/RelativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="200dp"
                 android:layout_gravity="bottom"
                 android:background="@drawable/subscription"
                 android:orientation="vertical">
@@ -47,9 +47,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="75dp"
-                    android:layout_marginRight="75dp"
-                    android:layout_marginBottom="94dp"
+                    android:layout_marginEnd="69dp"
+                    android:layout_marginRight="69dp"
+                    android:layout_marginBottom="148dp"
                     android:text="Suscribete a nuestro boletin "
                     android:textColor="@color/white"
                     android:textSize="22dp" />
@@ -60,9 +60,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="34dp"
-                    android:layout_marginRight="34dp"
-                    android:layout_marginBottom="52dp"
+                    android:layout_marginEnd="37dp"
+                    android:layout_marginRight="37dp"
+                    android:layout_marginBottom="99dp"
                     android:text="Conecte con nosotros y recibe nuevas noticias, eventos, campamentos, predicas, devocionales
                     y muchas cosas más… "
                     android:textColor="@color/white" />
@@ -75,16 +75,43 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="71dp"
-                    android:layout_marginLeft="71dp"
-                    android:layout_marginBottom="22dp"
+                    android:layout_marginStart="47dp"
+                    android:layout_marginLeft="47dp"
+                    android:layout_marginBottom="58dp"
                     android:background="@color/white"
                     android:hint="Ingresa tu correo"
                     android:inputType="textEmailAddress" />
 
+                <Button
+                    android:id="@+id/buttonRegistrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="246dp"
+                    android:layout_marginLeft="246dp"
+                    android:layout_marginEnd="34dp"
+                    android:layout_marginRight="34dp"
+                    android:layout_marginBottom="53dp"
+                    android:text="SUBSCRIBE" />
 
 
-
+                <TextView
+                    android:layout_width="293dp"
+                    android:layout_height="44dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="64dp"
+                    android:layout_marginRight="64dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="Ya subscrito? \n Click here to login "
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
             </RelativeLayout>
 
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="176dp"
+    android:layout_height="190dp"
     android:background="@drawable/main"
     android:gravity="bottom"
     android:padding="16dp"
@@ -11,24 +11,56 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="79dp"
         android:src="@mipmap/ic_launcher_inicio_round" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="51dp"
         android:paddingTop="10dp"
         android:text="CMB FUEGO SANTO "
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        />
+        android:textColor="@color/white"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:layout_width="99dp"
+        android:layout_height="45dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="170dp"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="12dp"
+        android:paddingTop="10dp"
+        android:text="BIENVENIDO"
+        android:textColor="@color/white" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="57dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="157dp"
+        android:layout_marginLeft="157dp"
+        android:layout_marginTop="57dp"
         android:paddingTop="10dp"
-        android:text="CMB"
+        android:text="Ingresa para poder comentar las publicaciones "
+        android:textColor="@color/white" />
 
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonlogin"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="120dp"
+        android:text="Ingresar a Fuego santo "
         />
 
 
-</LinearLayout>
+</RelativeLayout>
