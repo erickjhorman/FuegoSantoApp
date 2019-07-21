@@ -13,7 +13,8 @@ public class SharedPrefManager {
     private static  final String SHARED_PREF_NAME = "mysharedpref12";
     private static  final String KEY_SUBSCRIPTOR_ID = "subscriptorid";
     private static  final String KEY_SUBSCRIPTOR_EMAIL = "subscriptoremail";
-
+    private static  final String KEY_SUBSCRIPTOR_NAME = "subscriptorname";
+    private static  final String KEY_SUBSCRIPTOR_AVATAR = "subscriptoravatar";
     private SharedPrefManager(Context context) {
         ctx = context;
 
@@ -36,6 +37,7 @@ SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME
 
   editor.putInt(KEY_SUBSCRIPTOR_ID, id_correos);
   editor.putString(KEY_SUBSCRIPTOR_EMAIL , email);
+
   editor.apply();
 
     return  true;
@@ -57,8 +59,9 @@ SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME
          return true;
     }
 
-    public  void getUsername(){
-
+    public  String getUserId(){
+        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_SUBSCRIPTOR_ID, null);
     }
 
     public String getUserEmail(){
@@ -66,6 +69,15 @@ SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME
         return sharedPreferences.getString(KEY_SUBSCRIPTOR_EMAIL, null);
     }
 
+    public String getUserName(){
+        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_SUBSCRIPTOR_NAME, null);
+    }
+
+    public String getUseAvtar(){
+        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_SUBSCRIPTOR_AVATAR, null);
+    }
 
 }
 

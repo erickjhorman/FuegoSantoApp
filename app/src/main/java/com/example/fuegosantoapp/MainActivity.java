@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //pager = findViewById(R.id.view_pager);
 
 
-
+      
 
 
         adapter = new CustomSwipeAdapter(this);
@@ -160,8 +160,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 msg = "edit";
                 break;
 
-            case R.id.Salir:
-                msg = "salir";
+            case R.id.menuLogout:
+                SharedPrefManager.getInstance(this).logout();
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
                 break;
 
         }

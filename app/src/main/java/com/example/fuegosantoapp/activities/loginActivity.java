@@ -81,6 +81,7 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
                                         .subsciptorLogin(
                                                 obj.getInt("id"),
                                                 obj.getString("email")
+
                                         );
                                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                                finish();
@@ -127,7 +128,7 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
     public void onClick(View view) {
         if (view == buttonlogin)
             subscriptorLogin();
-            startActivity(new Intent(this, loginActivity.class));
+            startActivity(new Intent(this, ProfileActivity.class));
     }
 
     /*
