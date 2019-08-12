@@ -1,6 +1,7 @@
 package com.example.fuegosantoapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -36,7 +36,7 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
     private EditText editTextCorreo;
     private Button buttonlogin;
     private ProgressDialog progressDialog;
-
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,16 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        //Crear logica del toolbar y asignarle un titulo
+        toolbar = (Toolbar) findViewById(R.id.toolbar_Profile);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Fuego Santo");
+        toolbar.setSubtitle("Dios les bendiga");
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        toolbar.setSubtitleTextColor(0xFFFFFFFF);
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24px);
 
         editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
         buttonlogin = (Button) findViewById(R.id.buttonlogin);
@@ -80,7 +90,9 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
                                 SharedPrefManager.getInstance(getApplicationContext())
                                         .subsciptorLogin(
                                                 obj.getInt("id"),
-                                                obj.getString("email")
+                                                obj.getString("nombre"),
+                                                obj.getString("email"),
+                                                obj.getString("avatar")
 
                                         );
                                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
@@ -105,7 +117,7 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
                     progressDialog.dismiss();
                         Toast.makeText(
                                 getApplicationContext(),
-                               error.getMessage(),
+                                error.getMessage(),
                                 Toast.LENGTH_LONG
                         ).show();
                     }

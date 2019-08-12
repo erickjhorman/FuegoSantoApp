@@ -4,17 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProfileActivity">
+    tools:context="activities.ProfileActivity">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include layout="@layout/toolbar_layout_profile" />
 
         <TextView
+
             android:layout_width="match_parent"
             android:layout_height="44dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="476dp"
             android:text="Nombre de usuario"
             android:textAlignment="center" />
 
@@ -23,7 +27,7 @@
             android:layout_width="386dp"
             android:layout_height="56dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="602dp"
+            android:layout_marginBottom="220dp"
             android:text="Nombre de usuario"
             android:textAlignment="center" />
 
@@ -32,7 +36,7 @@
             android:layout_height="51dp"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="118dp"
-            android:layout_marginBottom="470dp"
+            android:layout_marginBottom="318dp"
             android:text="Correo"
             android:textAlignment="center" />
 
@@ -42,8 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="49dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="365dp"
-            android:text="Correo"
+            android:layout_marginBottom="411dp"
+            android:text="correo"
             android:textAlignment="center" />
 
         <ImageView
@@ -51,8 +55,10 @@
             android:layout_width="397dp"
             android:layout_height="191dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="77dp"
+            android:layout_marginBottom="6dp"
             android:gravity="bottom" />
+
+
 
     </RelativeLayout>
 

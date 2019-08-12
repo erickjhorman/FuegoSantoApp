@@ -71,10 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         //pager = findViewById(R.id.view_pager);
 
-
-      
-
-
         adapter = new CustomSwipeAdapter(this);
 
 
