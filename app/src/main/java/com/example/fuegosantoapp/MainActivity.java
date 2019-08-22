@@ -9,15 +9,14 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.AuthenticationRequiredException;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,26 +25,26 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
-import com.example.fuegosantoapp.activities.ProfileActivity;
 import com.example.fuegosantoapp.activities.loginActivity;
 import com.example.fuegosantoapp.fragmentos.Fragmento_Mensaje;
-import com.example.fuegosantoapp.fragmentos.Fragmento_articulo;
 import com.example.fuegosantoapp.fragmentos.Fragmento_biblia;
 import com.example.fuegosantoapp.fragmentos.Fragmento_favoritos;
+import com.example.fuegosantoapp.fragmentos.Fragmento_publicaciones;
+import com.example.fuegosantoapp.interfaces.IFragments;
 import com.google.android.material.navigation.NavigationView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IFragments {
 
     //Edit texts for the database
     private EditText editTextCorreo;
@@ -55,12 +54,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView textViewLogin;
 
 
-
     private DrawerLayout drawer; //Variable to make the funcionality of the navbar
     Toolbar toolbar;
     ViewPager viewPager;
     CustomSwipeAdapter adapter;
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -118,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textViewLogin.setOnClickListener(this);
 
     }
-
 
 
     @Override
@@ -180,9 +176,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_publicaciones:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new Fragmento_articulo()).commit();
+                        new Fragmento_publicaciones()).commit();
                 break;
-
             case R.id.favoritos:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new Fragmento_favoritos()).commit();
@@ -208,20 +203,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     //Method to create a subscription of any user
-    public void suscripcionUsuario(){
+    public void suscripcionUsuario() {
         final String email = editTextCorreo.getText().toString().trim();
 
 
-         //To create the conexion to the database through
+        //To create the conexion to the database through
         progressDialog.setMessage("Registrando usuario...");
         progressDialog.show();
-        StringRequest stringRequest  =  new StringRequest(Request.Method.POST,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constants.URL_REGISTER, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
                 try {
-                    JSONObject jsonObject = new JSONObject (response);
+                    JSONObject jsonObject = new JSONObject(response);
                     Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
 
                 } catch (JSONException e) {
@@ -231,14 +226,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                 progressDialog.hide();
-                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                progressDialog.hide();
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                params.put("email" , email);
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
                 return params;
             }
         };
@@ -257,14 +252,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void onClick(View view) {
-        if(view == buttonRegistrar)
-        suscripcionUsuario();
+        if (view == buttonRegistrar)
+            suscripcionUsuario();
         if (view == textViewLogin)
-         startActivity(new Intent(this, loginActivity.class));
+            startActivity(new Intent(this, loginActivity.class));
 
     }
 
 
 
+    public void onFragmentInteraction(Uri uri) {
 
+    }
 }
