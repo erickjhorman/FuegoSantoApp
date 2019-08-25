@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="190dp"
     android:background="@drawable/main"
     android:gravity="bottom"
+    android:orientation="vertical"
     android:padding="16dp"
-    android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
+    tools:context=".activities.navHeaderActivity">
 
     <ImageView
+        android:id="@+id/avatarUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -23,8 +27,8 @@
         android:layout_marginBottom="51dp"
         android:paddingTop="10dp"
         android:text="CMB FUEGO SANTO "
-        android:textColor="@color/white"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,14 +58,12 @@
         android:textColor="@color/white" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonlogin"
+        android:id="@+id/btnlogin"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="120dp"
-        android:text="Ingresar a Fuego santo "/>
-
-
+        android:text="Ingresar a Fuego santo " />
 
 
 </RelativeLayout>

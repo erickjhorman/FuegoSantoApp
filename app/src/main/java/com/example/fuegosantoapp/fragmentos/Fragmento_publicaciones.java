@@ -2,6 +2,7 @@ package com.example.fuegosantoapp.fragmentos;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.R;
@@ -142,15 +145,18 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                 jsonObject = json.getJSONObject(i);
 
                 publicacion.setId_publicaciones(jsonObject.optInt("id"));
-                publicacion.setPublicaciones(jsonObject.optString("publicacion"));
                 publicacion.setFtitulo(jsonObject.optString("titulo"));
+                publicacion.setDescripcion(jsonObject.optString("descripcion"));
+                publicacion.setCover((jsonObject.optString("cover")));
+                publicacion.setPublicaciones(jsonObject.optString("publicacion"));
                 publicacion.setFecha_publicacion(jsonObject.optString("fecha_publicacion"));
                 publicacion.setAutor(jsonObject.optString("autor"));
-               listaPublicaciones.add(publicacion);
+                listaPublicaciones.add(publicacion);
 
             }
             progress.hide();
-            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones);
+
+            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones , getContext());
             recyclerPublicaciones.setAdapter(adapter);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -163,6 +169,10 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             progress.hide();
         }
     }
+
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Edit texts for the database
     private EditText editTextCorreo;
     private Button buttonRegistrar;
-    private Button buttonlogin;
     private ProgressDialog progressDialog;
     private TextView textViewLogin;
 
@@ -114,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         buttonRegistrar.setOnClickListener(this);
         textViewLogin.setOnClickListener(this);
 
+
     }
 
 
@@ -131,9 +131,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);  //To add the menu to the toolbar
-
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -165,6 +165,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //To select the item of the navbar and open a specific fragmen
     @Override
+
+
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
@@ -249,16 +251,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     @Override
-
-
     public void onClick(View view) {
         if (view == buttonRegistrar)
             suscripcionUsuario();
         if (view == textViewLogin)
             startActivity(new Intent(this, loginActivity.class));
 
-    }
 
+    }
 
 
     public void onFragmentInteraction(Uri uri) {

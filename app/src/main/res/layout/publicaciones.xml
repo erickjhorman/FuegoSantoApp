@@ -18,7 +18,7 @@
 
 
             <ImageView
-                android:id="@+id/idImagen"
+                android:id="@+id/idImagenPublicacion"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="15dp"
@@ -46,11 +46,19 @@
 
                 <TextView
 
+                    android:id="@+id/Description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Descripcion" />
+
+               <!--
+                <TextView
+
                     android:id="@+id/Publicacion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Publicacion" />
-
+                android:text="Descripcion" />
+                -->
 
 
                 <TextView

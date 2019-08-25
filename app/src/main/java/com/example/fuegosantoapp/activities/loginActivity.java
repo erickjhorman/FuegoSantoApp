@@ -53,14 +53,7 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
         setContentView(R.layout.activity_login);
 
 
-        //Crear logica del toolbar y asignarle un titulo
-        toolbar = (Toolbar) findViewById(R.id.toolbar_Profile);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Fuego Santo");
-        toolbar.setSubtitle("Dios les bendiga");
-        toolbar.setTitleTextColor(0xFFFFFFFF);
-        toolbar.setSubtitleTextColor(0xFFFFFFFF);
-        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24px);
+        initializeToolbar();
 
         editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
         buttonlogin = (Button) findViewById(R.id.buttonlogin);
@@ -72,7 +65,26 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
 
     }
 
-    private void subscriptorLogin(){
+    private void initializeToolbar(){
+        //Crear logica del toolbar y asignarle un titulo
+        toolbar = (Toolbar) findViewById(R.id.toolbar_Profile);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Fuego Santo");
+        toolbar.setSubtitle("Dios les bendiga");
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        toolbar.setSubtitleTextColor(0xFFFFFFFF);
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24px);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+
+    public void subscriptorLogin(){
         final String email = editTextCorreo.getText().toString().trim();
         progressDialog.show();
         StringRequest  stringRequest = new StringRequest(

@@ -4,6 +4,7 @@ public class Publicacion {
 
     private int id_publicaciones;
     private String publicaciones;
+    private String descripcion;
     private String cover;
     private String fecha_publicacion;
     private String autor;
@@ -15,6 +16,14 @@ public class Publicacion {
 
     public void setId_publicaciones(int id_publicaciones) {
         this.id_publicaciones = id_publicaciones;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getPublicaciones() {

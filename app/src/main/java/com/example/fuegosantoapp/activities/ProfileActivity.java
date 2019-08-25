@@ -3,16 +3,23 @@ package com.example.fuegosantoapp.activities;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+
 import com.android.volley.RequestQueue;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,39 +30,46 @@ import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
 
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity  {
 
     private TextView textViewUsername, textViewUserCorreo;
     private ImageView imageViewUserAvatar;
     Toolbar toolbar;
     RequestQueue request;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        if(!SharedPrefManager.getInstance(this).isLoggedIn()){
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, loginActivity.class));
         }
 
 
-        textViewUsername = (TextView) findViewById(R.id.textViewUsername);
+        //textViewUsername = (TextView) findViewById(R.id.textViewUsername);
         textViewUserCorreo = (TextView) findViewById(R.id.textViewUserCorreo);
         imageViewUserAvatar = (ImageView) findViewById(R.id.imageViewUserAvatar);
 
+
         request = Volley.newRequestQueue(getApplicationContext());
 
-        textViewUsername.setText(SharedPrefManager.getInstance(this).getUserName());
+        //textViewUsername.setText(SharedPrefManager.getInstance(this).getUserName());
         textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
-        String urlImagen =  SharedPrefManager.getInstance(this).getUseAvatar();
-        Toast.makeText(getApplicationContext(), "Url" + urlImagen , Toast.LENGTH_LONG).show();
+        String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
+        Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
 
-
+        initializeToolbar();
         //To transform this url to a picture
-          setearUrlImagen(urlImagen);
+        setearUrlImagen(urlImagen);
 
+
+    }
+
+
+    private void initializeToolbar() {
         //Crear logica del toolbar y asignarle un titulo
         toolbar = (Toolbar) findViewById(R.id.toolbar_Profile);
         setSupportActionBar(toolbar);
@@ -65,12 +79,16 @@ public class ProfileActivity extends AppCompatActivity {
         toolbar.setSubtitleTextColor(0xFFFFFFFF);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24px);
 
-
-
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
-        private void setearUrlImagen(String urlImagen) {
 
+    private void setearUrlImagen(String urlImagen) {
 
 
         urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image
@@ -78,15 +96,26 @@ public class ProfileActivity extends AppCompatActivity {
         ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
-                imageViewUserAvatar.setImageBitmap(response);
+
+                //To pit the image avator rounded
+
+                //creamos el drawable redondeado
+                RoundedBitmapDrawable roundedDrawable =
+                        RoundedBitmapDrawableFactory.create(getResources(), response);
+
+                roundedDrawable.setCornerRadius(response.getHeight());
+
+                imageViewUserAvatar.setImageDrawable(roundedDrawable);
+                //imageViewUserAvatar.setImageBitmap(response);
+
             }
-        }, 0,0 , ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error al cargar la imagen"  , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
             }
-           });
-           request.add(imageRequest);
+        });
+        request.add(imageRequest);
 
 
     }
@@ -100,15 +129,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menuLogout:
                 SharedPrefManager.getInstance(this).logout();
                 finish();
                 startActivity(new Intent(this, MainActivity.class));
-            break;
+                break;
+
 
         }
         return true;
     }
+
 
 }
