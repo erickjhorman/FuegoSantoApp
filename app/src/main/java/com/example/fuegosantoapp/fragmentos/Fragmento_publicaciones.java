@@ -1,5 +1,6 @@
 package com.example.fuegosantoapp.fragmentos;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.adapter.publicacionesAdapter;
 import com.example.fuegosantoapp.entidades.Publicacion;
+import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +46,7 @@ import java.util.ArrayList;
  * Use the {@link Fragmento_publicaciones#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragmento_publicaciones extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener {
+public class Fragmento_publicaciones extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener , View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,6 +60,9 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
     RecyclerView recyclerPublicaciones;
     ArrayList<Publicacion> listaPublicaciones;
+
+    Activity activity;
+    IComunicaFragments interfaceComunicaFragments;
 
     ProgressDialog progress;
     RequestQueue request;
@@ -158,6 +163,20 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
             publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones , getContext());
             recyclerPublicaciones.setAdapter(adapter);
+
+            adapter.setOnclickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(), "Selecciona: " + listaPublicaciones.get(recyclerPublicaciones.getChildAdapterPosition(view)).getFtitulo(), Toast.LENGTH_SHORT).show();
+
+                    interfaceComunicaFragments.enviarPublicacion(listaPublicaciones.get(recyclerPublicaciones.getChildAdapterPosition(view)));
+                }
+
+
+            });
+
+
+
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
@@ -170,6 +189,10 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         }
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
 
 
 
@@ -184,6 +207,12 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        if(context instanceof Activity){
+            this.activity = (Activity ) context;
+            interfaceComunicaFragments =  (IComunicaFragments) this.activity;
+        }
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -197,6 +226,8 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         super.onDetach();
         mListener = null;
     }
+
+
 
 
     /**

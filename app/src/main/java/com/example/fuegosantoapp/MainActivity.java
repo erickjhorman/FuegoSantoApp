@@ -5,12 +5,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,21 +22,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
 import com.example.fuegosantoapp.activities.loginActivity;
+import com.example.fuegosantoapp.entidades.Publicacion;
+import com.example.fuegosantoapp.fragmentos.DetallePublicacionesFragment;
 import com.example.fuegosantoapp.fragmentos.Fragmento_Mensaje;
 import com.example.fuegosantoapp.fragmentos.Fragmento_biblia;
 import com.example.fuegosantoapp.fragmentos.Fragmento_favoritos;
 import com.example.fuegosantoapp.fragmentos.Fragmento_publicaciones;
+import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 import com.example.fuegosantoapp.interfaces.IFragments;
 import com.google.android.material.navigation.NavigationView;
 
@@ -44,14 +54,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IFragments {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IFragments, IComunicaFragments {
 
     //Edit texts for the database
     private EditText editTextCorreo;
     private Button buttonRegistrar;
     private ProgressDialog progressDialog;
     private TextView textViewLogin;
+    DetallePublicacionesFragment detalleFragment;
+    private Button btnloginNavbar;
+    private TextView navHeaderComentario;
+    private ImageView imageViewUserAvatar;
+    private TextView textViewUserCorreo;
 
+    RequestQueue request;
 
     private DrawerLayout drawer; //Variable to make the funcionality of the navbar
     Toolbar toolbar;
@@ -104,6 +120,71 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }*/
 
+        request = Volley.newRequestQueue(getApplicationContext());
+
+
+        //Inflate the nav_header
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header);
+        headerView.findViewById(R.id.nav_header);
+
+        //Declaring the variables for the nav_header
+
+
+        //imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.imageViewUserAvatar);
+
+        btnloginNavbar = (Button) headerView.findViewById(R.id.btnlogin);
+        navHeaderComentario = (TextView) headerView.findViewById(R.id.navHeaderComentario);
+        textViewUserCorreo = (TextView) headerView.findViewById(R.id.textViewUserCorreo);
+        textViewUserCorreo.setVisibility(View.GONE);
+        imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
+        btnloginNavbar.setOnClickListener(this);
+
+        //String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
+        //setearUrlImagen(urlImagen);
+
+
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+
+            textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
+            textViewUserCorreo.setVisibility(View.VISIBLE);
+            String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
+            Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
+
+            navHeaderComentario.setVisibility(View.GONE);
+            btnloginNavbar.setVisibility(View.GONE);
+
+
+            urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image
+
+            ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap response) {
+
+                    //To pit the image avator rounded
+
+                    //creamos el drawable redondeado
+                    RoundedBitmapDrawable roundedDrawable =
+                            RoundedBitmapDrawableFactory.create(getResources(), response);
+
+                    roundedDrawable.setCornerRadius(response.getHeight());
+
+                    imageViewUserAvatar.setImageDrawable(roundedDrawable);
+                    //imageViewUserAvatar.setImageBitmap(response);
+
+                }
+            }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
+                }
+            });
+            request.add(imageRequest);
+
+
+            return;
+        }
+
+
         //Declaring the variables for the suscription
         editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
         textViewLogin = (TextView) findViewById(R.id.textViewLogin);
@@ -112,6 +193,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progressDialog = new ProgressDialog(this);
         buttonRegistrar.setOnClickListener(this);
         textViewLogin.setOnClickListener(this);
+
+
+    }
+
+    private void DatosAMostrar() {
+
+        String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
+        Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
 
 
     }
@@ -252,16 +341,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onClick(View view) {
+
+        String msg = "";
         if (view == buttonRegistrar)
             suscripcionUsuario();
         if (view == textViewLogin)
             startActivity(new Intent(this, loginActivity.class));
+        if (view == btnloginNavbar) ;
 
 
     }
 
 
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void enviarPublicacion(Publicacion publicacion) {
+        detalleFragment = new DetallePublicacionesFragment();
+        Bundle bundleEnvio = new Bundle();
+        bundleEnvio.putSerializable("objeto", publicacion);
+        detalleFragment.setArguments(bundleEnvio);
+
+        //Cargar el fragment en el activity
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, detalleFragment).addToBackStack(null).commit();
 
     }
 }

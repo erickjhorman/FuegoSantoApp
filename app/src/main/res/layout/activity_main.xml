@@ -127,7 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:theme="@style/barra_navegacion"
-        app:headerLayout="@layout/nav_header"
+
         app:menu="@menu/drawer_menu" />
 
 

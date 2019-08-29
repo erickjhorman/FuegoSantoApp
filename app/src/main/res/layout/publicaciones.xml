@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:text="Descripcion" />
 
-               <!--
+                <!--
                 <TextView
 
                     android:id="@+id/Publicacion"
@@ -78,6 +78,15 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/verDetalle"
+            android:layout_width="343dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="110dp"
+            android:layout_marginTop="135dp"
+            android:text="Leer mas " />
+
     </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

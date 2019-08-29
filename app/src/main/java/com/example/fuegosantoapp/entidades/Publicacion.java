@@ -1,6 +1,8 @@
 package com.example.fuegosantoapp.entidades;
 
-public class Publicacion {
+import java.io.Serializable;
+
+public class Publicacion implements Serializable {
 
     private int id_publicaciones;
     private String publicaciones;

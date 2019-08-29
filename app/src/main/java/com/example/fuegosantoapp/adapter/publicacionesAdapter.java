@@ -23,11 +23,14 @@ import com.example.fuegosantoapp.entidades.Publicacion;
 
 import java.util.List;
 
-public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdapter.publicacionesHolder> {
+public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdapter.publicacionesHolder> implements View.OnClickListener {
 
     List<Publicacion> listaPublicaiones;
     RequestQueue request;
     Context context;
+
+    private  View.OnClickListener listener;
+
 
     public publicacionesAdapter(List<Publicacion> listaPublicaiones, Context context) {
         this.listaPublicaiones = listaPublicaiones;
@@ -40,9 +43,16 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
     public publicacionesAdapter.publicacionesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.publicaciones, parent, false);
+        vista.setOnClickListener(this);
+
         RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         vista.setLayoutParams(layoutParams);
         return new publicacionesAdapter.publicacionesHolder(vista);
+    }
+
+
+    public void setOnclickListener(View.OnClickListener listener){
+        this.listener  = listener;
     }
 
     @Override
@@ -56,7 +66,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
 
         if(listaPublicaiones.get(position).getCover()!= null){
-               cargarImagenUrl(listaPublicaiones.get(position).getCover(), holder);
+               //cargarImagenUrl(listaPublicaiones.get(position).getCover(), holder);
         }
 
 
@@ -90,6 +100,13 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     @Override
     public int getItemCount() {
         return listaPublicaiones.size();
+    }
+
+    @Override
+    public void onClick(View view) {
+     if(listener!=null){
+         listener.onClick(view);
+        }
     }
 
     public class publicacionesHolder extends RecyclerView.ViewHolder {
