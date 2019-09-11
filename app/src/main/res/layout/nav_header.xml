@@ -63,9 +63,9 @@
         android:layout_alignEnd="@+id/textViewUserCorreo"
         android:layout_alignRight="@+id/textViewUserCorreo"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="59dp"
-        android:layout_marginEnd="-58dp"
-        android:layout_marginRight="-58dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
         android:paddingTop="10dp"
         android:text="Ingresa para poder comentar las publicaciones "
         android:textColor="@color/white" />

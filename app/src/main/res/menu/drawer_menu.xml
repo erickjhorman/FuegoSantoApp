@@ -11,7 +11,7 @@
             android:title="inicio " />
 
         <item
-
+            android:id="@+id/act_cuenta"
             android:icon="@drawable/ic_baseline_account_circle_24px"
             android:title="Cuenta "/>
 

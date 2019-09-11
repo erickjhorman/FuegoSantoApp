@@ -97,11 +97,15 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+      super.onStop();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
 
         View vista = inflater.inflate(R.layout.fragment_fragmento_publicaciones, container, false);
 
@@ -127,7 +131,11 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);
+
+
     }
+
+
 
     @Override
     public void onErrorResponse(VolleyError error) {
@@ -135,6 +143,12 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         System.out.println();
         //Log.d("error : ", error.toString());
         progress.hide();
+    }
+
+    @Override
+    public void onDestroy() {
+        progress.dismiss();
+        super.onDestroy();
     }
 
     @Override

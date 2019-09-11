@@ -41,13 +41,13 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+
         if(SharedPrefManager.getInstance(this).isLoggedIn()){
             finish();
             startActivity(new Intent(this, ProfileActivity.class));
             return;
         }
-
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -78,7 +78,8 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                finish();
+                //onBackPressed();
             }
         });
     }

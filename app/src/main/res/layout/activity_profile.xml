@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="activities.ProfileActivity">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,37 +13,80 @@
         <include layout="@layout/toolbar_layout_profile" />
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="256dp"
-            android:layout_marginRight="256dp"
-            android:layout_marginBottom="435dp"
-            android:text="Bienvendido" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
 
-        <TextView
-            android:id="@+id/textViewUserCorreo"
-            android:layout_width="313dp"
-            android:layout_height="35dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="389dp"
-            android:text="correo"
-            android:textAlignment="center" />
 
-        <ImageView
-            android:id="@+id/imageViewUserAvatar"
-            android:layout_width="117dp"
-            android:layout_height="71dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="249dp"
-            android:layout_marginRight="249dp"
-            android:layout_marginBottom="290dp"
-            android:gravity="bottom" />
+            <Button
+
+                android:id="@+id/btnEditarPerfil"
+                android:layout_width="369dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="125dp"
+                android:backgroundTint="@color/white"
+                android:text="Editar Perfil"
+                android:textColor="@color/Black">
+
+            </Button>
+
+
+            <ImageView
+                android:id="@+id/imageViewUserAvatar"
+                android:layout_width="117dp"
+                android:layout_height="71dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="279dp"
+                android:layout_marginRight="279dp"
+                android:layout_marginBottom="271dp"
+                android:gravity="bottom" />
+
+            <ImageView
+                android:layout_width="match_parent"
+
+                android:layout_height="163dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="270dp"
+                android:background="@drawable/sample_1" />
+
+            <TextView
+                android:id="@+id/textViewUserCorreo"
+                android:layout_width="165dp"
+                android:layout_height="33dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="228dp"
+                android:layout_marginRight="228dp"
+                android:layout_marginBottom="184dp"
+                android:text="correo"
+                android:textAlignment="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="279dp"
+                android:layout_marginRight="279dp"
+                android:layout_marginBottom="230dp"
+                android:text="Bienvendido" />
+
+
+
+        </RelativeLayout>
 
 
     </RelativeLayout>

@@ -30,18 +30,21 @@ import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
 
 
-public class ProfileActivity extends AppCompatActivity  {
+public class ProfileActivity extends AppCompatActivity     {
 
     private TextView textViewUsername, textViewUserCorreo;
     private ImageView imageViewUserAvatar;
     Toolbar toolbar;
+    private Button btnEditarPerfil;
     RequestQueue request;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
 
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
@@ -52,9 +55,18 @@ public class ProfileActivity extends AppCompatActivity  {
         //textViewUsername = (TextView) findViewById(R.id.textViewUsername);
         textViewUserCorreo = (TextView) findViewById(R.id.textViewUserCorreo);
         imageViewUserAvatar = (ImageView) findViewById(R.id.imageViewUserAvatar);
-
-
         request = Volley.newRequestQueue(getApplicationContext());
+        btnEditarPerfil = (Button) findViewById(R.id.btnEditarPerfil);
+
+        btnEditarPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            //Toast.makeText(getApplicationContext(),"Desde button Editar Perfil",Toast.LENGTH_SHORT).show();
+                Intent miIntent = new Intent(ProfileActivity.this, editarDatos.class);
+                startActivity(miIntent);
+            }
+        });
+
 
         //textViewUsername.setText(SharedPrefManager.getInstance(this).getUserName());
         textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
@@ -67,8 +79,6 @@ public class ProfileActivity extends AppCompatActivity  {
 
 
     }
-
-
     private void initializeToolbar() {
         //Crear logica del toolbar y asignarle un titulo
         toolbar = (Toolbar) findViewById(R.id.toolbar_Profile);
@@ -82,7 +92,11 @@ public class ProfileActivity extends AppCompatActivity  {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                //onBackPressed();
+                finish();
+                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                startActivity(intent);
+
             }
         });
     }
@@ -106,6 +120,7 @@ public class ProfileActivity extends AppCompatActivity  {
                 roundedDrawable.setCornerRadius(response.getHeight());
 
                 imageViewUserAvatar.setImageDrawable(roundedDrawable);
+
                 //imageViewUserAvatar.setImageBitmap(response);
 
             }
@@ -119,6 +134,8 @@ public class ProfileActivity extends AppCompatActivity  {
 
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,6 +157,9 @@ public class ProfileActivity extends AppCompatActivity  {
         }
         return true;
     }
+
+
+
 
 
 }

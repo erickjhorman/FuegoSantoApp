@@ -36,6 +36,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
+import com.example.fuegosantoapp.activities.ProfileActivity;
 import com.example.fuegosantoapp.activities.loginActivity;
 import com.example.fuegosantoapp.entidades.Publicacion;
 import com.example.fuegosantoapp.fragmentos.DetallePublicacionesFragment;
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //setearUrlImagen(urlImagen);
 
 
+        /*
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
 
             textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
@@ -150,8 +152,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
             Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
 
+
             navHeaderComentario.setVisibility(View.GONE);
             btnloginNavbar.setVisibility(View.GONE);
+
 
 
             urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image
@@ -184,23 +188,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
+         */
+
+
 
         //Declaring the variables for the suscription
         editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
         textViewLogin = (TextView) findViewById(R.id.textViewLogin);
-
         buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
         progressDialog = new ProgressDialog(this);
         buttonRegistrar.setOnClickListener(this);
         textViewLogin.setOnClickListener(this);
-
-
-    }
-
-    private void DatosAMostrar() {
-
-        String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
-        Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
 
 
     }
@@ -260,7 +258,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
 
+            case R.id.inicio:
+                startActivity(new Intent(this, MainActivity.class));
+                break;
+            case R.id.act_cuenta:
+                if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+                    finish();
+                    startActivity(new Intent(this, ProfileActivity.class));
+                } else {
+                    startActivity(new Intent(this, loginActivity.class));
 
+                }
+
+                break;
             case R.id.nav_mensajes:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new Fragmento_Mensaje()).commit();
@@ -347,9 +357,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             suscripcionUsuario();
         if (view == textViewLogin)
             startActivity(new Intent(this, loginActivity.class));
-        if (view == btnloginNavbar) ;
-
-
     }
 
 
