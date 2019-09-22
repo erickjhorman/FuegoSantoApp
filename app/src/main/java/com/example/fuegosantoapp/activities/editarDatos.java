@@ -1,9 +1,13 @@
 package com.example.fuegosantoapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
@@ -11,15 +15,20 @@ import com.android.volley.RequestQueue;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -36,6 +45,8 @@ import com.example.fuegosantoapp.SharedPrefManager;
 
 import java.io.File;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.example.fuegosantoapp.R.color.BlueViolet;
 
 public class editarDatos extends AppCompatActivity {
@@ -50,7 +61,7 @@ public class editarDatos extends AppCompatActivity {
     String path;
     private TextView textViewUsername;
     private ImageView imageViewUserAvatar;
-
+    Button botonCargar;
     Toolbar toolbar;
     RequestQueue request;
     @Override
@@ -64,6 +75,17 @@ public class editarDatos extends AppCompatActivity {
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
 
+        botonCargar =  (Button) findViewById(R.id.btnCargarImagen);
+
+        if (validaPermisos()) {
+
+           botonCargar.setEnabled(true);
+        }else{
+            botonCargar.setEnabled(false);
+        }
+
+
+
         request = Volley.newRequestQueue(getApplicationContext());
         textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
@@ -72,6 +94,84 @@ public class editarDatos extends AppCompatActivity {
 
     }
 
+    private boolean validaPermisos() {
+
+        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.M){
+            return true;
+        }
+
+        if((checkSelfPermission(CAMERA)== PackageManager.PERMISSION_GRANTED) &&
+                (checkSelfPermission(WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)){
+              return true;
+        }
+
+        if((shouldShowRequestPermissionRationale(CAMERA)) ||
+                (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE))){
+                 cargarDialogoRecomendacion();
+        } else{
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(requestCode == 100){
+            if(grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                botonCargar.setEnabled(true);
+            } else
+                solicitarPermisoManual();
+        }
+
+    }
+
+    private void solicitarPermisoManual() {
+        final CharSequence[] opciones = {"si","no"};
+        final AlertDialog.Builder alertOpciones = new  AlertDialog.Builder(editarDatos.this);
+        alertOpciones.setTitle("¿Desea configurar los permisos de forma manual?");
+        alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if (opciones[i].equals("si")) {
+                  Intent intent = new Intent();
+                  intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                  Uri uri = Uri.fromParts("package" , getPackageName(), null);
+                  intent.setData(uri);
+                  startActivity(intent);
+                  botonCargar.setEnabled(true);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Los permisos no fueron aceptados ", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                }
+            }
+        });
+        alertOpciones.show();
+
+    }
+
+
+    private void cargarDialogoRecomendacion() {
+
+
+        AlertDialog.Builder dialogo = new AlertDialog.Builder(editarDatos.this);
+        dialogo.setTitle("Permisos Desactivados ");
+        dialogo.setMessage("Debe aceptar los permisos para el correcto funcionamiento de la App");
+
+        dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,CAMERA},100);
+            }
+        });
+
+        dialogo.show();
+    }
 
 
     private void initializeToolbar() {
@@ -177,12 +277,22 @@ public class editarDatos extends AppCompatActivity {
         }
 
         //Route to save the image
-         path = Environment.getExternalStorageDirectory()+File.separator + RUTA_IMAGEN + File.separator + nombreImagen;
+         path = Environment.getExternalStorageDirectory()+File.separator + RUTA_IMAGEN + File.separator + nombreImagen; // we  indicate the path of the storage
 
         File imagen = new File(path);
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imagen));
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N)
+        {
+            String authorities = getApplicationContext().getPackageName() + ".provider";
+            Uri imageUri = FileProvider.getUriForFile(this,authorities,imagen);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        } else{
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imagen));
+        }
+
+
         startActivityForResult(intent, COD_FOTO);
     }
 

@@ -74,6 +74,19 @@
             android:layout_marginBottom="285dp"
             android:text="Nombre"></TextView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="136dp"
+            android:backgroundTint="@color/white"
+            android:text="Update"
+            android:textColor="@color/Black"
+
+
+            />
+
 
     </RelativeLayout>
 
