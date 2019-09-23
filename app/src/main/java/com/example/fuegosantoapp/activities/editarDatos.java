@@ -39,17 +39,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
+import com.cloudinary.Cloudinary;
 import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
+import com.example.fuegosantoapp.mCloud.Myconfiguration;
 
 import java.io.File;
+import java.io.IOException;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.example.fuegosantoapp.R.color.BlueViolet;
 
-public class editarDatos extends AppCompatActivity {
+public class editarDatos extends AppCompatActivity  implements View.OnClickListener {
 
     //Route to save the images
     private final String CARPETA_RAIZ = "Imagenes_usuarios/";
@@ -60,8 +63,10 @@ public class editarDatos extends AppCompatActivity {
 
     String path;
     private TextView textViewUsername;
+    private TextView getTextViewId;
     private ImageView imageViewUserAvatar;
     Button botonCargar;
+    Button btnUpdate;
     Toolbar toolbar;
     RequestQueue request;
     @Override
@@ -73,9 +78,14 @@ public class editarDatos extends AppCompatActivity {
 
 
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
+        getTextViewId =  (TextView) findViewById(R.id.txtIdUsuario);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
 
+
         botonCargar =  (Button) findViewById(R.id.btnCargarImagen);
+        btnUpdate =  (Button) findViewById(R.id.btnUpdate);
+        btnUpdate.setOnClickListener(this);
+        botonCargar.setOnClickListener(this);
 
         if (validaPermisos()) {
 
@@ -88,6 +98,7 @@ public class editarDatos extends AppCompatActivity {
 
         request = Volley.newRequestQueue(getApplicationContext());
         textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
+        getTextViewId.setText(Integer.toString(SharedPrefManager.getInstance(this).getUserId()));
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
         initializeToolbar();
         setearUrlImagen(urlImagen);
@@ -226,13 +237,20 @@ public class editarDatos extends AppCompatActivity {
 
     }
 
-
+/*
     public void onClick(View view) {
 
         cargarImagen();
     }
+*/
 
-
+    @Override
+    public void onClick(View view) {
+        if (view == botonCargar)
+            cargarImagen();
+        if(view == btnUpdate)
+            SubirImagenCloudinary();
+    }
 
 
     private void cargarImagen(){
@@ -320,6 +338,8 @@ public class editarDatos extends AppCompatActivity {
 
                     Bitmap bitmap = BitmapFactory.decodeFile(path);
                     imageViewUserAvatar.setImageBitmap(bitmap);
+
+
                     break;
 
             }
@@ -328,6 +348,21 @@ public class editarDatos extends AppCompatActivity {
         }
     }
 
+
+    public  void SubirImagenCloudinary(){
+        Toast.makeText(getApplicationContext(), "Click Subir Cloudinary", Toast.LENGTH_LONG).show();
+
+        Cloudinary cloud = new Cloudinary(Myconfiguration.getMyconfigs());
+       /*
+        try {
+            cloud.uploader().upload();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
+    }
 
 }
 

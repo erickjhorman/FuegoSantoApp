@@ -3,10 +3,6 @@ package com.example.fuegosantoapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
 public class SharedPrefManager {
     private static SharedPrefManager instance;
     private static Context ctx;
@@ -61,9 +57,9 @@ SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME
          return true;
     }
 
-    public  String getUserId(){
+    public int getUserId(){
         SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(KEY_SUBSCRIPTOR_ID, null);
+        return sharedPreferences.getInt(KEY_SUBSCRIPTOR_ID,0 );
     }
 
     public String getUserEmail(){
