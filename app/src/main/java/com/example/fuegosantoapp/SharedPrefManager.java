@@ -28,7 +28,7 @@ public class SharedPrefManager {
 
   public boolean subsciptorLogin(int id_correos, String email,String nombre, String avatar){
 
-SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+  SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
   SharedPreferences.Editor editor = sharedPreferences.edit();
 
   editor.putInt(KEY_SUBSCRIPTOR_ID, id_correos);

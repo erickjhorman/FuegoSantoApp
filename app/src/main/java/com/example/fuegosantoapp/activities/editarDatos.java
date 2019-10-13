@@ -11,8 +11,11 @@ import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -29,7 +32,9 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,8 +43,11 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cloudinary.Cloudinary;
+import com.example.fuegosantoapp.Constants;
 import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
@@ -47,9 +55,11 @@ import com.example.fuegosantoapp.mCloud.Myconfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static com.example.fuegosantoapp.Constants.*;
 import static com.example.fuegosantoapp.R.color.BlueViolet;
 
 public class editarDatos extends AppCompatActivity  implements View.OnClickListener {
@@ -65,10 +75,20 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
     private TextView textViewUsername;
     private TextView getTextViewId;
     private ImageView imageViewUserAvatar;
+
     Button botonCargar;
     Button btnUpdate;
     Toolbar toolbar;
+    ProgressDialog progreso;
     RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
+    StringRequest stringRequest;
+    Bitmap bitmap;
+    File file;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +100,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
         getTextViewId =  (TextView) findViewById(R.id.txtIdUsuario);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
+
 
 
         botonCargar =  (Button) findViewById(R.id.btnCargarImagen);
@@ -248,8 +269,8 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
     public void onClick(View view) {
         if (view == botonCargar)
             cargarImagen();
-        if(view == btnUpdate)
-            SubirImagenCloudinary();
+        if(view == btnUpdate);
+            //SubirImagenCloudinary();
     }
 
 
@@ -326,6 +347,15 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
                 case COD_SELECCIONA:
                     Uri mipath = data.getData();
                     imageViewUserAvatar.setImageURI(mipath);
+
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), mipath);
+                        imageViewUserAvatar.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
                     break;
 
                 case COD_FOTO:
@@ -336,7 +366,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
                         }
                     });
 
-                    Bitmap bitmap = BitmapFactory.decodeFile(path);
+                    bitmap = BitmapFactory.decodeFile(path);
                     imageViewUserAvatar.setImageBitmap(bitmap);
 
 
@@ -348,20 +378,60 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
         }
     }
 
+    public void updateSuscriptor(){
 
-    public  void SubirImagenCloudinary(){
+       progreso = new ProgressDialog(getApplicationContext());
+       progreso.setMessage("Cargando...");
+
+
+        textViewUsername = (TextView) findViewById(R.id.editTextNombre);
+        getTextViewId =  (TextView) findViewById(R.id.txtIdUsuario);
+        imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
+
+
+        String url = "http://192.168.0.74/Android/v1/updateSuscriptor.php?id=";
+
+       stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+           @Override
+           public void onResponse(String response) {
+
+           }
+       }, new Response.ErrorListener() {
+           @Override
+           public void onErrorResponse(VolleyError error) {
+
+           }
+       }){
+           @Override
+           protected Map<String, String> getParams() throws AuthFailureError {
+               String documento = getTextViewId.getText().toString();
+               String nombre = textViewUsername.getText().toString();
+               String avatar = convertirImgString(bitmap);
+
+               SubirImagenCloudinary(file);
+
+               return super.getParams();
+           }
+       };
+
+
+    }
+
+    private String convertirImgString(Bitmap bitmap) {
+
+
+
+        return "";
+    }
+
+
+    public  void SubirImagenCloudinary(File imagen){
         Toast.makeText(getApplicationContext(), "Click Subir Cloudinary", Toast.LENGTH_LONG).show();
 
         Cloudinary cloud = new Cloudinary(Myconfiguration.getMyconfigs());
-       /*
-        try {
-            cloud.uploader().upload();
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
+
     }
 
 }
