@@ -47,6 +47,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cloudinary.Cloudinary;
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.fuegosantoapp.Constants;
 import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
@@ -96,7 +98,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
 
 
 
-
+       
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
         getTextViewId =  (TextView) findViewById(R.id.txtIdUsuario);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
@@ -270,7 +272,8 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
         if (view == botonCargar)
             cargarImagen();
         if(view == btnUpdate);
-            //SubirImagenCloudinary();
+        SubirImagenCloudinary();
+
     }
 
 
@@ -384,6 +387,8 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
        progreso.setMessage("Cargando...");
 
 
+        //SubirImagenCloudinary();
+/*
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
         getTextViewId =  (TextView) findViewById(R.id.txtIdUsuario);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
@@ -413,26 +418,45 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
                return super.getParams();
            }
        };
-
+*/
 
     }
 
     private String convertirImgString(Bitmap bitmap) {
-
-
-
         return "";
     }
 
 
-    public  void SubirImagenCloudinary(File imagen){
+    public  void SubirImagenCloudinary()  {
         Toast.makeText(getApplicationContext(), "Click Subir Cloudinary", Toast.LENGTH_LONG).show();
 
-        Cloudinary cloud = new Cloudinary(Myconfiguration.getMyconfigs());
+        Cloudinary cloudinary = new Cloudinary(Myconfiguration.getMyconfigs());
+
+        //cloudinary.uploader().upload("R.drawable.sample_1", ObjectUtils.emptyMap());
+
+        /*
+        try {
+        Map   uploadResult = cloudinary.uploader().upload("http://res.cloudinary.com/demo/image/facebook/c_thumb,g_face,h_90,w_120/billclinton.jpg", ObjectUtils.emptyMap());
+        System.out.println(uploadResult);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+*/
 
 
 
-    }
+        }
+        //MediaManager.get().upload("http://res.cloudinary.com/demo/image/facebook/c_thumb,g_face,h_90,w_120/billclinton.jpg");
+        /*
+        try {
+            cloudinary.uploader().upload("R.drawable.sample_1",ObjectUtils.asMap("public_id","my_name"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+
+
 
 }
 

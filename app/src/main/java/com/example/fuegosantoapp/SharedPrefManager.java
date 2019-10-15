@@ -49,6 +49,14 @@ public class SharedPrefManager {
       return  false;
     }
 
+    public  boolean isUpdated(){
+        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        if(sharedPreferences.getString(KEY_SUBSCRIPTOR_NAME, null) != null && sharedPreferences.getString(KEY_SUBSCRIPTOR_AVATAR, null) != null) {
+            return  true;
+        }
+        return false;
+    }
+
      public boolean logout(){
          SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
          SharedPreferences.Editor editor = sharedPreferences.edit();

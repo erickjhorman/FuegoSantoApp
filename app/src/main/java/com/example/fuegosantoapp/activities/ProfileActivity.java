@@ -67,18 +67,30 @@ public class ProfileActivity extends AppCompatActivity     {
             }
         });
 
+        if(SharedPrefManager.getInstance(this).isUpdated()){
+            textViewUserCorreo.setText(R.string.defaultText);
+            imageViewUserAvatar.setImageResource(R.drawable.ic_android_black_navbar);
+
+        }
+
+
+
 
         //textViewUsername.setText(SharedPrefManager.getInstance(this).getUserName());
         textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
         Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
-
         initializeToolbar();
-        //To transform this url to a picture
-        setearUrlImagen(urlImagen);
+    }
 
+    private void setearDatosiniciales() {
 
     }
+
+    private void setearDatosactualizados(String correo){
+
+    }
+
     private void initializeToolbar() {
         //Crear logica del toolbar y asignarle un titulo
         toolbar = (Toolbar) findViewById(R.id.toolbar_Profile);
@@ -105,35 +117,39 @@ public class ProfileActivity extends AppCompatActivity     {
     private void setearUrlImagen(String urlImagen) {
 
 
-        urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image
 
-        ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
 
-                //To pit the image avator rounded
+            urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image}
 
-                //creamos el drawable redondeado
-                RoundedBitmapDrawable roundedDrawable =
-                        RoundedBitmapDrawableFactory.create(getResources(), response);
+            ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
+                @Override
+                public void onResponse(Bitmap response) {
 
-                roundedDrawable.setCornerRadius(response.getHeight());
+                    //To pit the image avator rounded
 
-                imageViewUserAvatar.setImageDrawable(roundedDrawable);
+                    //creamos el drawable redondeado
+                    RoundedBitmapDrawable roundedDrawable =
+                            RoundedBitmapDrawableFactory.create(getResources(), response);
 
-                //imageViewUserAvatar.setImageBitmap(response);
+                    roundedDrawable.setCornerRadius(response.getHeight());
 
-            }
-        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
-            }
-        });
-        request.add(imageRequest);
+                    imageViewUserAvatar.setImageDrawable(roundedDrawable);
+
+                    //imageViewUserAvatar.setImageBitmap(response);
+
+                }
+            }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            request.add(imageRequest);
 
 
     }
+
 
 
 

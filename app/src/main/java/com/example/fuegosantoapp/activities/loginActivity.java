@@ -88,6 +88,7 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
     public void subscriptorLogin(){
         final String email = editTextCorreo.getText().toString().trim();
         progressDialog.show();
+        System.out.println(email);
         StringRequest  stringRequest = new StringRequest(
 
                 Request.Method.POST,

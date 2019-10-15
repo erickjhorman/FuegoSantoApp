@@ -41,6 +41,14 @@
 
 
             <ImageView
+                android:layout_width="match_parent"
+
+                android:layout_height="163dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="268dp"
+                android:background="@drawable/sample_1" />
+
+            <ImageView
                 android:id="@+id/imageViewUserAvatar"
                 android:layout_width="117dp"
                 android:layout_height="71dp"
@@ -52,13 +60,7 @@
                 android:layout_marginBottom="271dp"
                 android:gravity="bottom" />
 
-            <ImageView
-                android:layout_width="match_parent"
 
-                android:layout_height="163dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="270dp"
-                android:background="@drawable/sample_1" />
 
             <TextView
                 android:id="@+id/textViewUserCorreo"

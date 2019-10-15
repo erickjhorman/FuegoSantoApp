@@ -127,7 +127,8 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         progress.setMessage("Consultando");
         progress.show();
 
-        String url = "http://192.168.0.74/Android/v1/publications.php";
+        //String url = "http://192.168.0.74/Android/v1/publications.php";
+         String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/publications.php";
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
         request.add(jsonObjectRequest);
