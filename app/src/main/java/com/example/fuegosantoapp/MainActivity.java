@@ -9,6 +9,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.ProgressDialog;
@@ -35,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.cloudinary.android.MediaManager;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
 import com.example.fuegosantoapp.activities.ProfileActivity;
 import com.example.fuegosantoapp.activities.loginActivity;
@@ -79,11 +81,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+         Toast.makeText(MainActivity.this, "Firebase conncetion Succes", Toast.LENGTH_LONG).show();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         //pager = findViewById(R.id.view_pager);
-
+        onNewIntent(getIntent());
         adapter = new CustomSwipeAdapter(this);
 
 
@@ -144,9 +150,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //setearUrlImagen(urlImagen);
 
 
-        /*
-        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
 
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
             textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
             textViewUserCorreo.setVisibility(View.VISIBLE);
             String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
@@ -173,6 +179,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     roundedDrawable.setCornerRadius(response.getHeight());
 
                     imageViewUserAvatar.setImageDrawable(roundedDrawable);
+
+
                     //imageViewUserAvatar.setImageBitmap(response);
 
                 }
@@ -188,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return;
         }
 
-         */
+
 
 
 
@@ -374,5 +382,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Cargar el fragment en el activity
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, detalleFragment).addToBackStack(null).commit();
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            if (extras.containsKey("menuFragment")) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new Fragmento_publicaciones()).commit();
+            }
+        }
     }
 }

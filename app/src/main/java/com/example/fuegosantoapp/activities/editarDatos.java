@@ -56,7 +56,11 @@ import com.example.fuegosantoapp.SharedPrefManager;
 import com.example.fuegosantoapp.mCloud.Myconfiguration;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import static android.Manifest.permission.CAMERA;
@@ -86,7 +90,8 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
     JsonObjectRequest jsonObjectRequest;
     StringRequest stringRequest;
     Bitmap bitmap;
-    File file;
+    File imagen;
+    Uri file;
 
 
 
@@ -96,9 +101,11 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_datos);
 
+        Map config = new HashMap();
+        config.put("cloud_name", "dequvdgav");
+        //MediaManager.init(this, config);
 
 
-       
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
         getTextViewId =  (TextView) findViewById(R.id.txtIdUsuario);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
@@ -272,7 +279,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
         if (view == botonCargar)
             cargarImagen();
         if(view == btnUpdate);
-        SubirImagenCloudinary();
+        updateSuscriptor();
 
     }
 
@@ -309,6 +316,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
         File fileImagen = new File(Environment.getExternalStorageDirectory(),RUTA_IMAGEN);
         boolean iscreada = fileImagen.exists();
         String nombreImagen = "";
+
         if(iscreada == false){
             iscreada = fileImagen.mkdirs();
         }
@@ -322,6 +330,8 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
          path = Environment.getExternalStorageDirectory()+File.separator + RUTA_IMAGEN + File.separator + nombreImagen; // we  indicate the path of the storage
 
         File imagen = new File(path);
+        Toast.makeText(getApplicationContext(), "Path inicial" + imagen, Toast.LENGTH_LONG).show();
+
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -332,10 +342,12 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         } else{
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imagen));
+
         }
 
 
         startActivityForResult(intent, COD_FOTO);
+
     }
 
 
@@ -349,11 +361,24 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
             switch (requestCode){
                 case COD_SELECCIONA:
                     Uri mipath = data.getData();
+
                     imageViewUserAvatar.setImageURI(mipath);
 
+
                     try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), mipath);
+
+                        //Here i need to do the same as Bitmap with a file
+
+                        bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),mipath);
                         imageViewUserAvatar.setImageBitmap(bitmap);
+
+
+
+
+
+                        Toast.makeText(getApplicationContext(), "Path inicial" + bitmap, Toast.LENGTH_LONG).show();
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -366,11 +391,16 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
                            Log.i("Ruta de almacenamiento","Path:"+ path );
+
                         }
                     });
 
                     bitmap = BitmapFactory.decodeFile(path);
                     imageViewUserAvatar.setImageBitmap(bitmap);
+
+
+
+
 
 
                     break;
@@ -379,6 +409,29 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
 
 
         }
+
+
+    }
+
+
+    public  void SubirImagenCloudinary(File file)  {
+        Toast.makeText(getApplicationContext(), "Path" + file, Toast.LENGTH_LONG).show();
+
+
+        /*
+        String requestId = MediaManager.get().upload()
+                .option("public_id", "demo")
+                .dispatch();
+
+*/
+         /*
+        Cloudinary cloudinary = new Cloudinary(Myconfiguration.getMyconfigs());
+        try {
+            cloudinary.uploader().upload(file.getAbsolutePath(), ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
     }
 
     public void updateSuscriptor(){
@@ -387,14 +440,14 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
        progreso.setMessage("Cargando...");
 
 
-        //SubirImagenCloudinary();
-/*
+
+
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
         getTextViewId =  (TextView) findViewById(R.id.txtIdUsuario);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
 
 
-        String url = "http://192.168.0.74/Android/v1/updateSuscriptor.php?id=";
+        String url = "http://192.168.0.74/Android/v1/updateSuscriptor.php?id=?";
 
        stringRequest = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
            @Override
@@ -407,18 +460,19 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
 
            }
        }){
+           //Metghod to send the information
            @Override
            protected Map<String, String> getParams() throws AuthFailureError {
                String documento = getTextViewId.getText().toString();
                String nombre = textViewUsername.getText().toString();
                String avatar = convertirImgString(bitmap);
 
-               SubirImagenCloudinary(file);
+
 
                return super.getParams();
            }
        };
-*/
+
 
     }
 
@@ -427,10 +481,10 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
     }
 
 
-    public  void SubirImagenCloudinary()  {
-        Toast.makeText(getApplicationContext(), "Click Subir Cloudinary", Toast.LENGTH_LONG).show();
 
-        Cloudinary cloudinary = new Cloudinary(Myconfiguration.getMyconfigs());
+
+
+        //Cloudinary cloudinary = new Cloudinary(Myconfiguration.getMyconfigs());
 
         //cloudinary.uploader().upload("R.drawable.sample_1", ObjectUtils.emptyMap());
 
@@ -458,7 +512,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
 
 
 
-}
+
 
 
 
