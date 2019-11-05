@@ -38,6 +38,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.example.fuegosantoapp.Constants.URL_GETPUBLICACIONFS;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -128,9 +130,9 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         progress.show();
 
         //String url = "http://192.168.0.74/Android/v1/publications.php";
-         String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/publications.php";
+        //String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/publications.php";
 
-        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, this, this);
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_GETPUBLICACIONFS, null, this, this);
         request.add(jsonObjectRequest);
 
 

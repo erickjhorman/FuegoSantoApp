@@ -30,7 +30,7 @@ import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
 
 
-public class ProfileActivity extends AppCompatActivity     {
+public class ProfileActivity extends AppCompatActivity   {
 
     private TextView textViewUsername, textViewUserCorreo;
     private ImageView imageViewUserAvatar;
@@ -45,49 +45,40 @@ public class ProfileActivity extends AppCompatActivity     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        textViewUserCorreo = (TextView) findViewById(R.id.textViewUserCorreo);
+        imageViewUserAvatar = (ImageView) findViewById(R.id.imageViewUserAvatar);
+        request = Volley.newRequestQueue(getApplicationContext());
+        btnEditarPerfil = (Button) findViewById(R.id.btnEditarPerfil);
+        initializeToolbar();
 
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, loginActivity.class));
         }
 
-
-        //textViewUsername = (TextView) findViewById(R.id.textViewUsername);
-        textViewUserCorreo = (TextView) findViewById(R.id.textViewUserCorreo);
-        imageViewUserAvatar = (ImageView) findViewById(R.id.imageViewUserAvatar);
-        request = Volley.newRequestQueue(getApplicationContext());
-        btnEditarPerfil = (Button) findViewById(R.id.btnEditarPerfil);
-
-        btnEditarPerfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            //Toast.makeText(getApplicationContext(),"Desde button Editar Perfil",Toast.LENGTH_SHORT).show();
-                Intent miIntent = new Intent(ProfileActivity.this, editarDatos.class);
-                startActivity(miIntent);
-            }
-        });
-
         if(SharedPrefManager.getInstance(this).isUpdated()){
-            textViewUserCorreo.setText(R.string.defaultText);
+            textViewUserCorreo.setHint("Erick");
             imageViewUserAvatar.setImageResource(R.drawable.ic_android_black_navbar);
-
         }
 
 
 
-
-        //textViewUsername.setText(SharedPrefManager.getInstance(this).getUserName());
         textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
-        Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
-        initializeToolbar();
-    }
+        //Toast.makeText(getApplicationContext(), "Url en profile Activity" + urlImagen, Toast.LENGTH_LONG).show();
+        setearUrlImagen(urlImagen);
 
-    private void setearDatosiniciales() {
 
-    }
 
-    private void setearDatosactualizados(String correo){
+
+        btnEditarPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(),"Desde button Editar Perfil",Toast.LENGTH_SHORT).show();
+                Intent miIntent = new Intent(ProfileActivity.this, editarDatos.class);
+                startActivity(miIntent);
+            }
+        });
 
     }
 
@@ -115,11 +106,7 @@ public class ProfileActivity extends AppCompatActivity     {
 
 
     private void setearUrlImagen(String urlImagen) {
-
-
-
-
-            urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image}
+        //urlImagen = urlImagen.replace("", "%20");  //To remove the spaces in my image}
 
             ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
                 @Override
@@ -141,14 +128,16 @@ public class ProfileActivity extends AppCompatActivity     {
             }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
                 }
             });
 
             request.add(imageRequest);
+            return;
 
 
     }
+
 
 
 

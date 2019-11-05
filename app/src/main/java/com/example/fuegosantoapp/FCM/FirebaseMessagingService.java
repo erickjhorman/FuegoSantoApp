@@ -120,6 +120,7 @@ public class FirebaseMessagingService  extends com.google.firebase.messaging.Fir
                 .setContentIntent(pendingIntent)
                 .setContentInfo("info");
 
+
         manager.notify(1, builder.build());
     }
 

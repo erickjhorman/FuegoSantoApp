@@ -55,6 +55,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IFragments, IComunicaFragments {
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
 
 
-         Toast.makeText(MainActivity.this, "Firebase conncetion Succes", Toast.LENGTH_LONG).show();
+         //Toast.makeText(MainActivity.this, "Firebase conncetion Succes", Toast.LENGTH_LONG).show();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -156,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
             textViewUserCorreo.setVisibility(View.VISIBLE);
             String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
-            Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
 
 
             navHeaderComentario.setVisibility(View.GONE);
@@ -187,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
                 }
             });
             request.add(imageRequest);
@@ -313,45 +315,66 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Method to create a subscription of any user
     public void suscripcionUsuario() {
+
+        //To validate the email
+        Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+
+
+        Pattern exp2 = Pattern.compile("^([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
+
+
         final String email = editTextCorreo.getText().toString().trim();
+        Matcher mather = pattern.matcher(email);
+        Matcher mather2 = exp2.matcher(email);
 
-
-        //To create the conexion to the database through
-        progressDialog.setMessage("Registrando usuario...");
-        progressDialog.show();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                Constants.URL_REGISTER, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                progressDialog.dismiss();
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        if(email.isEmpty()){
+            Toast.makeText(this, "Ingrese un correo", Toast.LENGTH_SHORT).show();
+        }else if(!mather.find()) {
+            Toast.makeText(this, "Email ingresado es invalido", Toast.LENGTH_SHORT).show();
+        }else if(!mather2.find()){
+            Toast.makeText(this, "Caracteres no permitidos ", Toast.LENGTH_SHORT).show();
+        }  else {
+            //To create the conexion to the database through
+            progressDialog.setMessage("Registrando usuario...");
+            progressDialog.show();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                    Constants.URL_REGISTER, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    progressDialog.dismiss();
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        editTextCorreo.getText().clear();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.hide();
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                return params;
-            }
-        };
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    progressDialog.hide();
+                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("email", email);
+                    return params;
+                }
+            };
+            RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+        }
+
+
 
         /*
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
         */
-        RequestHandler.getInstance(this).addToRequestQueue(stringRequest);
+
     }
 
     //To get the accion of the button
