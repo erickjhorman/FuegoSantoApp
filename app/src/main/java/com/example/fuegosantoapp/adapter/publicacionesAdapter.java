@@ -66,21 +66,22 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
 
         if(listaPublicaiones.get(position).getCover()!= null){
-               //cargarImagenUrl(listaPublicaiones.get(position).getCover(), holder);
+               cargarImagenUrl(listaPublicaiones.get(position).getCover(), holder);
         }
 
 
 
 
         String urlImagen = listaPublicaiones.get(position).getCover();
-        Toast.makeText(context, "Url" + urlImagen , Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "Url" + urlImagen , Toast.LENGTH_LONG).show();
 
     }
 
     private void cargarImagenUrl(String getCover , final publicacionesHolder holder ) {
-         String urlImagen = getCover.replace("", "%20");
 
-        ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
+        //String urlImagen = getCover.replace("", "%20");
+
+        ImageRequest imageRequest = new ImageRequest(getCover, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 holder.Imagecover.setImageBitmap(response);
@@ -88,7 +89,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         }, 0,0 , ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Error al cargar la imagen"  , Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "Error al cargar la imagen"  , Toast.LENGTH_LONG).show();
             }
         });
         request.add(imageRequest);

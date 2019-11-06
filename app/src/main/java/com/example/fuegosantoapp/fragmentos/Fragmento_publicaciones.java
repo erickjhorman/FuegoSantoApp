@@ -184,8 +184,9 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             adapter.setOnclickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getContext(), "Selecciona: " + listaPublicaciones.get(recyclerPublicaciones.getChildAdapterPosition(view)).getFtitulo(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "Selecciona: " + listaPublicaciones.get(recyclerPublicaciones.getChildAdapterPosition(view)).getFtitulo(), Toast.LENGTH_SHORT).show();
 
+                    //To send the object in fully to the detail fragment
                     interfaceComunicaFragments.enviarPublicacion(listaPublicaciones.get(recyclerPublicaciones.getChildAdapterPosition(view)));
                 }
 

@@ -1,18 +1,29 @@
 package com.example.fuegosantoapp.fragmentos;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.R;
+import com.example.fuegosantoapp.adapter.publicacionesAdapter;
 import com.example.fuegosantoapp.entidades.Publicacion;
 
 /**
@@ -35,8 +46,10 @@ public class DetallePublicacionesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+
     TextView textPublicacionTexto;
     ImageView imageDetalle;
+    RequestQueue request;
 
     public DetallePublicacionesFragment() {
         // Required empty public constructor
@@ -75,8 +88,9 @@ public class DetallePublicacionesFragment extends Fragment {
 
         View vista  = inflater.inflate(R.layout.fragment_detalle_publicacion, container, false);
 
+        request = Volley.newRequestQueue(getContext());
         textPublicacionTexto = (TextView)  vista.findViewById(R.id.descripcionId);
-        imageDetalle = vista.findViewById(R.id.publicacionDetalle);
+        imageDetalle = (ImageView)  vista.findViewById(R.id.publicacionDetalle);
 
        Bundle objetoPublicacion = getArguments();
         Publicacion publicacion = null;
@@ -84,12 +98,43 @@ public class DetallePublicacionesFragment extends Fragment {
         if(objetoPublicacion != null){
             publicacion =  (Publicacion)  objetoPublicacion.getSerializable("objeto");
 
-           textPublicacionTexto.setText(publicacion.getPublicaciones());
+            System.out.println(publicacion);
+            textPublicacionTexto.setText(publicacion.getPublicaciones());
+           String imagen = publicacion.getCover();
+            //Toast.makeText(getContext(),"Url en DetallePublicacion Activity" + publicacion.getCover(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(),"Url en DetallePublicacion Activity" + imagen , Toast.LENGTH_LONG).show();
+            cargarImagenUrl(imagen);
         }
 
 
         return  vista;
+
+
     }
+
+    private void cargarImagenUrl(String imagen) {
+
+        //String urlImagen = getCover.replace("", "%20");
+        //Toast.makeText(getContext(),"Url en cargarImagenUrL Activity" + imagen , Toast.LENGTH_LONG).show();
+
+        ImageRequest imageRequest = new ImageRequest(imagen, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                imageDetalle.setImageBitmap(response);
+            }
+        }, 0,0 , ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(context, "Error al cargar la imagen"  , Toast.LENGTH_LONG).show();
+            }
+        });
+
+        request.add(imageRequest);
+    }
+
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
