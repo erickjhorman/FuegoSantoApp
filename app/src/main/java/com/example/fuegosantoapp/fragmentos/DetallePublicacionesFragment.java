@@ -48,6 +48,9 @@ public class DetallePublicacionesFragment extends Fragment {
 
 
     TextView textPublicacionTexto;
+    TextView txtTituloPublicacion;
+    TextView txtAutorPublicacion;
+    TextView txtFechaPublicacion;
     ImageView imageDetalle;
     RequestQueue request;
 
@@ -91,6 +94,9 @@ public class DetallePublicacionesFragment extends Fragment {
         request = Volley.newRequestQueue(getContext());
         textPublicacionTexto = (TextView)  vista.findViewById(R.id.descripcionId);
         imageDetalle = (ImageView)  vista.findViewById(R.id.publicacionDetalle);
+        txtTituloPublicacion = (TextView) vista.findViewById(R.id.tituloPublicacion);
+        txtAutorPublicacion = (TextView) vista.findViewById(R.id.autorPublicacion);
+        txtFechaPublicacion = (TextView) vista.findViewById(R.id.fechaPublicacion);
 
        Bundle objetoPublicacion = getArguments();
         Publicacion publicacion = null;
@@ -100,6 +106,9 @@ public class DetallePublicacionesFragment extends Fragment {
 
             System.out.println(publicacion);
             textPublicacionTexto.setText(publicacion.getPublicaciones());
+            txtTituloPublicacion.setText(publicacion.getFtitulo());
+            txtAutorPublicacion.setText(publicacion.getAutor());
+            txtFechaPublicacion.setText(publicacion.getFecha_publicacion());
            String imagen = publicacion.getCover();
             //Toast.makeText(getContext(),"Url en DetallePublicacion Activity" + publicacion.getCover(), Toast.LENGTH_LONG).show();
             //Toast.makeText(getContext(),"Url en DetallePublicacion Activity" + imagen , Toast.LENGTH_LONG).show();

@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/mtrl_card_spacing"
+        android:layout_height="295dp"
+        android:layout_marginLeft="10sp"
         android:layout_marginTop="@dimen/mtrl_card_spacing"
         android:layout_marginRight="@dimen/mtrl_card_spacing"
         android:minHeight="150dp">
 
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="106dp"
             android:orientation="horizontal">
 
-
             <ImageView
-                android:id="@+id/idImagenPublicacion"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="10dp"
-                android:src="@mipmap/ic_launcher" />
-
-            <LinearLayout
+                android:id="@+id/imageViewUserAvatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="105dp"
                 android:orientation="vertical">
+
 
                 <TextView
 
@@ -43,22 +47,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Titulo Publicacion" />
-
-                <TextView
-
-                    android:id="@+id/Description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Descripcion" />
-
-                <!--
-                <TextView
-
-                    android:id="@+id/Publicacion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                android:text="Descripcion" />
-                -->
 
 
                 <TextView
@@ -75,17 +63,91 @@
                     android:layout_height="wrap_content"
                     android:text="Autor" />
 
+
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="167dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15sp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/idImagenPublicacion"
+                android:layout_width="match_parent"
+                android:layout_height="116dp"
+
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+
+                android:id="@+id/Description"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_marginTop="16dp"
+                android:text="Descripcion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.783"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/verDetalle"
-            android:layout_width="343dp"
-            android:layout_height="28dp"
-            android:layout_marginLeft="110dp"
-            android:layout_marginTop="135dp"
-            android:text="Leer mas " />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="394dp"
+            android:layout_height="33dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="10sp"
+            android:layout_marginBottom="2sp"
+            android:orientation="horizontal">
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/verDetalle"
+                android:layout_width="93dp"
+                android:layout_height="wrap_content"
+                android:text="Leer mas "
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:layout_width="101dp"
+                android:layout_height="match_parent"
+                android:text="@string/comentar"
+                android:textColor="@color/Gray"
+                android:textSize="15sp"
+                app:backgroundTint="@color/white">
+
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="117dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/share">
+
+                </TextView>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
 
     </com.google.android.material.card.MaterialCardView>
 
