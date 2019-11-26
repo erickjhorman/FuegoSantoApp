@@ -29,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.adapter.publicacionesAdapter;
+import com.example.fuegosantoapp.entidades.Comentarios;
 import com.example.fuegosantoapp.entidades.Publicacion;
 import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 
@@ -39,6 +40,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.example.fuegosantoapp.Constants.URL_GETPUBLICACIONFS;
+import static com.example.fuegosantoapp.Constants.URL_IMAGENES;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +50,7 @@ import static com.example.fuegosantoapp.Constants.URL_GETPUBLICACIONFS;
  * Use the {@link Fragmento_publicaciones#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragmento_publicaciones extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener , View.OnClickListener {
+public class Fragmento_publicaciones extends Fragment implements Response.Listener<JSONObject>, Response.ErrorListener, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,6 +64,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
     RecyclerView recyclerPublicaciones;
     ArrayList<Publicacion> listaPublicaciones;
+    ArrayList<Publicacion> listaComentarios;
 
     Activity activity;
     IComunicaFragments interfaceComunicaFragments;
@@ -100,7 +103,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-      super.onStop();
+        super.onStop();
 
     }
 
@@ -118,12 +121,12 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
         request = Volley.newRequestQueue(getContext());
 
-        cargarWebServices();
-
+        cargarWebServicesPublicaciones();
+        //cargarWebServicesImagenes();
         return vista;
     }
 
-    private void cargarWebServices() {
+    private void cargarWebServicesPublicaciones() {
 
         progress = new ProgressDialog(getContext());
         progress.setMessage("Consultando");
@@ -132,12 +135,40 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         //String url = "http://192.168.0.74/Android/v1/publications.php";
         //String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/publications.php";
 
+
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_GETPUBLICACIONFS, null, this, this);
         request.add(jsonObjectRequest);
 
 
+  /*
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_IMAGENES, null, this, this);
+        request.add(jsonObjectRequest);
+
+   */
+
+
     }
 
+    private void cargarWebServicesImagenes() {
+
+        progress = new ProgressDialog(getContext());
+        progress.setMessage("Consultando");
+        progress.show();
+
+        //String url = "http://192.168.0.74/Android/v1/publications.php";
+        //String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/publications.php";
+
+        /*
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_GETPUBLICACIONFS, null, this, this);
+        request.add(jsonObjectRequest);
+        */
+
+
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_IMAGENES, null, this, this);
+        request.add(jsonObjectRequest);
+
+
+    }
 
 
     @Override
@@ -157,8 +188,35 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
     @Override
     public void onResponse(JSONObject response) {
         Publicacion publicacion = null;
+        Comentarios comentarios = null;
 
         JSONArray json = response.optJSONArray("publicacion");
+        JSONArray json2 = response.optJSONArray("comments");
+
+        //Toast.makeText(getContext(),"Maria: " + json2, Toast.LENGTH_SHORT).show();
+
+
+        /*
+        try {
+                for (int i = 0; i < json.length(); i++) {
+                    publicacion = new Publicacion();
+                    JSONObject jsonObject = null;
+                    jsonObject = json.getJSONObject(i);
+
+                    publicacion.setId_publicaciones(jsonObject.optInt("id"));
+                    publicacion.setFtitulo(jsonObject.optString("titulo"));
+                    publicacion.setDescripcion(jsonObject.optString("descripcion"));
+                    publicacion.setCover((jsonObject.optString("cover")));
+                    publicacion.setPublicaciones(jsonObject.optString("publicacion"));
+                    publicacion.setFecha_publicacion(jsonObject.optString("fecha_publicacion"));
+                    publicacion.setAutor(jsonObject.optString("autor"));
+                    publicacion.setComentario(jsonObject.optString("comentario"));
+                    listaPublicaciones.add(publicacion);
+
+                }
+
+
+         */
 
         try {
             for (int i = 0; i < json.length(); i++) {
@@ -173,12 +231,29 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                 publicacion.setPublicaciones(jsonObject.optString("publicacion"));
                 publicacion.setFecha_publicacion(jsonObject.optString("fecha_publicacion"));
                 publicacion.setAutor(jsonObject.optString("autor"));
+
+
+                for (int j = 0; j<json2.length(); j++){
+                    comentarios = new Comentarios();
+                    jsonObject = json2.getJSONObject(i);
+
+                    comentarios.setComentario(jsonObject.optString("comentario"));
+                    Toast.makeText(getContext(), "Comentario: " + jsonObject.optString("comentario"), Toast.LENGTH_SHORT).show();
+                }
+
+
                 listaPublicaciones.add(publicacion);
 
+
+
             }
+
+
+
+
             progress.hide();
 
-            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones , getContext());
+            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, getContext());
             recyclerPublicaciones.setAdapter(adapter);
 
             adapter.setOnclickListener(new View.OnClickListener() {
@@ -194,7 +269,6 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             });
 
 
-
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
@@ -205,14 +279,13 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             //Log.d("error : ", error.toString());
             progress.hide();
         }
+
     }
 
     @Override
     public void onClick(View v) {
 
     }
-
-
 
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -226,9 +299,9 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if(context instanceof Activity){
-            this.activity = (Activity ) context;
-            interfaceComunicaFragments =  (IComunicaFragments) this.activity;
+        if (context instanceof Activity) {
+            this.activity = (Activity) context;
+            interfaceComunicaFragments = (IComunicaFragments) this.activity;
         }
 
         if (context instanceof OnFragmentInteractionListener) {
@@ -244,8 +317,6 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         super.onDetach();
         mListener = null;
     }
-
-
 
 
     /**

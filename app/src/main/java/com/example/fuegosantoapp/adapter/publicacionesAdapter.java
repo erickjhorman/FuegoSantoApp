@@ -21,11 +21,13 @@ import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
 import com.example.fuegosantoapp.entidades.Publicacion;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdapter.publicacionesHolder> implements View.OnClickListener {
 
     List<Publicacion> listaPublicaiones;
+    ArrayList<Publicacion> listaComentarios;
     RequestQueue request;
     Context context;
 
@@ -56,13 +58,17 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull publicacionesAdapter.publicacionesHolder holder, int position) {
+    public void onBindViewHolder(@NonNull publicacionesHolder holder, int position) {
+
+        //Toast.makeText(context, "lista" + listaComentarios.get(position).getComentario() , Toast.LENGTH_LONG).show();
+
         //holder.txtidPublicacion.setText(( listaPublicaiones.get(position).getId_publicaciones()));
         holder.txttituloPublicacion.setText(listaPublicaiones.get(position).getFtitulo());
         //holder.txtPublicacion.setText(listaPublicaiones.get(position).getPublicaciones());
         holder.txtfechaPublicacion.setText(listaPublicaiones.get(position).getFecha_publicacion());
         holder.txtautor.setText(listaPublicaiones.get(position).getAutor());
         holder.txtDecripcion.setText(listaPublicaiones.get(position).getDescripcion());
+        holder.txcomentario.setText(listaPublicaiones.get(position).getComentario());
 
 
         if(listaPublicaiones.get(position).getCover()!= null){
@@ -112,17 +118,18 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
     public class publicacionesHolder extends RecyclerView.ViewHolder {
 
-        TextView txtidPublicacion, txttituloPublicacion, txtPublicacion, txtDecripcion, txtfechaPublicacion, txtautor;
-        ImageView Imagecover;
+        TextView txtidPublicacion, txttituloPublicacion, txtPublicacion, txtDecripcion, txtfechaPublicacion, txtautor,txcomentario;
+        ImageView Imagecover ;
 
         public publicacionesHolder(@NonNull View itemView) {
             super(itemView);
-            txtidPublicacion = (TextView) itemView.findViewById(R.id.idPublicacion);
+            txtidPublicacion = itemView.findViewById(R.id.idPublicacion);
             txttituloPublicacion = itemView.findViewById(R.id.tituloPublicacion);
             Imagecover = itemView.findViewById(R.id.idImagenPublicacion);
             txtDecripcion = itemView.findViewById(R.id.Description);
             txtfechaPublicacion = itemView.findViewById(R.id.fechaPublicacion);
             txtautor = itemView.findViewById(R.id.autor);
+            txcomentario = itemView.findViewById(R.id.Comentarios);
         }
     }
 }

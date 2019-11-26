@@ -8,7 +8,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="295dp"
+        android:layout_height="467dp"
         android:layout_marginLeft="10sp"
         android:layout_marginTop="@dimen/mtrl_card_spacing"
         android:layout_marginRight="@dimen/mtrl_card_spacing"
@@ -71,13 +71,12 @@
             android:layout_width="match_parent"
             android:layout_height="167dp"
             android:layout_gravity="center"
-            android:layout_marginTop="15sp"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/idImagenPublicacion"
                 android:layout_width="match_parent"
-                android:layout_height="116dp"
+                android:layout_height="106dp"
 
                 android:scaleType="fitXY"
                 android:src="@mipmap/ic_launcher" />
@@ -106,11 +105,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="394dp"
-            android:layout_height="33dp"
+            android:layout_width="414dp"
+            android:layout_height="52dp"
             android:layout_gravity="bottom"
             android:layout_marginLeft="10sp"
-            android:layout_marginBottom="2sp"
+            android:layout_marginBottom="90sp"
             android:orientation="horizontal">
 
 
@@ -122,6 +121,7 @@
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
+                android:id="@+id/txtComentar"
                 android:layout_width="101dp"
                 android:layout_height="match_parent"
                 android:text="@string/comentar"
@@ -132,6 +132,7 @@
             </TextView>
 
             <LinearLayout
+                android:id="@+id/btnActions"
                 android:layout_width="117dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -147,6 +148,35 @@
 
 
         </LinearLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/Comentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Comentarios" />
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
 
 
     </com.google.android.material.card.MaterialCardView>

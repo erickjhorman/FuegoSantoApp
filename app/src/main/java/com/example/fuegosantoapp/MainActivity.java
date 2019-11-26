@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,13 +34,18 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.cloudinary.android.MediaManager;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
 import com.example.fuegosantoapp.activities.ProfileActivity;
 import com.example.fuegosantoapp.activities.loginActivity;
+import com.example.fuegosantoapp.adapter.publicacionesAdapter;
+import com.example.fuegosantoapp.entidades.Comentarios;
+import com.example.fuegosantoapp.entidades.Imagenes;
 import com.example.fuegosantoapp.entidades.Publicacion;
 import com.example.fuegosantoapp.fragmentos.DetallePublicacionesFragment;
 import com.example.fuegosantoapp.fragmentos.Fragmento_Mensaje;
@@ -49,17 +55,25 @@ import com.example.fuegosantoapp.fragmentos.Fragmento_publicaciones;
 import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 import com.example.fuegosantoapp.interfaces.IFragments;
 import com.google.android.material.navigation.NavigationView;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
+import org.cloudinary.json.JSONString;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.example.fuegosantoapp.Constants.URL_GETPUBLICACIONFS;
+import static com.example.fuegosantoapp.Constants.URL_IMAGENES;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IFragments, IComunicaFragments {
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IFragments, IComunicaFragments, Response.ErrorListener, Response.Listener<JSONObject> {
 
     //Edit texts for the database
     private EditText editTextCorreo;
@@ -71,32 +85,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView navHeaderComentario;
     private ImageView imageViewUserAvatar;
     private TextView textViewUserCorreo;
-
+    ArrayList<Imagenes> listaImagenes;
+    ProgressDialog progress;
+    CarouselView carouselView;
     RequestQueue request;
+    JsonObjectRequest jsonObjectRequest;
 
     private DrawerLayout drawer; //Variable to make the funcionality of the navbar
     Toolbar toolbar;
     ViewPager viewPager;
     CustomSwipeAdapter adapter;
-
+    Imagenes imagenes = null;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
-         //Toast.makeText(MainActivity.this, "Firebase conncetion Succes", Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, "Firebase conncetion Succes", Toast.LENGTH_LONG).show();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        //viewPager = (ViewPager) findViewById(R.id.view_pager);
         //pager = findViewById(R.id.view_pager);
         onNewIntent(getIntent());
         adapter = new CustomSwipeAdapter(this);
+        request = Volley.newRequestQueue(getApplicationContext());
 
-
-        viewPager.setAdapter(adapter);
-        viewPager.setAdapter(adapter);
+        //viewPager.setAdapter(adapter);
+        //viewPager.setAdapter(adapter);
 
         //Crear logica del toolbar y asignarle un titulo
         toolbar = (Toolbar) findViewById(R.id.toolbar_inicio);
@@ -115,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setVerticalScrollBarEnabled(false);
 
 
+
+        listaImagenes = new ArrayList<>();
+        getImagenes();
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -128,8 +149,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new Fragmento_articulo()).commit();
 
         }*/
-
-        request = Volley.newRequestQueue(getApplicationContext());
 
 
         //Inflate the nav_header
@@ -152,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //setearUrlImagen(urlImagen);
 
 
-
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
             textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
@@ -163,7 +181,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             navHeaderComentario.setVisibility(View.GONE);
             btnloginNavbar.setVisibility(View.GONE);
-
 
 
             urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image
@@ -197,9 +214,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             return;
         }
-
-
-
 
 
         //Declaring the variables for the suscription
@@ -262,8 +276,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //To select the item of the navbar and open a specific fragmen
     @Override
-
-
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
@@ -313,6 +325,119 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public void getImagenes() {
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, Constants.URL_IMAGENES, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+
+                //JSONObject jsonObject = new JSONObject(response);
+
+                JSONArray json = response.optJSONArray("imagenes");
+                //Toast.makeText(getApplicationContext(),"Mensaje:" + json, Toast.LENGTH_SHORT).show();
+                //To create Carousel
+                //carouselView.setPageCount(json.length());
+                Toast.makeText(getApplicationContext(),"Mensaje:" + json.length(), Toast.LENGTH_SHORT).show();
+
+                try {
+                    for (int i = 0; i < json.length(); i++) {
+
+
+
+
+                        //carouselView.setPageCount(json.length());
+                        imagenes = new Imagenes();
+                        JSONObject jsonObject = null;
+                        jsonObject = json.getJSONObject(i);
+
+
+                        imagenes.setTitulo(jsonObject.optString("Titulo"));
+                        imagenes.setDescription(jsonObject.optString("Descripcion"));
+                        imagenes.setImagen(jsonObject.optString("Imagen"));
+
+
+                        listaImagenes.add(imagenes);
+                        //Toast.makeText(getApplicationContext(), "lista" + listaImagenes.get(i).getTitulo() , Toast.LENGTH_LONG).show();
+                        //String urlImagen = listaImagenes.get(i).getImagen();
+                        cargarImagenUrl(listaImagenes.get(i).getImagen());
+                        //Toast.makeText(getApplicationContext(), "lista" + urlImagen , Toast.LENGTH_LONG).show();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
+                    //System.out.println();
+                    Log.d("error : ", response.toString());
+                    progress.hide();
+
+                    //Log.d("error : ", error.toString());
+                    progress.hide();
+                }
+                //Toast.makeText(getApplicationContext(),"Mensaje:" + response, Toast.LENGTH_SHORT).show();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                //VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+
+
+        request.add(jsonObjectRequest);
+
+
+
+
+
+
+        //String url = "http://localhost/Android/v1/getImagenes.php";
+
+/*
+        jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_IMAGENES, null, this, this);
+        request.add(jsonObjectRequest);
+*/
+
+
+    }
+    private void cargarImagenUrl(String getImagen ) {
+
+        //String urlImagen = getCover.replace("", "%20");
+
+        ImageRequest imageRequest = new ImageRequest(getImagen, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                //Imagecover.setImageBitmap(response);
+            }
+        }, 0,0 , ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(context, "Error al cargar la imagen"  , Toast.LENGTH_LONG).show();
+            }
+        });
+        request.add(imageRequest);
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Toast.makeText(getApplicationContext(), "No se consultar" + error.toString(), Toast.LENGTH_LONG).show();
+        System.out.println();
+        //Log.d("error : ", error.toString());
+        progress.hide();
+    }
+
+    public void onResponse(JSONObject response) {
+
+
+        Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
+    }
+
+
     //Method to create a subscription of any user
     public void suscripcionUsuario() {
 
@@ -328,13 +453,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Matcher mather = pattern.matcher(email);
         Matcher mather2 = exp2.matcher(email);
 
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             Toast.makeText(this, "Ingrese un correo", Toast.LENGTH_SHORT).show();
-        }else if(!mather.find()) {
+        } else if (!mather.find()) {
             Toast.makeText(this, "Email ingresado es invalido", Toast.LENGTH_SHORT).show();
-        }else if(!mather2.find()){
+        } else if (!mather2.find()) {
             Toast.makeText(this, "Caracteres no permitidos ", Toast.LENGTH_SHORT).show();
-        }  else {
+        } else {
             //To create the conexion to the database through
             progressDialog.setMessage("Registrando usuario...");
             progressDialog.show();
@@ -417,5 +542,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.replace(R.id.fragment_container, new Fragmento_publicaciones()).commit();
             }
         }
+    }
+
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
