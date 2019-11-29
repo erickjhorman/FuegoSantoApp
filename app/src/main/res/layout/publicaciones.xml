@@ -8,7 +8,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="467dp"
+        android:layout_height="578dp"
         android:layout_marginLeft="10sp"
         android:layout_marginTop="@dimen/mtrl_card_spacing"
         android:layout_marginRight="@dimen/mtrl_card_spacing"
@@ -18,7 +18,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="106dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_gravity="top">
 
             <ImageView
                 android:id="@+id/imageViewUserAvatar"
@@ -31,11 +32,11 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
+                android:layout_gravity="top"
                 android:orientation="vertical">
 
 
                 <TextView
-
                     android:id="@+id/idPublicacion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,26 +68,30 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="167dp"
+            android:layout_height="260dp"
             android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/idImagenPublicacion"
-                android:layout_width="match_parent"
-                android:layout_height="106dp"
-
+                android:layout_width="394dp"
+                android:layout_height="213dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="-1dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
-
                 android:id="@+id/Description"
-                android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="383dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="220dp"
+                android:layout_marginEnd="5dp"
+                android:gravity="bottom"
                 android:text="Descripcion"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.783"
@@ -94,22 +99,15 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="414dp"
-            android:layout_height="52dp"
+            android:layout_width="380dp"
+            android:layout_height="35dp"
             android:layout_gravity="bottom"
             android:layout_marginLeft="10sp"
-            android:layout_marginBottom="90sp"
+            android:layout_marginBottom="155sp"
             android:orientation="horizontal">
 
 
@@ -149,7 +147,6 @@
 
         </LinearLayout>
 
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -157,24 +154,111 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="bottom">
+                android:layout_height="89dp"
+                android:gravity="bottom"
+                android:layout_marginBottom="75dp"
+                android:orientation="horizontal">
+
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/imgAvatar"
+                    android:layout_width="43dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="top"
+                    android:src="@mipmap/ic_launcher">
 
                 </ImageView>
 
-                <TextView
-                    android:id="@+id/Comentarios"
-                    android:layout_width="match_parent"
-                    android:layout_height="58dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Comentarios" />
+                <LinearLayout
+                    android:layout_width="350dp"
+                    android:layout_height="51dp"
+                    android:layout_gravity="top
+"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtEmail"
+                        android:layout_width="73dp"
+                        android:layout_height="wrap_content"
+                        android:text="Email" />
+
+                    <TextView
+                        android:id="@+id/Comentarios"
+                        android:layout_width="170dp"
+                        android:layout_height="wrap_content"
+                        android:text="Comentarios" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtFecha"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fecha" />
+
+                        <TextView
+                            android:id="@+id/txtHora"
+                            android:layout_width="57dp"
+                            android:layout_height="wrap_content"
+                            android:text="Hora" />
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_gravity="bottom">
+
+
+                <ImageView
+                    android:id="@+id/imgAvatarComentario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_toStartOf="@+id/txtEnviarComentario"
+                    android:src="@mipmap/ic_launcher" />
+
+                <EditText
+                    android:id="@+id/txtEnviarComentario"
+                    android:layout_width="276dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:hint="Escribe un comentario"
+                    android:imeOptions="actionSend"
+                    android:inputType="text">
+
+                </EditText>
+
+                <!--
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:gravity="bottom"
+
+                    android:textSize="14dp">
+
+                </Button>
+                -->
+
+            </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
 

@@ -55,6 +55,7 @@ import com.example.fuegosantoapp.fragmentos.Fragmento_publicaciones;
 import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 import com.example.fuegosantoapp.interfaces.IFragments;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageListener;
 
@@ -471,7 +472,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+
+
                         editTextCorreo.getText().clear();
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -511,6 +517,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String msg = "";
         if (view == buttonRegistrar)
             suscripcionUsuario();
+
+
         if (view == textViewLogin)
             startActivity(new Intent(this, loginActivity.class));
     }

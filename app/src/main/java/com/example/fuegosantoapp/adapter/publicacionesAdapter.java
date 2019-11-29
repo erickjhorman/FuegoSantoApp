@@ -1,6 +1,7 @@
 package com.example.fuegosantoapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
+import com.example.fuegosantoapp.activities.loginActivity;
+import com.example.fuegosantoapp.entidades.Comentarios;
 import com.example.fuegosantoapp.entidades.Publicacion;
 
 import java.util.ArrayList;
@@ -26,19 +29,25 @@ import java.util.List;
 
 public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdapter.publicacionesHolder> implements View.OnClickListener {
 
+
     List<Publicacion> listaPublicaiones;
-    ArrayList<Publicacion> listaComentarios;
+    List<Comentarios> listaComentarios;
     RequestQueue request;
     Context context;
 
     private  View.OnClickListener listener;
 
 
-    public publicacionesAdapter(List<Publicacion> listaPublicaiones, Context context) {
+    public publicacionesAdapter(List<Publicacion> listaPublicaiones,List<Comentarios> listaComentarios, Context context) {
         this.listaPublicaiones = listaPublicaiones;
+        this.listaComentarios = listaComentarios;
         this.context = context;
         request = Volley.newRequestQueue(context);
     }
+
+
+
+
 
     @NonNull
     @Override
@@ -47,20 +56,19 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.publicaciones, parent, false);
         vista.setOnClickListener(this);
 
+
         RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         vista.setLayoutParams(layoutParams);
         return new publicacionesAdapter.publicacionesHolder(vista);
     }
 
 
-    public void setOnclickListener(View.OnClickListener listener){
-        this.listener  = listener;
-    }
+
 
     @Override
     public void onBindViewHolder(@NonNull publicacionesHolder holder, int position) {
 
-        //Toast.makeText(context, "lista" + listaComentarios.get(position).getComentario() , Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "lista Comentarios" + listaComentarios.get(position).getComentario() , Toast.LENGTH_LONG).show();
 
         //holder.txtidPublicacion.setText(( listaPublicaiones.get(position).getId_publicaciones()));
         holder.txttituloPublicacion.setText(listaPublicaiones.get(position).getFtitulo());
@@ -68,7 +76,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         holder.txtfechaPublicacion.setText(listaPublicaiones.get(position).getFecha_publicacion());
         holder.txtautor.setText(listaPublicaiones.get(position).getAutor());
         holder.txtDecripcion.setText(listaPublicaiones.get(position).getDescripcion());
-        holder.txcomentario.setText(listaPublicaiones.get(position).getComentario());
+        holder.txcomentario.setText(listaComentarios.get(position).getComentario());
 
 
         if(listaPublicaiones.get(position).getCover()!= null){
@@ -111,10 +119,12 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
     @Override
     public void onClick(View view) {
-     if(listener!=null){
-         listener.onClick(view);
+        if(listener!=null){
+            listener.onClick(view);
         }
     }
+
+
 
     public class publicacionesHolder extends RecyclerView.ViewHolder {
 
@@ -130,6 +140,17 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
             txtfechaPublicacion = itemView.findViewById(R.id.fechaPublicacion);
             txtautor = itemView.findViewById(R.id.autor);
             txcomentario = itemView.findViewById(R.id.Comentarios);
+
+
         }
     }
+
+    public void setOnclickListener(View.OnClickListener listener){
+        this.listener  = listener;
+
+    }
+
+
+
+
 }

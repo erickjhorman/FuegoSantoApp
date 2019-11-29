@@ -3,7 +3,7 @@ package com.example.fuegosantoapp.fragmentos;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,8 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -24,7 +23,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.R;
@@ -61,10 +59,10 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    private TextView verDetalle;
     RecyclerView recyclerPublicaciones;
     ArrayList<Publicacion> listaPublicaciones;
-    ArrayList<Publicacion> listaComentarios;
+    ArrayList<Comentarios> listaComentarios;
 
     Activity activity;
     IComunicaFragments interfaceComunicaFragments;
@@ -114,7 +112,9 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
         View vista = inflater.inflate(R.layout.fragment_fragmento_publicaciones, container, false);
 
+
         listaPublicaciones = new ArrayList<>();
+        listaComentarios = new ArrayList<>();
         recyclerPublicaciones = (RecyclerView) vista.findViewById(R.id.idRecycler);
         recyclerPublicaciones.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerPublicaciones.setHasFixedSize(true);
@@ -192,7 +192,8 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
         JSONArray json = response.optJSONArray("publicacion");
         JSONArray json2 = response.optJSONArray("comments");
-
+        Integer id_publicacion = null;
+        Integer id_publicacion_comentarios = null;
         //Toast.makeText(getContext(),"Maria: " + json2, Toast.LENGTH_SHORT).show();
 
 
@@ -223,6 +224,11 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                 publicacion = new Publicacion();
                 JSONObject jsonObject = null;
                 jsonObject = json.getJSONObject(i);
+                //Toast.makeText(getContext(), "Publicacion: " + jsonObject.optInt("id"), Toast.LENGTH_SHORT).show();
+                ;
+                //id_publicacion = 1;
+                id_publicacion = jsonObject.optInt("id");
+                Toast.makeText(getContext(), "Publicacion: " + id_publicacion, Toast.LENGTH_SHORT).show();
 
                 publicacion.setId_publicaciones(jsonObject.optInt("id"));
                 publicacion.setFtitulo(jsonObject.optString("titulo"));
@@ -233,14 +239,58 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                 publicacion.setAutor(jsonObject.optString("autor"));
 
 
-                for (int j = 0; j<json2.length(); j++){
-                    comentarios = new Comentarios();
-                    jsonObject = json2.getJSONObject(i);
 
-                    comentarios.setComentario(jsonObject.optString("comentario"));
-                    Toast.makeText(getContext(), "Comentario: " + jsonObject.optString("comentario"), Toast.LENGTH_SHORT).show();
+                for (int j = 0; j < json2.length(); j++) {
+                    comentarios = new Comentarios();
+                    JSONObject jsonObject2 = null;
+                    jsonObject2 = json2.getJSONObject(j);
+                    //Toast.makeText(getContext(), "Length Comentario: " + json2.length(), Toast.LENGTH_SHORT).show();
+
+
+                    id_publicacion_comentarios = jsonObject2.optInt("publicacion_id");
+
+
+                    Toast.makeText(getContext(), "Publicacion en Comentario: " +id_publicacion_comentarios, Toast.LENGTH_SHORT).show();
+
+
+
+
+                           comentarios.setId(jsonObject2.optInt("publicacion_id"));
+                           comentarios.setComentario(jsonObject2.optString("comentario"));
+                           comentarios.setEmail(jsonObject2.optString("email"));
+                           comentarios.setAvatar(jsonObject2.optString("avatar"));
+                           comentarios.setHora(jsonObject2.optString("hora"));
+                           comentarios.setFecha(jsonObject2.optString("fecha"));
+
+
+
+                    listaComentarios.add(comentarios);
+
+                       //Toast.makeText(getContext(), "Comentario: " + jsonObject.optString("comentario"), Toast.LENGTH_SHORT).show();
                 }
 
+
+
+                /*
+                for (int j = 0; j < json2.length();j++) {
+                    comentarios = new Comentarios();
+                    JSONObject jsonObject2 = null;
+                    jsonObject2 = json2.getJSONObject(i);
+
+                    id_publicacion_comentarios = jsonObject2.optInt("id");
+
+
+
+                        comentarios.setId(jsonObject2.optInt("publicacion_id"));
+                        comentarios.setComentario(jsonObject2.optString("comentario"));
+                        comentarios.setEmail(jsonObject2.optString("email"));
+                        comentarios.setAvatar(jsonObject2.optString("avatar"));
+                        comentarios.setHora(jsonObject2.optString("hora"));
+                        comentarios.setFecha(jsonObject2.optString("fecha"));
+                        //Toast.makeText(getContext(), "Comentario: " + jsonObject.optString("comentario"), Toast.LENGTH_SHORT).show();
+
+                }
+                */
 
                 listaPublicaciones.add(publicacion);
 
@@ -249,12 +299,11 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             }
 
 
-
-
             progress.hide();
 
-            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, getContext());
+            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, listaComentarios, getContext());
             recyclerPublicaciones.setAdapter(adapter);
+
 
             adapter.setOnclickListener(new View.OnClickListener() {
                 @Override

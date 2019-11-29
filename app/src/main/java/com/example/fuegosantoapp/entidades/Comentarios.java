@@ -1,12 +1,24 @@
 package com.example.fuegosantoapp.entidades;
 
-public class Comentarios {
+import java.io.Serializable;
 
+public class Comentarios implements Serializable {
+
+    private int id;
     private String comentario;
     private String hora;
     private String fecha;
     private String email;
     private String avatar;
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getComentario() {
         return comentario;
