@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -52,6 +53,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.example.fuegosantoapp.Constants;
 import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
+import com.example.fuegosantoapp.RequestHandler;
 import com.example.fuegosantoapp.SharedPrefManager;
 import com.example.fuegosantoapp.mCloud.Myconfiguration;
 
@@ -126,7 +128,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
 
 
 
-        request = Volley.newRequestQueue(getApplicationContext());
+        //request = Volley.newRequestQueue(getApplicationContext());
         textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
         getTextViewId.setText(Integer.toString(SharedPrefManager.getInstance(this).getUserId()));
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
@@ -265,7 +267,10 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
         request.add(imageRequest);
 
 
+
     }
+
+
 
 /*
     public void onClick(View view) {

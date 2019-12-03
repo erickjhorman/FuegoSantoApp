@@ -109,7 +109,7 @@ public class DetallePublicacionesFragment extends Fragment {
             txtTituloPublicacion.setText(publicacion.getFtitulo());
             txtAutorPublicacion.setText(publicacion.getAutor());
             txtFechaPublicacion.setText(publicacion.getFecha_publicacion());
-           String imagen = publicacion.getCover();
+            String imagen = publicacion.getCover();
             //Toast.makeText(getContext(),"Url en DetallePublicacion Activity" + publicacion.getCover(), Toast.LENGTH_LONG).show();
             //Toast.makeText(getContext(),"Url en DetallePublicacion Activity" + imagen , Toast.LENGTH_LONG).show();
             cargarImagenUrl(imagen);

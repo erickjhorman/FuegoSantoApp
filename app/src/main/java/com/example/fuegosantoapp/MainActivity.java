@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +28,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -39,12 +39,10 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.cloudinary.android.MediaManager;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
 import com.example.fuegosantoapp.activities.ProfileActivity;
 import com.example.fuegosantoapp.activities.loginActivity;
-import com.example.fuegosantoapp.adapter.publicacionesAdapter;
-import com.example.fuegosantoapp.entidades.Comentarios;
+import com.example.fuegosantoapp.adapter.ViewPagerAdapter;
 import com.example.fuegosantoapp.entidades.Imagenes;
 import com.example.fuegosantoapp.entidades.Publicacion;
 import com.example.fuegosantoapp.fragmentos.DetallePublicacionesFragment;
@@ -55,11 +53,8 @@ import com.example.fuegosantoapp.fragmentos.Fragmento_publicaciones;
 import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 import com.example.fuegosantoapp.interfaces.IFragments;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageListener;
 
-import org.cloudinary.json.JSONString;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,11 +62,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.example.fuegosantoapp.Constants.URL_GETPUBLICACIONFS;
-import static com.example.fuegosantoapp.Constants.URL_IMAGENES;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IFragments, IComunicaFragments, Response.ErrorListener, Response.Listener<JSONObject> {
@@ -91,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     CarouselView carouselView;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
+    private Timer timer;
+    private int current_position = 0;
 
     private DrawerLayout drawer; //Variable to make the funcionality of the navbar
     Toolbar toolbar;
@@ -107,13 +103,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //viewPager = (ViewPager) findViewById(R.id.view_pager);
+
+
+        listaImagenes = new ArrayList<>();
+
+        getImagenes();
+
+          if(listaImagenes != null){
+            Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes , Toast.LENGTH_LONG).show();
+        }
+
+        viewPager = findViewById(R.id.view_pager);
+        Timer();
         //pager = findViewById(R.id.view_pager);
         onNewIntent(getIntent());
-        adapter = new CustomSwipeAdapter(this);
+        Timer timer = new Timer();
+        //timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
+        /*
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this, listaImagenes);
+        viewPager.setAdapter(adapter);
+        */
+
         request = Volley.newRequestQueue(getApplicationContext());
 
-        //viewPager.setAdapter(adapter);
+
         //viewPager.setAdapter(adapter);
 
         //Crear logica del toolbar y asignarle un titulo
@@ -132,10 +145,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.setVerticalScrollBarEnabled(false);
 
-
-
-        listaImagenes = new ArrayList<>();
-        getImagenes();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -168,9 +177,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
         btnloginNavbar.setOnClickListener(this);
 
-        //String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
-        //setearUrlImagen(urlImagen);
 
+        //Carousel
+        /*
+        CarouselView carouselView = findViewById(R.id.carousel);
+        ImageView imageView = findViewById(R.id.image_view);
+        carouselView.setPageCount(listaImagenes.size());
+*/
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
@@ -327,8 +340,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void getImagenes() {
-
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, Constants.URL_IMAGENES, null, new Response.Listener<JSONObject>() {
             @Override
@@ -341,12 +352,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Toast.makeText(getApplicationContext(),"Mensaje:" + json, Toast.LENGTH_SHORT).show();
                 //To create Carousel
                 //carouselView.setPageCount(json.length());
-                Toast.makeText(getApplicationContext(),"Mensaje:" + json.length(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Mensaje desde MainActivity:" + json.length(), Toast.LENGTH_SHORT).show();
 
                 try {
                     for (int i = 0; i < json.length(); i++) {
-
-
 
 
                         //carouselView.setPageCount(json.length());
@@ -360,13 +369,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         imagenes.setImagen(jsonObject.optString("Imagen"));
 
 
+
+                        String urlImagen = imagenes.getImagen();
+                        //cargarImagenUrl(listaImagenes.get(i).getImagen());
+                        Toast.makeText(getApplicationContext(), "lista" + urlImagen , Toast.LENGTH_LONG).show();
                         listaImagenes.add(imagenes);
-                        //Toast.makeText(getApplicationContext(), "lista" + listaImagenes.get(i).getTitulo() , Toast.LENGTH_LONG).show();
-                        //String urlImagen = listaImagenes.get(i).getImagen();
-                        cargarImagenUrl(listaImagenes.get(i).getImagen());
-                        //Toast.makeText(getApplicationContext(), "lista" + urlImagen , Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Listado dentro for :" + listaImagenes, Toast.LENGTH_SHORT).show();
+
+                        ViewPagerAdapter adapter = new ViewPagerAdapter(getApplicationContext(), listaImagenes);
+                        viewPager.setAdapter(adapter);
+
 
                     }
+
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
@@ -390,11 +407,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
 
-        request.add(jsonObjectRequest);
-
-
-
-
+        RequestHandler.getInstance(this).addToRequestQueue(jsonObjectRequest);
 
 
         //String url = "http://localhost/Android/v1/getImagenes.php";
@@ -403,25 +416,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_IMAGENES, null, this, this);
         request.add(jsonObjectRequest);
 */
-
-
     }
-    private void cargarImagenUrl(String getImagen ) {
+
+    /*
+    public class MyTimerTask extends TimerTask{
+
+        @Override
+        public void run() {
+
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                 int tamañolista  = listaImagenes.size();
+
+                   for ( int i = 0; i < tamañolista; i++){
+                       if(viewPager.getCurrentItem() == i ){
+                           viewPager.setCurrentItem(i++);
+                       }
+                   }
+                }
+            });
+        }
+    }
+
+    */
+
+   private void Timer(){
+       final Handler handler = new Handler();
+       final Runnable runnable = new Runnable() {
+           @Override
+           public void run() {
+               if(current_position == listaImagenes.size())
+
+
+
+                   current_position = 0;
+               viewPager.setCurrentItem(current_position++,true );
+           }
+       };
+
+       timer = new Timer();
+       timer.schedule(new TimerTask() {
+           @Override
+           public void run() {
+
+               handler.post(runnable);
+           }
+       }, 250,2500);
+   }
+
+
+    private void cargarImagenUrl(String getImagen) {
 
         //String urlImagen = getCover.replace("", "%20");
+
+        //Toast.makeText(getApplicationContext(), "Imagenes desde CargarImagenUrl" + getImagen , Toast.LENGTH_LONG).show();
+
 
         ImageRequest imageRequest = new ImageRequest(getImagen, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 //Imagecover.setImageBitmap(response);
+
+
             }
-        }, 0,0 , ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Toast.makeText(context, "Error al cargar la imagen"  , Toast.LENGTH_LONG).show();
             }
         });
         request.add(imageRequest);
+
+
     }
 
     @Override
@@ -433,8 +500,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void onResponse(JSONObject response) {
-
-
         Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
     }
 
@@ -464,6 +529,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //To create the conexion to the database through
             progressDialog.setMessage("Registrando usuario...");
             progressDialog.show();
+
+
             StringRequest stringRequest = new StringRequest(Request.Method.POST,
                     Constants.URL_REGISTER, new Response.Listener<String>() {
                 @Override
@@ -472,9 +539,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-
-
                         editTextCorreo.getText().clear();
 
 
