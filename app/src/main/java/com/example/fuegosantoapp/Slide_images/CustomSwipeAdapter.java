@@ -152,7 +152,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
                         String urlImagen = imagenes.getImagen();
 
                         //cargarImagenUrl(listaImagenes.get(i).getImagen());
-                        Toast.makeText(ctx, "lista desde CustomSwipeAdapter" + urlImagen, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(ctx, "lista desde CustomSwipeAdapter" + urlImagen, Toast.LENGTH_LONG).show();
                         Log.i("Imagees : ", json.toString());
                         //urlImagen(urlImagen);
 
@@ -194,7 +194,7 @@ public class CustomSwipeAdapter extends PagerAdapter {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(ctx, "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(ctx, "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
                     //System.out.println();
                     Log.d("error : ", response.toString());
                     progressDialog.hide();

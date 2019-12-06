@@ -41,12 +41,9 @@ public class ViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         Imagenes imagenes = null;
         ImageView imageView = new ImageView(context);
-
-
         Picasso.get()
                 .load(listaImagenes.get(position).getImagen())
                 .fit()
-
                 .centerCrop()
                 .into(imageView);
 

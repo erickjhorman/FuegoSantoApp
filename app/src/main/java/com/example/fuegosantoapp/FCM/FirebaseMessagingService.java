@@ -32,20 +32,21 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Hashtable;
 import java.util.Map;
+
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class FirebaseMessagingService  extends com.google.firebase.messaging.FirebaseMessagingService {
+public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        if(remoteMessage.getData() != null) {
+        if (remoteMessage.getData() != null) {
             enviarNotificacion(remoteMessage);
         }
-        if(remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Body notification: "+remoteMessage.getNotification().getBody());
+        if (remoteMessage.getNotification() != null) {
+            Log.d(TAG, "Body notification: " + remoteMessage.getNotification().getBody());
             enviarNotificacion(remoteMessage);
         }
     }
@@ -54,11 +55,14 @@ public class FirebaseMessagingService  extends com.google.firebase.messaging.Fir
         Map<String, String> data = remoteMessage.getData();
         String title = data.get("title");
         String body = data.get("body");
+        String imagen = data.get("imagen");
+
+        Log.d(TAG, "Imagen: " + imagen);
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "xcheko51x";
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Solo para android Oreo o superior
             @SuppressLint("WrongConstant")
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
@@ -109,13 +113,14 @@ public class FirebaseMessagingService  extends com.google.firebase.messaging.Fir
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
 
-                 builder.setAutoCancel(true)
+        builder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setTicker("Hearty365")
                 .setContentTitle(title)
                 .setContentText(body)
+                //.setStyle(new NotificationCompat.BigPictureStyle().bigPicture())
                 .setVibrate(new long[]{0, 1000, 500, 1000})
                 .setContentIntent(pendingIntent)
                 .setContentInfo("info");
@@ -126,7 +131,7 @@ public class FirebaseMessagingService  extends com.google.firebase.messaging.Fir
 
     @Override
     public void onNewToken(String token) {
-        Log.d(TAG, "Refreshed Token"+token);
+        Log.d(TAG, "Refreshed Token" + token);
 
         FirebaseMessaging.getInstance().subscribeToTopic("dispositivos");
         enviarTokenToServer(token);
@@ -145,7 +150,7 @@ public class FirebaseMessagingService  extends com.google.firebase.messaging.Fir
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), "ERROR EN LA CONEXION", Toast.LENGTH_LONG).show();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parametros = new Hashtable<String, String>();
