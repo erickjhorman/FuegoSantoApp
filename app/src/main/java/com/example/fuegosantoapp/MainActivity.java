@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Toast.makeText(getApplicationContext(),"Mensaje:" + json, Toast.LENGTH_SHORT).show();
                 //To create Carousel
                 //carouselView.setPageCount(json.length());
-                Toast.makeText(getApplicationContext(), "Mensaje desde MainActivity:" + json.length(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Mensaje desde MainActivity:" + json.length(), Toast.LENGTH_SHORT).show();
 
                 try {
                     for (int i = 0; i < json.length(); i++) {
@@ -372,9 +372,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         String urlImagen = imagenes.getImagen();
                         //cargarImagenUrl(listaImagenes.get(i).getImagen());
-                        Toast.makeText(getApplicationContext(), "lista" + urlImagen , Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "lista" + urlImagen , Toast.LENGTH_LONG).show();
                         listaImagenes.add(imagenes);
-                        Toast.makeText(getApplicationContext(),"Listado dentro for :" + listaImagenes, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Listado dentro for :" + listaImagenes, Toast.LENGTH_SHORT).show();
 
                         ViewPagerAdapter adapter = new ViewPagerAdapter(getApplicationContext(), listaImagenes);
                         viewPager.setAdapter(adapter);
