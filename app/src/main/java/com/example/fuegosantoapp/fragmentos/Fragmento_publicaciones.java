@@ -258,7 +258,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
                     //Toast.makeText(getContext(), "Publicacion en Comentario: " +id_publicacion_comentarios, Toast.LENGTH_SHORT).show();
 
-                       if (id_publicacion.intValue() == id_publicacion_comentarios.intValue()) {
+                       if (id_publicacion == id_publicacion_comentarios) {
 
                            comentarios.setId(jsonObject2.optInt("publicacion_id"));
                            comentarios.setComentario(jsonObject2.optString("comentario"));
@@ -266,6 +266,8 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                            comentarios.setAvatar(jsonObject2.optString("avatar"));
                            comentarios.setHora(jsonObject2.optString("hora"));
                            comentarios.setFecha(jsonObject2.optString("fecha"));
+
+
                        }
 
 

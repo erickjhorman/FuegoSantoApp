@@ -9,6 +9,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Icon;
 import android.os.Build;
 
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationCompatExtras;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
@@ -43,6 +45,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
     Bitmap bitmap;
+    Notification action;
 
 
     @Override
@@ -63,8 +66,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String title = data.get("title");
         String body = data.get("body");
         String imagen = data.get("imagen");
-        convertirImagebBitmap(imagen);
+        //convertirImagebBitmap(imagen);
 
+        Log.d(TAG, "titulo: " + title);
+        Log.d(TAG, "body: " + body);
         Log.d(TAG, "Imagen: " + imagen);
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -78,6 +83,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                     NotificationManager.IMPORTANCE_MAX
             );
 
+
+
+
+
             // Configuracion del canal de notificacion
             channel.setDescription("xcheko51x channel para app");
             channel.enableLights(true);
@@ -87,22 +96,31 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
             manager.createNotificationChannel(channel);
 
+
+            Intent intent = new Intent(this, MainActivity.class);
+
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent articulopendingIntent = PendingIntent.getActivity(this,
+                    0,
+                    intent,
+                    0 );
+
+            Notification.Action action =
+                    new Notification.Action.Builder(Icon.createWithResource(this, R.mipmap.ic_launcher_round), getString(R.string.articulo), articulopendingIntent).build();
+
+             }
+
+
+
+
+
+        /*
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            Notification.Action action =
+                    new Notification.Action.Builder(Icon.createWithResource(this, R.mipmap.ic_launcher_round), "Ir al articulo", pendingIntent).build();
         }
-
-
-        Intent intent = new Intent(this, MainActivity.class);
-
-
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0,
-                intent,
-                0
-
-
-        );
-
-
+*/
 
         /*
         Intent intent = new Intent(this, MainActivity.class);
@@ -116,7 +134,57 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 
         );
+
+
+
 */
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        ImageRequest imageRequest = new ImageRequest(imagen, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+
+                //bitmap = response;
+
+                CrearNotificacion(title,body,response,manager,NOTIFICATION_CHANNEL_ID,action);
+
+               /*
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID);
+
+                builder.setAutoCancel(true)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setWhen(System.currentTimeMillis())
+                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                        .setTicker("Hearty365")
+                        .setContentTitle(title)
+                        .setContentText(body)
+                        .setLargeIcon(response)
+                        .setStyle(new NotificationCompat.BigPictureStyle()
+                                .bigPicture(response)
+                                .bigLargeIcon(null))
+                        .setVibrate(new long[]{0, 1000, 500, 1000})
+                        //.setContentIntent(pendingIntent)
+                        .setContentInfo("info");
+
+
+                manager.notify(1, builder.build());
+
+                */
+
+
+            }
+        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        requestQueue.add(imageRequest);
+
+
+        /*
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
 
         builder.setAutoCancel(true)
@@ -128,17 +196,23 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentText(body)
                 .setLargeIcon(bitmap)
                 .setStyle(new NotificationCompat.BigPictureStyle()
-                        .bigPicture(bitmap)
+                         .bigPicture(bitmap)
                         .bigLargeIcon(null))
-
                 .setVibrate(new long[]{0, 1000, 500, 1000})
-                .setContentIntent(pendingIntent)
+                //.setContentIntent(pendingIntent)
                 .setContentInfo("info");
 
 
         manager.notify(1, builder.build());
+*/
+
     }
 
+
+
+
+
+    /*
     private void convertirImagebBitmap(String imagen) {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -159,9 +233,38 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         });
 
         requestQueue.add(imageRequest);
+
         return;
 
     }
+    */
+
+
+    public void CrearNotificacion(String title, String body, Bitmap response, NotificationManager manager, String NOTIFICATION_CHANNEL_ID,Notification action){
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID);
+
+
+        builder.setAutoCancel(true)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setTicker("Hearty365")
+
+                .setContentTitle(title)
+                .setContentText(body)
+                .setLargeIcon(response)
+                .setStyle(new NotificationCompat.BigPictureStyle()
+                        .bigPicture(response)
+                        .bigLargeIcon(null))
+                .setVibrate(new long[]{0, 1000, 500, 1000})
+                //.setContentIntent(pendingIntent)
+                .setContentInfo("info");
+
+
+        manager.notify(1, builder.build());
+    }
+
 
     @Override
     public void onNewToken(String token) {
