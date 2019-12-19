@@ -27,11 +27,20 @@ public class pantallaInicio extends Activity {
             public void run(){
                 //Se instancia el clase intent para pasar de una activity a otra
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                finish();
+
+                /*
+                Intent intent = new Intent(pantallaInicio.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+
+                 */
+
             }
         };
 
         mHandler = new Handler();
-        mHandler.postDelayed(mRunnable, 1000);
+        mHandler.postDelayed(mRunnable, 4000);
        }
 
     @Override

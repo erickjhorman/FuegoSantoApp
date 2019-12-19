@@ -64,10 +64,9 @@ public class navHeaderActivity extends loginActivity  implements View.OnClickLis
         String msg = "";
 
         if (v == buttonlogin)
-
             Toast.makeText(this, msg + "Checked", Toast.LENGTH_SHORT).show();
           subscriptorLogin();
-        startActivity(new Intent(this, ProfileActivity.class));
+          startActivity(new Intent(this, ProfileActivity.class));
     }
 
 

@@ -236,7 +236,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                 id_publicacion = jsonObject.optInt("id");
                 //Toast.makeText(getContext(), "Publicacion: " + id_publicacion, Toast.LENGTH_SHORT).show();
 
-                publicacion.setId_publicaciones(jsonObject.optInt("id"));
+                publicacion.setId_publicaciones(jsonObject.optString("id"));
                 publicacion.setFtitulo(jsonObject.optString("titulo"));
                 publicacion.setDescripcion(jsonObject.optString("descripcion"));
                 publicacion.setCover((jsonObject.optString("cover")));
@@ -268,13 +268,15 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                            comentarios.setFecha(jsonObject2.optString("fecha"));
 
 
+                           listaComentarios.add(comentarios);
                        }
 
 
-                       listaComentarios.add(comentarios);
+
 
                        //Toast.makeText(getContext(), "Comentario: " + jsonObject.optString("comentario"), Toast.LENGTH_SHORT).show();
                 }
+
 
 
 
@@ -307,10 +309,11 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
             progress.hide();
 
-            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, listaComentarios, getContext());
+            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, listaComentarios, getContext(),interfaceComunicaFragments);
             recyclerPublicaciones.setAdapter(adapter);
 
 
+/*
             adapter.setOnclickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -322,6 +325,13 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
 
             });
+
+*/
+
+
+
+
+
 
 
         } catch (JSONException e) {

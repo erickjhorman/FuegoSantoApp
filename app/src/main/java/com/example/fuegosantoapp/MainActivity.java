@@ -34,7 +34,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -67,6 +66,8 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.example.fuegosantoapp.Constants.URL_COMENTAR_PUBLICACION;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IFragments, IComunicaFragments, Response.ErrorListener, Response.Listener<JSONObject> {
 
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ViewPager viewPager;
     CustomSwipeAdapter adapter;
     Imagenes imagenes = null;
+    loginActivity Login = new loginActivity();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -109,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getImagenes();
 
-          if(listaImagenes != null){
-            Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes , Toast.LENGTH_LONG).show();
+        if (listaImagenes != null) {
+            Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes, Toast.LENGTH_LONG).show();
         }
 
         viewPager = findViewById(R.id.view_pager);
@@ -369,7 +371,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         imagenes.setImagen(jsonObject.optString("Imagen"));
 
 
-
                         String urlImagen = imagenes.getImagen();
                         //cargarImagenUrl(listaImagenes.get(i).getImagen());
                         //Toast.makeText(getApplicationContext(), "lista" + urlImagen , Toast.LENGTH_LONG).show();
@@ -381,7 +382,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
                     }
-
 
 
                 } catch (JSONException e) {
@@ -441,29 +441,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     */
 
-   private void Timer(){
-       final Handler handler = new Handler();
-       final Runnable runnable = new Runnable() {
-           @Override
-           public void run() {
-               if(current_position == listaImagenes.size())
+    private void Timer() {
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (current_position == listaImagenes.size())
 
 
+                    current_position = 0;
+                viewPager.setCurrentItem(current_position++, true);
+            }
+        };
 
-                   current_position = 0;
-               viewPager.setCurrentItem(current_position++,true );
-           }
-       };
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
 
-       timer = new Timer();
-       timer.schedule(new TimerTask() {
-           @Override
-           public void run() {
-
-               handler.post(runnable);
-           }
-       }, 250,2500);
-   }
+                handler.post(runnable);
+            }
+        }, 250, 2500);
+    }
 
 
     private void cargarImagenUrl(String getImagen) {
@@ -578,12 +577,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onClick(View view) {
 
+
         String msg = "";
         if (view == buttonRegistrar)
             suscripcionUsuario();
 
 
         if (view == textViewLogin)
+            startActivity(new Intent(this, loginActivity.class));
+
+        if (view == btnloginNavbar)
+
             startActivity(new Intent(this, loginActivity.class));
     }
 
@@ -592,6 +596,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    //Methods call from Fragmento_publicaciones fragment
     @Override
     public void enviarPublicacion(Publicacion publicacion) {
         detalleFragment = new DetallePublicacionesFragment();
@@ -603,6 +608,69 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, detalleFragment).addToBackStack(null).commit();
 
     }
+
+    @Override
+    public void comentarPublicacion(String comentario, String publicacion_id, String subscriptor_id) {
+        Toast.makeText(getApplicationContext(), "Comentar desde Main activity" + comentario + "Publicacion id" + publicacion_id + "Subcriptor id" + subscriptor_id, Toast.LENGTH_SHORT).show();
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                URL_COMENTAR_PUBLICACION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    //editTextCorreo.getText().clear();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("subscriptor_id", subscriptor_id);
+                params.put("publicacion_id", publicacion_id);
+                params.put("comentario", comentario);
+                return params;
+            }
+        };
+        RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+
+
+    }
+
+    public void sharePublicacion() {
+        Toast.makeText(getApplicationContext(), "Boton detalle  desde Main activity", Toast.LENGTH_LONG).show();
+    }
+
+
+    public void detallePublicacion() {
+        Toast.makeText(getApplicationContext(), "Boton Compartir desde Main activity ", Toast.LENGTH_LONG).show();
+    }
+
+
+
+    /*
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Toast.makeText(context, "No se consultar" + error.toString(), Toast.LENGTH_LONG).show();
+        System.out.println();
+        Log.d("error : ", error.toString());
+        progressDialog.hide();
+    }
+
+     */
 
     @Override
     protected void onNewIntent(Intent intent) {

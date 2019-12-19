@@ -13,7 +13,7 @@ public static final String URL_LOGIN = ROOT_URL + "subscriptorLogin.php";
 public static final String URL_GETPUBLICACIONFS = ROOT_URL + "publications.php";
 public static final String URL_IMAGENES = ROOT_URL + "getImagenes.php";
 public static final String URL_UPDATE = ROOT_URL + "updateSuscriptor.php";
-public static final String URL_COMENTAR_PUBLICACION = ROOT_URL + "registrarComentario.php";
+public static final String URL_COMENTAR_PUBLICACION = ROOT_URL + "register_Publicacion_Comentario.php";
 
 }
 

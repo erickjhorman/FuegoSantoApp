@@ -128,7 +128,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
 
 
 
-        //request = Volley.newRequestQueue(getApplicationContext());
+        request = Volley.newRequestQueue(getApplicationContext());
         textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
         getTextViewId.setText(Integer.toString(SharedPrefManager.getInstance(this).getUserId()));
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
@@ -241,7 +241,7 @@ public class editarDatos extends AppCompatActivity  implements View.OnClickListe
     private void setearUrlImagen(String urlImagen) {
 
 
-        urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image
+        // urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image
 
         ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
             @Override

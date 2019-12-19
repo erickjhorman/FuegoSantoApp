@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Publicacion implements Serializable {
 
-    private int id_publicaciones;
+    private String id_publicaciones;
     private String publicaciones;
     private String descripcion;
     private String cover;
@@ -18,11 +18,11 @@ public class Publicacion implements Serializable {
     private String avatar;
 
 
-    public int getId_publicaciones() {
+    public String getId_publicaciones() {
         return id_publicaciones;
     }
 
-    public void setId_publicaciones(int id_publicaciones) {
+    public void setId_publicaciones(String id_publicaciones) {
         this.id_publicaciones = id_publicaciones;
     }
 
