@@ -44,6 +44,7 @@ import com.example.fuegosantoapp.activities.loginActivity;
 import com.example.fuegosantoapp.adapter.ViewPagerAdapter;
 import com.example.fuegosantoapp.entidades.Imagenes;
 import com.example.fuegosantoapp.entidades.Publicacion;
+import com.example.fuegosantoapp.entidades.VersoOfTheDay;
 import com.example.fuegosantoapp.fragmentos.DetallePublicacionesFragment;
 import com.example.fuegosantoapp.fragmentos.Fragmento_Mensaje;
 import com.example.fuegosantoapp.fragmentos.Fragmento_biblia;
@@ -76,12 +77,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button buttonRegistrar;
     private ProgressDialog progressDialog;
     private TextView textViewLogin;
+    private TextView txtVerso;
+    private TextView txtVersiculo;
+
     DetallePublicacionesFragment detalleFragment;
     private Button btnloginNavbar;
     private TextView navHeaderComentario;
     private ImageView imageViewUserAvatar;
     private TextView textViewUserCorreo;
     ArrayList<Imagenes> listaImagenes;
+
+
     ProgressDialog progress;
     CarouselView carouselView;
     RequestQueue request;
@@ -94,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ViewPager viewPager;
     CustomSwipeAdapter adapter;
     Imagenes imagenes = null;
+    VersoOfTheDay versoOfTheDay = null;
     loginActivity Login = new loginActivity();
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -109,7 +116,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         listaImagenes = new ArrayList<>();
 
+
         getImagenes();
+
 
         if (listaImagenes != null) {
             Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes, Toast.LENGTH_LONG).show();
@@ -177,15 +186,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textViewUserCorreo = (TextView) headerView.findViewById(R.id.textViewUserCorreo);
         textViewUserCorreo.setVisibility(View.GONE);
         imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
+
         btnloginNavbar.setOnClickListener(this);
 
+        //Declaring the variables for the suscription
+        editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
+        textViewLogin = (TextView) findViewById(R.id.textViewLogin);
+        buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
+        progressDialog = new ProgressDialog(this);
+        buttonRegistrar.setOnClickListener(this);
+        textViewLogin.setOnClickListener(this);
 
-        //Carousel
-        /*
-        CarouselView carouselView = findViewById(R.id.carousel);
-        ImageView imageView = findViewById(R.id.image_view);
-        carouselView.setPageCount(listaImagenes.size());
-*/
+        //Declaring the variables for the vers of the day
+        txtVerso = (TextView) findViewById(R.id.txtVerso);
+        txtVersiculo = (TextView) findViewById(R.id.txtVersiculo);
+
+        getDailyVers();
+
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
@@ -197,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             navHeaderComentario.setVisibility(View.GONE);
             btnloginNavbar.setVisibility(View.GONE);
+            textViewLogin.setEnabled(false);
 
 
             urlImagen = urlImagen.replace(" ", "%20");  //To remove the spaces in my image
@@ -230,15 +248,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             return;
         }
-
-
-        //Declaring the variables for the suscription
-        editTextCorreo = (EditText) findViewById(R.id.editTextCorreo);
-        textViewLogin = (TextView) findViewById(R.id.textViewLogin);
-        buttonRegistrar = (Button) findViewById(R.id.buttonRegistrar);
-        progressDialog = new ProgressDialog(this);
-        buttonRegistrar.setOnClickListener(this);
-        textViewLogin.setOnClickListener(this);
 
 
     }
@@ -441,6 +450,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     */
 
+
+    public void getDailyVers() {
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, Constants.URL_GET_VERSO_DIARIO, null, new Response.Listener<JSONObject>() {
+
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
+                JSONArray versos = response.optJSONArray("verso");
+
+
+                VersoOfTheDay versoOfTheDay = new VersoOfTheDay();
+
+
+                try {
+
+
+                    JSONObject jsonObject = null;
+                    jsonObject = versos.getJSONObject(0);
+                    Toast.makeText(getApplicationContext(), "Json" + jsonObject, Toast.LENGTH_LONG).show();
+
+                    versoOfTheDay.setBook(jsonObject.optString("Book"));
+                    versoOfTheDay.setVerso(jsonObject.optString("Vers"));
+
+                    Toast.makeText(getApplicationContext(), "Objeto" + versoOfTheDay, Toast.LENGTH_LONG).show();
+
+                    txtVerso.setText(versoOfTheDay.getVerso());
+                    txtVersiculo.setText(versoOfTheDay.getBook());
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
+                    //System.out.println();
+                    Log.d("error : ", response.toString());
+                    progress.hide();
+
+                    //Log.d("error : ", error.toString());
+                    progress.hide();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                progressDialog.hide();
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                //VolleyLog.d(TAG, "Error: " + error.getMessage());
+            }
+        });
+
+
+        RequestHandler.getInstance(this).addToRequestQueue(jsonObjectRequest);
+
+
+    }
+
     private void Timer() {
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
@@ -537,6 +608,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     progressDialog.dismiss();
                     try {
                         JSONObject jsonObject = new JSONObject(response);
+                        Log.v("JSON", response);
+
                         Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                         editTextCorreo.getText().clear();
 

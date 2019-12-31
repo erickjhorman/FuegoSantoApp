@@ -95,6 +95,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             channel.enableVibration(true);
 
             manager.createNotificationChannel(channel);
+            MainActivity mainActivity = new MainActivity();
+            mainActivity.getImagenes();
+
+            Fragmento_publicaciones fragmento_publicaciones = new Fragmento_publicaciones();
 
 
             Intent intent = new Intent(this, MainActivity.class);

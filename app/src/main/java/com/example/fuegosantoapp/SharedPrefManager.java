@@ -6,14 +6,14 @@ import android.content.SharedPreferences;
 public class SharedPrefManager {
     private static SharedPrefManager instance;
     private static Context ctx;
-    private static  final String SHARED_PREF_NAME = "mysharedpref12";
-    private static  final String KEY_SUBSCRIPTOR_ID = "subscriptorid";
-    private static  final String KEY_SUBSCRIPTOR_EMAIL = "subscriptoremail";
-    private static  final String KEY_SUBSCRIPTOR_NAME = "subscriptorname";
-    private static  final String KEY_SUBSCRIPTOR_AVATAR = "subscriptoravatar";
+    private static final String SHARED_PREF_NAME = "mysharedpref12";
+    private static final String KEY_SUBSCRIPTOR_ID = "subscriptorid";
+    private static final String KEY_SUBSCRIPTOR_EMAIL = "subscriptoremail";
+    private static final String KEY_SUBSCRIPTOR_NAME = "subscriptorname";
+    private static final String KEY_SUBSCRIPTOR_AVATAR = "subscriptoravatar";
+
     private SharedPrefManager(Context context) {
         ctx = context;
-
 
 
     }
@@ -26,33 +26,48 @@ public class SharedPrefManager {
         return instance;
     }
 
-  public boolean subsciptorLogin(int id_correos, String email,String nombre, String avatar){
+    public boolean subsciptorLogin(int id_correos, String email, String nombre, String avatar) {
 
-  SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-  SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-  editor.putInt(KEY_SUBSCRIPTOR_ID, id_correos);
-  editor.putString(KEY_SUBSCRIPTOR_EMAIL , email);
-  editor.putString(KEY_SUBSCRIPTOR_NAME , nombre);
-  editor.putString(KEY_SUBSCRIPTOR_AVATAR , avatar);
+        editor.putInt(KEY_SUBSCRIPTOR_ID, id_correos);
+        editor.putString(KEY_SUBSCRIPTOR_EMAIL, email);
+        editor.putString(KEY_SUBSCRIPTOR_NAME, nombre);
+        editor.putString(KEY_SUBSCRIPTOR_AVATAR, avatar);
 
-  editor.apply();
+        editor.apply();
 
-    return  true;
+        return true;
     }
 
-    public boolean isLoggedIn(){
-        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        if(sharedPreferences.getString(KEY_SUBSCRIPTOR_EMAIL, null) != null){
+    public boolean getUserUpdated(int id_correos, String email, String nombre, String avatar) {
+
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(KEY_SUBSCRIPTOR_ID, id_correos);
+        editor.putString(KEY_SUBSCRIPTOR_EMAIL, email);
+        editor.putString(KEY_SUBSCRIPTOR_NAME, nombre);
+        editor.putString(KEY_SUBSCRIPTOR_AVATAR, avatar);
+
+        editor.apply();
+
+        return true;
+    }
+
+    public boolean isLoggedIn() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        if (sharedPreferences.getString(KEY_SUBSCRIPTOR_EMAIL, null) != null) {
             return true;
         }
-      return  false;
+        return false;
     }
 
-    public  boolean isUpdated(){
-        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        if(sharedPreferences.getString(KEY_SUBSCRIPTOR_EMAIL, "Invitado") != null && sharedPreferences.getString(KEY_SUBSCRIPTOR_AVATAR, "Invitado") != null) {
-            return  true;
+    public boolean isUpdated() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        if (sharedPreferences.getString(KEY_SUBSCRIPTOR_EMAIL, "Invitado") != null && sharedPreferences.getString(KEY_SUBSCRIPTOR_AVATAR, "Invitado") != null) {
+            return true;
         }
         return false;
     }
@@ -68,33 +83,32 @@ public class SharedPrefManager {
     */
 
 
-    public boolean logout(){
-        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+    public boolean logout() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
         return true;
     }
 
-    public int getUserId(){
-        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(KEY_SUBSCRIPTOR_ID,0 );
+    public int getUserId() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(KEY_SUBSCRIPTOR_ID, 0);
     }
 
-    public String getUserEmail(){
-        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(KEY_SUBSCRIPTOR_EMAIL,null);
+    public String getUserEmail() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_SUBSCRIPTOR_EMAIL, null);
     }
 
-    public String getUserName(){
-        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+    public String getUserName() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_SUBSCRIPTOR_NAME, null);
     }
 
 
-
-    public String getUseAvatar(){
-        SharedPreferences sharedPreferences =  ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+    public String getUseAvatar() {
+        SharedPreferences sharedPreferences = ctx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_SUBSCRIPTOR_AVATAR, null);
     }
 

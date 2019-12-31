@@ -11,6 +11,7 @@ import com.android.volley.RequestQueue;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,14 +31,13 @@ import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
 
 
-public class ProfileActivity extends AppCompatActivity   {
+public class ProfileActivity extends AppCompatActivity {
 
     private TextView textViewUsername, textViewUserCorreo;
     private ImageView imageViewUserAvatar;
     Toolbar toolbar;
     private Button btnEditarPerfil;
     RequestQueue request;
-
 
 
     @Override
@@ -56,19 +56,16 @@ public class ProfileActivity extends AppCompatActivity   {
             startActivity(new Intent(this, loginActivity.class));
         }
 
-        if(SharedPrefManager.getInstance(this).isUpdated()){
+        if (SharedPrefManager.getInstance(this).isUpdated()) {
             textViewUserCorreo.setHint("Erick");
             imageViewUserAvatar.setImageResource(R.drawable.ic_android_black_navbar);
         }
-
 
 
         textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
         //Toast.makeText(getApplicationContext(), "Url en profile Activity" + urlImagen, Toast.LENGTH_LONG).show();
         setearUrlImagen(urlImagen);
-
-
 
 
         btnEditarPerfil.setOnClickListener(new View.OnClickListener() {
@@ -108,38 +105,37 @@ public class ProfileActivity extends AppCompatActivity   {
     private void setearUrlImagen(String urlImagen) {
         //urlImagen = urlImagen.replace("", "%20");  //To remove the spaces in my image}
 
-            ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
-                @Override
-                public void onResponse(Bitmap response) {
+        ImageRequest imageRequest = new ImageRequest(urlImagen, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
 
-                    //To pit the image avator rounded
+                //To pit the image avator rounded
 
-                    //creamos el drawable redondeado
-                    RoundedBitmapDrawable roundedDrawable =
-                            RoundedBitmapDrawableFactory.create(getResources(), response);
+                //creamos el drawable redondeado
 
-                    roundedDrawable.setCornerRadius(response.getHeight());
 
-                    imageViewUserAvatar.setImageDrawable(roundedDrawable);
+                RoundedBitmapDrawable roundedDrawable =
+                        RoundedBitmapDrawableFactory.create(getResources(), response);
 
-                    //imageViewUserAvatar.setImageBitmap(response);
+                roundedDrawable.setCornerRadius(response.getHeight());
 
-                }
-            }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    //Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
-                }
-            });
+                imageViewUserAvatar.setImageDrawable(roundedDrawable);
 
-            request.add(imageRequest);
-            return;
+                //imageViewUserAvatar.setImageBitmap(response);
+
+            }
+        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        request.add(imageRequest);
+        return;
 
 
     }
-
-
-
 
 
     @Override
@@ -162,9 +158,6 @@ public class ProfileActivity extends AppCompatActivity   {
         }
         return true;
     }
-
-
-
 
 
 }

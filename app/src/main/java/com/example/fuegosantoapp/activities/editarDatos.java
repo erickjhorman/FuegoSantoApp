@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -47,6 +49,12 @@ import com.android.volley.toolbox.Volley;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.cloudinary.android.preprocess.BitmapDecoder;
+import com.cloudinary.android.preprocess.BitmapEncoder;
+import com.cloudinary.android.preprocess.DimensionsValidator;
+import com.cloudinary.android.preprocess.ImagePreprocessChain;
+import com.cloudinary.android.preprocess.Limit;
+import com.cloudinary.android.signed.SignatureProvider;
 import com.example.fuegosantoapp.Constants;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.RequestHandler;
@@ -100,12 +108,23 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
     Object object;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_datos);
 
-        MediaManager.init(this, Myconfiguration.getMyconfigs());
+
+
+            //MediaManager.init(this, Myconfiguration.getMyconfigs());
+        try {
+            MediaManager.init(this, Myconfiguration.getMyconfigs());;
+        } catch(IllegalStateException e) {
+            // media player is not initialized
+        }
+
+
+
         /*
         Map config = new HashMap();
         config.put("cloud_name", "dequvdgav");
@@ -140,6 +159,8 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
         initializeToolbar();
         setearUrlImagen(urlImagen);
     }
+
+
 
     private boolean validaPermisos() {
 
@@ -253,9 +274,6 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
                 //To pit the image avator rounded
 
-               
-
-
 
                 //creamos el drawable redondeado
                 RoundedBitmapDrawable roundedDrawable =
@@ -277,6 +295,67 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
     }
 
+
+    public void rotateimage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix matrix = new Matrix();
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            default:
+        }
+
+
+        Bitmap rotateBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        imageViewUserAvatar.setImageBitmap(rotateBitmap);
+
+    }
+
+
+    public void rotateImageGallery(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(String.valueOf(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Matrix matrix = new Matrix();
+
+        switch (orientation) {
+
+
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.setRotate(270);
+                break;
+
+            default:
+        }
+
+
+        Bitmap rotateBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        imageViewUserAvatar.setImageBitmap(rotateBitmap);
+
+    }
 
 
 /*
@@ -378,7 +457,7 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                     Uri uri = data.getData();
 
 
-                    imageViewUserAvatar.setImageURI(uri);
+                    //imageViewUserAvatar.setImageURI(uri);
                     Log.i("Ruta de almacenamiento", "Path:" + uri);
 
                     //MediaManager.get().upload(Uri.fromFile(filePath)).dispatch();
@@ -388,10 +467,13 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                         //Here i need to do the same as Bitmap with a file
 
                         bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), uri);
-                        imageViewUserAvatar.setImageBitmap(bitmap);
+                        //rotateimage(bitmap);
+
                         filePath = new File(getRealPathFromURI(uri));
                         Log.i("File creado", "Path:" + filePath);
                         btnUpdate.setEnabled(true);
+
+                        rotateImageGallery(bitmap);
 
                         Toast.makeText(getApplicationContext(), "Path inicial" + bitmap, Toast.LENGTH_LONG).show();
 
@@ -418,7 +500,7 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
                             Log.i("Ruta de almacenamiento", "Path:" + path);
-                            filePath = new File(getRealPathFromURI(uri));
+                            //filePath = new File(getRealPathFromURI(uri));
 
 
                         }
@@ -430,7 +512,8 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                     // filePath = new File(getRealPathFromURI(_mipath,Photo));
                     //Log.i("File creado", "Path:" + filePath);
                     bitmap = decodeFile(path);
-                    imageViewUserAvatar.setImageBitmap(bitmap);
+                    rotateimage(bitmap);
+                    //imageViewUserAvatar.setImageBitmap(bitmap);
 
 
                     break;
@@ -611,12 +694,16 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
                     }
                 })
-
-                        .option("resource_type", "image")
-                        .option("folder", "FuegoSanto/avatar/")
-                        .option("public_id", "My_dog")
-                        .option("overwrite", true)
-                        .dispatch();
+                        .preprocess(new ImagePreprocessChain()
+                                .loadWith(new BitmapDecoder(1000, 1000))
+                                .addStep(new Limit(1000, 1000))
+                                .addStep(new DimensionsValidator(10,10,1000,1000))
+                                .saveWith(new BitmapEncoder(BitmapEncoder.Format.JPEG, 80)))
+                                .option("resource_type", "image")
+                                .option("folder", "FuegoSanto/avatar/")
+                                .option("public_id", nombre)
+                                .option("overwrite", true)
+                                .dispatch(this);
 
 
             } catch (JSONException e) {
@@ -651,8 +738,13 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                                         obj.getString("avatar")
 
                                 );
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+
+                        Intent i = new Intent(editarDatos.this, ProfileActivity.class);
                         finish();
+                        startActivity(i);
+
+                        //startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+
                     } else {
                         Toast.makeText(
                                 getApplicationContext(),
