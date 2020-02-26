@@ -102,6 +102,7 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
     Uri miImagen;
     File filePath;
     String nombreImagen = "";
+    Context context;
 
     private String currentUrl = null;
     JSONObject Result;
@@ -161,6 +162,13 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
     }
 
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if ( progreso!=null && progreso.isShowing() ){
+            progreso.cancel();
+        }
+    }
 
     private boolean validaPermisos() {
 
@@ -500,8 +508,8 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
                             Log.i("Ruta de almacenamiento", "Path:" + path);
-                            //filePath = new File(getRealPathFromURI(uri));
-
+                            filePath = new File(getRealPathFromURI(uri));
+                            btnUpdate.setEnabled(true);
 
                         }
                     });
@@ -511,8 +519,19 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
                     // filePath = new File(getRealPathFromURI(_mipath,Photo));
                     //Log.i("File creado", "Path:" + filePath);
+
+
+                    Uri uri_camara = Uri.fromFile(new File(path));
+                    Log.i("URI ","Uri de la camara" + uri_camara);
+                    Toast.makeText(getApplicationContext(), "uri desde camara" + uri_camara, Toast.LENGTH_LONG).show();
+
                     bitmap = decodeFile(path);
                     rotateimage(bitmap);
+
+                    /*
+                    filePath = new File(getRealPathFromURI(uri_camara));
+                    btnUpdate.setEnabled(true);
+*/
                     //imageViewUserAvatar.setImageBitmap(bitmap);
 
 
@@ -640,8 +659,7 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
     public void uploadImage() {
 
 
-        progreso = new ProgressDialog(getApplicationContext());
-        progreso.setMessage("Cargando...");
+
 
 
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
@@ -662,6 +680,12 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
         } else {
             try {
+
+                progreso = new ProgressDialog(editarDatos.this);
+                progreso.setMessage("Cargando...");
+                progreso.show();
+
+
                 MediaManager.get().upload(Uri.fromFile(filePath)).callback(new UploadCallback() {
                     @Override
                     public void onStart(String requestId) {
@@ -709,10 +733,15 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
             } catch (JSONException e) {
 
             }
+
         }
 
 
+
+
     }
+
+
 
     public void updateSubscriptor(String nombre, String documento, String avatar) {
 

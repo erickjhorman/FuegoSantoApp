@@ -62,9 +62,13 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     Context context;
     //EditText txtTextComentario;
     String publicaciones_id;
+    private OnItemClickListener mlistener;
+    ProgressDialog progreso;
+
 
     ProgressDialog progressDialog;
     IComunicaFragments interfaceComunicaFragments;
+
 
 
     private View.OnClickListener listener;
@@ -76,6 +80,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         this.context = context;
         this.interfaceComunicaFragments = interfaceComunicaFragments;
         request = Volley.newRequestQueue(context);
+
 
     }
 
@@ -97,6 +102,21 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         vista.setLayoutParams(layoutParams);
         return new publicacionesAdapter.publicacionesHolder(vista);
     }
+
+
+    public interface OnItemClickListener{
+      void onItemClick(int position);
+    }
+
+    public void SetOnItemClickListener(OnItemClickListener listener){
+        mlistener = listener;
+    }
+
+
+    public void setOnclickListener(OnClickListener listener) {
+        this.listener = listener;
+    }
+
 
     private void CargarWebservices() {
 
@@ -174,22 +194,55 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         holder.txtfechaPublicacion.setText(listaPublicaiones.get(position).getFecha_publicacion());
         holder.txtautor.setText(listaPublicaiones.get(position).getAutor());
         holder.txtDecripcion.setText(listaPublicaiones.get(position).getDescripcion());
+
+        holder.nombre_usuario.setText(listaComentarios.get(position).getEmail());
         holder.txcomentario.setText(listaComentarios.get(position).getComentario());
         holder.txtfecha.setText(listaComentarios.get(position).getFecha());
         holder.txthora.setText(listaComentarios.get(position).getHora());
+
 
         if (listaPublicaiones.get(position).getCover() != null) {
             cargarImagenUrl(listaPublicaiones.get(position).getCover(), holder);
         }
 
 
-        String urlImagen = listaPublicaiones.get(position).getCover();
+        String imagenUser = listaComentarios.get(position).getAvatar();
+        Toast.makeText(context, "Avatar imagenes" + imagenUser , Toast.LENGTH_LONG).show();
+        String  url_imagen_usuario =(SharedPrefManager.getInstance(context).getUseAvatar());
 
 
-        //Toast.makeText(context, "Url" + urlImagen , Toast.LENGTH_LONG).show();
+        Picasso.get().load(imagenUser)
+                .fit()
+                .centerCrop()
+                .transform(new CircleTransform())
+                .into(holder.imagen_usuario);
+
+
+
+        if (SharedPrefManager.getInstance(context).isLoggedIn()) {
+
+
+
+            Picasso.get().load(url_imagen_usuario)
+                    .fit()
+                    .centerCrop()
+                    .transform(new CircleTransform())
+                    .into(holder.img_avatar_comentario);
+
+        } else {
+            holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
+
+        }
+
+
 
 
         //holder.btnComentar.setOnClickListener(this);
+
+
+
+
+
 
 
     }
@@ -225,7 +278,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
         switch (view.getId()) {
             case R.id.verDetalle:
-                //Toast.makeText(context, "Ver detalle", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Ver detalle", Toast.LENGTH_SHORT).show();
 
 
                 break;
@@ -301,9 +354,10 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
             imagen_usuario = itemView.findViewById(R.id.imgAvatar);
             nombre_usuario = itemView.findViewById(R.id.txt_nombre_usuario);
 
-            String url_imagen_usuario = SharedPrefManager.getInstance(context).getUseAvatar();
 
 
+
+            /*
             if (SharedPrefManager.getInstance(context).isLoggedIn()) {
 
 
@@ -325,12 +379,21 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
                 imagen_usuario.setImageResource(R.mipmap.ic_launcher);
 
             }
+*/
 
 
-            if (SharedPrefManager.getInstance(context).isLoggedIn()) {
                 btnComentar.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        if (SharedPrefManager.getInstance(context).isLoggedIn()) {
+
+
+
+                            progreso = new ProgressDialog(context);
+                            progreso.setMessage("Cargando...");
+                            progreso.show();
+
                         final String comentario = txtTextComentario.getText().toString().trim();
                         final String publicacion_id = txtidPublicacion.getText().toString().trim();
                         final String subscriptor_id = String.valueOf((SharedPrefManager.getInstance(context).getUserId()));
@@ -343,14 +406,33 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
                             txtTextComentario.getText().clear();
                         }
 
+                        progreso.hide();
+
 
                     }
+                        else {
+                            Toast.makeText(context, "Debes logearte para poder comentar", Toast.LENGTH_SHORT).show();
+                        }
+
+
+            }
                 });
 
-            } else {
-                Toast.makeText(context, "Debes logearte para poder comentar", Toast.LENGTH_SHORT).show();
-            }
 
+
+            verDetalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                        int position = getAdapterPosition();
+                        Toast.makeText(context, "Mensaje desde MainActivity:" + position, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Desde publicaciones adapater", Toast.LENGTH_SHORT).show();
+                        interfaceComunicaFragments.enviarPublicacion(listaPublicaiones.get(position));
+
+
+                }
+            });
 
         }
 
@@ -358,11 +440,9 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     }
 
 
-    public void setOnclickListener(View.OnClickListener listener) {
-        this.listener = listener;
 
 
-    }
+
 
 
 }

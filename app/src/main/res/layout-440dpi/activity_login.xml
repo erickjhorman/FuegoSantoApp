@@ -17,6 +17,7 @@
 
         <include layout="@layout/toolbar_layout_profile" />
 
+
         <TextView
 
             android:layout_width="306dp"
@@ -24,12 +25,11 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="48dp"
-            android:layout_marginRight="48dp"
-            android:layout_marginBottom="480dp"
-            android:textAlignment="center"
-            android:text="¡Hola! para seguir, ingresa tu correo para poder comentar las publicaciones " />
-
+            android:layout_marginEnd="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginBottom="506dp"
+            android:text="¡Hola! para seguir, ingresa tu correo para poder comentar las publicaciones "
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/editTextCorreo"
@@ -38,9 +38,9 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="39dp"
-            android:layout_marginRight="39dp"
-            android:layout_marginBottom="307dp"
+            android:layout_marginEnd="29dp"
+            android:layout_marginRight="29dp"
+            android:layout_marginBottom="371dp"
             android:gravity="center"
             android:hint="Ingresa tu correo"
             android:inputType="textEmailAddress"
@@ -68,7 +68,7 @@
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="27dp"
-            android:layout_marginTop="443dp"
+            android:layout_marginTop="338dp"
             android:layout_marginRight="27dp"
             android:text="Ingresar"
             android:textAlignment="center" />

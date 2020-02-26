@@ -15,6 +15,8 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,6 +56,7 @@ import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 import com.example.fuegosantoapp.interfaces.IFragments;
 import com.google.android.material.navigation.NavigationView;
 import com.synnapps.carouselview.CarouselView;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -147,12 +150,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setSubtitle("Dios les bendiga");
         toolbar.setTitleTextColor(0xFFFFFFFF);
         toolbar.setSubtitleTextColor(0xFFFFFFFF);
-        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+        //toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+
+        //To change color of option menu
+        toolbar.getOverflowIcon().setColorFilter(Color.WHITE , PorterDuff.Mode.SRC_ATOP);
+
 
         //Crar funcionalidad del toolbar que abre y cierra la barra de navegacion
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
 
         drawer.setVerticalScrollBarEnabled(false);
 
@@ -160,6 +168,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        //toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
+
         toggle.syncState();
 
         //Code for showing the articulos fragment at the start of the app
@@ -277,15 +287,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
 
             case R.id.search:
-                msg = "search";
+                msg = "Buscar";
                 break;
 
             case R.id.settings:
-                msg = "settings";
+                msg = "Configuraciones";
                 break;
 
             case R.id.edit:
-                msg = "edit";
+                msg = "editar";
                 break;
 
             case R.id.menuLogout:
@@ -295,7 +305,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
         }
-        Toast.makeText(this, msg + "Checked", Toast.LENGTH_SHORT).show();
+
+        //Toast.makeText(this, msg + "Checked", Toast.LENGTH_SHORT).show();
         return super.onOptionsItemSelected(item);
     }
 
@@ -461,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(JSONObject response) {
 
-                Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
                 JSONArray versos = response.optJSONArray("verso");
 
 

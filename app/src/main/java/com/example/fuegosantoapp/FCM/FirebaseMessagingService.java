@@ -23,6 +23,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.android.volley.toolbox.ImageRequest;
+import com.example.fuegosantoapp.Constants;
 import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.activities.ProfileActivity;
@@ -95,10 +96,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             channel.enableVibration(true);
 
             manager.createNotificationChannel(channel);
-            MainActivity mainActivity = new MainActivity();
-            mainActivity.getImagenes();
 
-            Fragmento_publicaciones fragmento_publicaciones = new Fragmento_publicaciones();
+
+
 
 
             Intent intent = new Intent(this, MainActivity.class);
@@ -216,32 +216,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 
 
-    /*
-    private void convertirImagebBitmap(String imagen) {
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-
-        ImageRequest imageRequest = new ImageRequest(imagen, new Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-
-                bitmap = response;
-
-            }
-        }, 0, 0, ImageView.ScaleType.CENTER, null, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Toast.makeText(getApplicationContext(), "Error al cargar la imagen", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        requestQueue.add(imageRequest);
-
-        return;
-
-    }
-    */
 
 
     public void CrearNotificacion(String title, String body, Bitmap response, NotificationManager manager, String NOTIFICATION_CHANNEL_ID,Notification action){
@@ -270,6 +245,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
 
+
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed Token" + token);
@@ -279,8 +255,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
     private void enviarTokenToServer(final String token) {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                "http://192.168.0.74/Android/v1/registerToken.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_ADD_TOKEN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -304,6 +279,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
+
+
 
 
 }
