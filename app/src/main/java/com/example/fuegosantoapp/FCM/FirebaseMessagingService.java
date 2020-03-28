@@ -105,15 +105,15 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent articulopendingIntent = PendingIntent.getActivity(this,
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,
                     0,
                     intent,
                     0 );
 
             Notification.Action action =
-                    new Notification.Action.Builder(Icon.createWithResource(this, R.mipmap.ic_launcher_round), getString(R.string.articulo), articulopendingIntent).build();
+                    new Notification.Action.Builder(Icon.createWithResource(this, R.mipmap.ic_launcher_round), getString(R.string.articulo), pendingIntent).build();
 
-             }
+        }
 
 
 
@@ -125,6 +125,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                     new Notification.Action.Builder(Icon.createWithResource(this, R.mipmap.ic_launcher_round), "Ir al articulo", pendingIntent).build();
         }
 */
+
 
         /*
         Intent intent = new Intent(this, MainActivity.class);
@@ -138,10 +139,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 
         );
-
-
-
 */
+
+
+
 
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -212,24 +213,25 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
     }
 
-
-
-
-
-
-
-
     public void CrearNotificacion(String title, String body, Bitmap response, NotificationManager manager, String NOTIFICATION_CHANNEL_ID,Notification action){
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID);
 
+
+        //Creating the activity pending of the publications
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0,
+                intent,
+                0
+        );
 
         builder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setTicker("Hearty365")
-
                 .setContentTitle(title)
                 .setContentText(body)
                 .setLargeIcon(response)
@@ -237,7 +239,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                         .bigPicture(response)
                         .bigLargeIcon(null))
                 .setVibrate(new long[]{0, 1000, 500, 1000})
-                //.setContentIntent(pendingIntent)
+                .setContentIntent(pendingIntent)
                 .setContentInfo("info");
 
 
@@ -245,7 +247,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
 
+//Code to register token in the database
 
+    /*
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed Token" + token);
@@ -259,7 +263,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "Se registro exitosamente", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Token registrado exitosamente", Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -280,6 +284,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         requestQueue.add(stringRequest);
     }
 
+*/
 
 
 

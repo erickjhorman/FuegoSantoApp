@@ -27,12 +27,14 @@ import android.media.ExifInterface;
 import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -135,6 +137,9 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
 
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
+
+
+
         getTextViewId = (TextView) findViewById(R.id.txtIdUsuario);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
 
@@ -142,6 +147,26 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
         botonCargar = (Button) findViewById(R.id.btnCargarImagen);
         btnUpdate = (Button) findViewById(R.id.btnUpdate);
         btnUpdate.setEnabled(false);
+
+        //To check if the persona is typing
+
+        textViewUsername.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event != null){
+                    Log.i("Usuario", "Estoy escribiendo:");
+                    btnUpdate.setEnabled(true);
+                    return  true;
+                }
+
+                Log.d("Usuario", "No Estoy escribiendo:");
+                btnUpdate.setEnabled(false);
+                return  false;
+            }
+
+
+        });
+
         btnUpdate.setOnClickListener(this);
         botonCargar.setOnClickListener(this);
 
@@ -657,11 +682,6 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
 
     public void uploadImage() {
-
-
-
-
-
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
 
         getTextViewId = (TextView) findViewById(R.id.txtIdUsuario);
@@ -673,20 +693,37 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
         final String nombre = textViewUsername.getText().toString().trim();
 
 
-        if (nombre.isEmpty()) {
+      /*
+        if (nombre.isEmpty()){
+            Toast.makeText(this, "Ingrese un nombre", Toast.LENGTH_SHORT).show();
+        } else if (imageViewUserAvatar.getDrawable() == null) {
+            Toast.makeText(this, "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show();
+
+        }
+
+       */
+
+        if (nombre.isEmpty()){
             Toast.makeText(this, "Ingrese un nombre", Toast.LENGTH_SHORT).show();
         } else if (imageViewUserAvatar.getDrawable() == null) {
             Toast.makeText(this, "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show();
 
         } else {
-            try {
+
+
+            if(filePath != null){
+                Toast.makeText(this, "FilePath existe", Toast.LENGTH_SHORT).show();
+
+                try {
+
 
                 progreso = new ProgressDialog(editarDatos.this);
                 progreso.setMessage("Cargando...");
                 progreso.show();
 
 
-                MediaManager.get().upload(Uri.fromFile(filePath)).callback(new UploadCallback() {
+
+                 MediaManager.get().upload(Uri.fromFile(filePath)).callback(new UploadCallback() {
                     @Override
                     public void onStart(String requestId) {
 
@@ -734,8 +771,11 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
             }
 
+        } else{
+                Toast.makeText(this, "FilePath nulo", Toast.LENGTH_SHORT).show();
+                updateSubscriptor(nombre, documento, currentUrl);
+            }
         }
-
 
 
 

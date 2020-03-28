@@ -56,7 +56,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
 
     List<Publicacion> listaPublicaiones;
-    List<Comentarios> listaComentarios;
+
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
     Context context;
@@ -74,9 +74,8 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     private View.OnClickListener listener;
 
 
-    public publicacionesAdapter(List<Publicacion> listaPublicaiones, List<Comentarios> listaComentarios, Context context, IComunicaFragments interfaceComunicaFragments) {
+    public publicacionesAdapter(List<Publicacion> listaPublicaiones,  Context context, IComunicaFragments interfaceComunicaFragments) {
         this.listaPublicaiones = listaPublicaiones;
-        this.listaComentarios = listaComentarios;
         this.context = context;
         this.interfaceComunicaFragments = interfaceComunicaFragments;
         request = Volley.newRequestQueue(context);
@@ -195,28 +194,29 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         holder.txtautor.setText(listaPublicaiones.get(position).getAutor());
         holder.txtDecripcion.setText(listaPublicaiones.get(position).getDescripcion());
 
+        /*
         holder.nombre_usuario.setText(listaComentarios.get(position).getEmail());
         holder.txcomentario.setText(listaComentarios.get(position).getComentario());
         holder.txtfecha.setText(listaComentarios.get(position).getFecha());
         holder.txthora.setText(listaComentarios.get(position).getHora());
-
+*/
 
         if (listaPublicaiones.get(position).getCover() != null) {
             cargarImagenUrl(listaPublicaiones.get(position).getCover(), holder);
         }
 
 
-        String imagenUser = listaComentarios.get(position).getAvatar();
-        Toast.makeText(context, "Avatar imagenes" + imagenUser , Toast.LENGTH_LONG).show();
+        //String imagenUser = listaComentarios.get(position).getAvatar();
+        //Toast.makeText(context, "Avatar imagenes" + imagenUser , Toast.LENGTH_LONG).show();
         String  url_imagen_usuario =(SharedPrefManager.getInstance(context).getUseAvatar());
 
-
+/*
         Picasso.get().load(imagenUser)
                 .fit()
                 .centerCrop()
                 .transform(new CircleTransform())
                 .into(holder.imagen_usuario);
-
+*/
 
 
         if (SharedPrefManager.getInstance(context).isLoggedIn()) {
@@ -237,7 +237,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
 
 
-        //holder.btnComentar.setOnClickListener(this);
+
 
 
 

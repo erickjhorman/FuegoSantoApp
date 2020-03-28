@@ -28,6 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.RequestHandler;
+import com.example.fuegosantoapp.adapter.commentsAdapter;
 import com.example.fuegosantoapp.adapter.publicacionesAdapter;
 import com.example.fuegosantoapp.entidades.Comentarios;
 import com.example.fuegosantoapp.entidades.Publicacion;
@@ -62,16 +63,21 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
     private OnFragmentInteractionListener mListener;
     private TextView verDetalle;
-    RecyclerView recyclerPublicaciones;
-    ArrayList<Publicacion> listaPublicaciones;
-    ArrayList<Comentarios> listaComentarios;
+
+    RecyclerView recyclerPublicaciones;  // To create a variable of my recycleView
+    RecyclerView recycleComentarios;  //  To create a variable of my recycleView
+
+    ArrayList<Publicacion> listaPublicaciones;  // To create a variable of the list
+    ArrayList<Comentarios> listaComentarios; // To create a variable of the list
+
     private EditText editTextComentario;
+
     Activity activity;
-    IComunicaFragments interfaceComunicaFragments;
+    IComunicaFragments interfaceComunicaFragments;  //To create an variable of my interface
 
     ProgressDialog progress;
-    //RequestQueue request;
-    JsonObjectRequest jsonObjectRequest;
+
+    JsonObjectRequest jsonObjectRequest;  //To create  an variable of  jsonObjectRequest
 
     public Fragmento_publicaciones() {
         // Required empty public constructor
@@ -115,10 +121,15 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         View vista = inflater.inflate(R.layout.fragment_fragmento_publicaciones, container, false);
 
 
-        listaPublicaciones = new ArrayList<>();
-        listaComentarios = new ArrayList<>();
-        recyclerPublicaciones = (RecyclerView) vista.findViewById(R.id.idRecycler);
-        recyclerPublicaciones.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        listaPublicaciones = new ArrayList<>(); //To create an instance of my list
+        listaComentarios = new ArrayList<>();  //To create an instance of my list
+
+        recyclerPublicaciones = (RecyclerView) vista.findViewById(R.id.idRecycler);   //To create an instance of of my recycleView
+        recyclerPublicaciones.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
+
+        recycleComentarios = (RecyclerView) vista.findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
+        //recycleComentarios.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
+
         recyclerPublicaciones.setHasFixedSize(true);
         editTextComentario = (EditText) vista.findViewById(R.id.txtComentario);
 
@@ -194,123 +205,94 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
     @Override
     public void onResponse(JSONObject response) {
         Publicacion publicacion = null;
-        Comentarios comentarios = null;
+            Comentarios comentarios = null;
 
-        JSONArray json = response.optJSONArray("publicacion");
-        JSONArray json2 = response.optJSONArray("comments");
-        Integer id_publicacion = null;
-        Integer id_publicacion_comentarios = null;
-        //Toast.makeText(getContext(),"Maria: " + json2, Toast.LENGTH_SHORT).show();
+            JSONArray json = response.optJSONArray("publicacion");
+            JSONArray json2 = response.optJSONArray("comments");
+            Integer id_publicacion = null;
+            Integer id_publicacion_comentarios = null;
+            //Toast.makeText(getContext(),"Maria: " + json2, Toast.LENGTH_SHORT).show();
 
-
-        /*
-        try {
+            try {
                 for (int i = 0; i < json.length(); i++) {
                     publicacion = new Publicacion();
                     JSONObject jsonObject = null;
                     jsonObject = json.getJSONObject(i);
+                    //Toast.makeText(getContext(), "Publicacion: " + jsonObject.optInt("id"), Toast.LENGTH_SHORT).show();
+                    ;
+                    //id_publicacion = 1;
+                    id_publicacion = jsonObject.optInt("id");
+                    //Toast.makeText(getContext(), "Publicacion: " + id_publicacion, Toast.LENGTH_SHORT).show();
 
-                    publicacion.setId_publicaciones(jsonObject.optInt("id"));
+                    publicacion.setId_publicaciones(jsonObject.optString("id"));
                     publicacion.setFtitulo(jsonObject.optString("titulo"));
                     publicacion.setDescripcion(jsonObject.optString("descripcion"));
                     publicacion.setCover((jsonObject.optString("cover")));
                     publicacion.setPublicaciones(jsonObject.optString("publicacion"));
                     publicacion.setFecha_publicacion(jsonObject.optString("fecha_publicacion"));
                     publicacion.setAutor(jsonObject.optString("autor"));
-                    publicacion.setComentario(jsonObject.optString("comentario"));
-                    listaPublicaciones.add(publicacion);
-
-                }
-
-
-         */
-
-        try {
-            for (int i = 0; i < json.length(); i++) {
-                publicacion = new Publicacion();
-                JSONObject jsonObject = null;
-                jsonObject = json.getJSONObject(i);
-                //Toast.makeText(getContext(), "Publicacion: " + jsonObject.optInt("id"), Toast.LENGTH_SHORT).show();
-                ;
-                //id_publicacion = 1;
-                id_publicacion = jsonObject.optInt("id");
-                //Toast.makeText(getContext(), "Publicacion: " + id_publicacion, Toast.LENGTH_SHORT).show();
-
-                publicacion.setId_publicaciones(jsonObject.optString("id"));
-                publicacion.setFtitulo(jsonObject.optString("titulo"));
-                publicacion.setDescripcion(jsonObject.optString("descripcion"));
-                publicacion.setCover((jsonObject.optString("cover")));
-                publicacion.setPublicaciones(jsonObject.optString("publicacion"));
-                publicacion.setFecha_publicacion(jsonObject.optString("fecha_publicacion"));
-                publicacion.setAutor(jsonObject.optString("autor"));
 
 
 
-                for (int j = 0; j < json2.length(); j++) {
-                    comentarios = new Comentarios();
-                    JSONObject jsonObject2 = null;
-                    jsonObject2 = json2.getJSONObject(j);
-                    //Toast.makeText(getContext(), "Length Comentario: " + json2.length(), Toast.LENGTH_SHORT).show();
+                    for (int j = 0; j < json2.length(); j++) {
+                        comentarios = new Comentarios();
+                        JSONObject jsonObject2 = null;
+                        jsonObject2 = json2.getJSONObject(j);
+                        //Toast.makeText(getContext(), "Length Comentario: " + json2.length(), Toast.LENGTH_SHORT).show();
 
 
-                    id_publicacion_comentarios = jsonObject2.optInt("publicacion_id");
+                        id_publicacion_comentarios = jsonObject2.optInt("publicacion_id");
 
 
-                    //Toast.makeText(getContext(), "Publicacion en Comentario: " +id_publicacion_comentarios, Toast.LENGTH_SHORT).show();
-
-                       if (id_publicacion == id_publicacion_comentarios) {
-
-                           comentarios.setId(jsonObject2.optInt("publicacion_id"));
-                           comentarios.setComentario(jsonObject2.optString("comentario"));
-                           comentarios.setEmail(jsonObject2.optString("email"));
-                           comentarios.setAvatar(jsonObject2.optString("avatar"));
-                           comentarios.setHora(jsonObject2.optString("hora"));
-                           comentarios.setFecha(jsonObject2.optString("fecha"));
+                        //Toast.makeText(getContext(), "Publicacion en Comentario: " +id_publicacion_comentarios, Toast.LENGTH_SHORT).show();
 
 
-                           listaComentarios.add(comentarios);
-                       }
+                        if (id_publicacion == id_publicacion_comentarios) {
+
+                            comentarios.setId(jsonObject2.optInt("publicacion_id"));
+                            comentarios.setComentario(jsonObject2.optString("comentario"));
+                            comentarios.setEmail(jsonObject2.optString("email"));
+                            comentarios.setAvatar(jsonObject2.optString("avatar"));
+                            comentarios.setHora(jsonObject2.optString("hora"));
+                            comentarios.setFecha(jsonObject2.optString("fecha"));
+
+                            Log.i("id", String.valueOf(id_publicacion));
+                            Log.i("id_publication", String.valueOf(id_publicacion_comentarios));
+                            listaComentarios.add(comentarios);
+                            Log.i("Comments", comentarios.getComentario());
+                        }
+
+                        /*
+                            comentarios.setId(jsonObject2.optInt("publicacion_id"));
+                            comentarios.setComentario(jsonObject2.optString("comentario"));
+                            comentarios.setEmail(jsonObject2.optString("email"));
+                            comentarios.setAvatar(jsonObject2.optString("avatar"));
+                            comentarios.setHora(jsonObject2.optString("hora"));
+                            comentarios.setFecha(jsonObject2.optString("fecha"));
+
+                            Log.i("id", String.valueOf(id_publicacion));
+                            Log.i("id_publication", String.valueOf(id_publicacion_comentarios));
+                            listaComentarios.add(comentarios);
+                            Log.i("Comments", comentarios.getComentario());
+
+*/
 
 
-
-
-                       //Toast.makeText(getContext(), "Comentario: " + jsonObject.optString("comentario"), Toast.LENGTH_SHORT).show();
-                }
-
-
-
-
-                /*
-                for (int j = 0; j < json2.length();j++) {
-                    comentarios = new Comentarios();
-                    JSONObject jsonObject2 = null;
-                    jsonObject2 = json2.getJSONObject(i);
-
-                    id_publicacion_comentarios = jsonObject2.optInt("id");
-
-
-
-                        comentarios.setId(jsonObject2.optInt("publicacion_id"));
-                        comentarios.setComentario(jsonObject2.optString("comentario"));
-                        comentarios.setEmail(jsonObject2.optString("email"));
-                        comentarios.setAvatar(jsonObject2.optString("avatar"));
-                        comentarios.setHora(jsonObject2.optString("hora"));
-                        comentarios.setFecha(jsonObject2.optString("fecha"));
                         //Toast.makeText(getContext(), "Comentario: " + jsonObject.optString("comentario"), Toast.LENGTH_SHORT).show();
+                    }
 
+                    Log.i("publications", publicacion.getId_publicaciones());
+                    listaPublicaciones.add(publicacion);
                 }
-                */
-                listaPublicaciones.add(publicacion);
-
-
-
-            }
-
 
             progress.hide();
 
-            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, listaComentarios, getContext(),interfaceComunicaFragments);
+            // To create an instace of my adapter and send my list with some information to start the process
+            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, getContext(),interfaceComunicaFragments);
+            //commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
+
             recyclerPublicaciones.setAdapter(adapter);
+            //recycleComentarios.setAdapter(commentsAdapter);
 
 
 /*
@@ -327,13 +309,6 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             });
 
 */
-
-
-
-
-
-
-
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();

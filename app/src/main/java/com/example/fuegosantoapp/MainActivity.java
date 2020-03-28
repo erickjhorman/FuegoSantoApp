@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -54,7 +55,11 @@ import com.example.fuegosantoapp.fragmentos.Fragmento_favoritos;
 import com.example.fuegosantoapp.fragmentos.Fragmento_publicaciones;
 import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 import com.example.fuegosantoapp.interfaces.IFragments;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.synnapps.carouselview.CarouselView;
 
 
@@ -64,12 +69,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.fuegosantoapp.Constants.URL_COMENTAR_PUBLICACION;
 
 
@@ -621,6 +628,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         JSONObject jsonObject = new JSONObject(response);
                         Log.v("JSON", response);
 
+                        //To create the token
+                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this,new OnSuccessListener<InstanceIdResult>() {
+                            @Override
+                            public void onSuccess(InstanceIdResult instanceIdResult) {
+                                String token = instanceIdResult.getToken();
+                                FirebaseMessaging.getInstance().subscribeToTopic("dispositivos");
+                                enviarTokenToServer(token);
+
+                            }
+                        });
+
+
+
+
                         Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                         editTextCorreo.getText().clear();
 
@@ -655,9 +676,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private void enviarTokenToServer(final String token) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_ADD_TOKEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), "Token registrado exitosamente", Toast.LENGTH_LONG).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "ERROR EN LA CONEXION", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parametros = new Hashtable<String, String>();
+                parametros.put("Token", token);
+
+                return parametros;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+
+
     //To get the accion of the button
-
-
     @Override
     public void onClick(View view) {
 
