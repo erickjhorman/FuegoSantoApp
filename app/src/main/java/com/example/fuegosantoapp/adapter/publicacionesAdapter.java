@@ -56,7 +56,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
 
     List<Publicacion> listaPublicaiones;
-
+    List<Comentarios> listaComentarios;
     RequestQueue request;
     JsonObjectRequest jsonObjectRequest;
     Context context;
@@ -74,8 +74,9 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     private View.OnClickListener listener;
 
 
-    public publicacionesAdapter(List<Publicacion> listaPublicaiones,  Context context, IComunicaFragments interfaceComunicaFragments) {
+    public publicacionesAdapter(List<Publicacion> listaPublicaiones, List<Comentarios> listaComentarios,    Context context, IComunicaFragments interfaceComunicaFragments) {
         this.listaPublicaiones = listaPublicaiones;
+        this.listaComentarios = listaComentarios;
         this.context = context;
         this.interfaceComunicaFragments = interfaceComunicaFragments;
         request = Volley.newRequestQueue(context);
@@ -184,67 +185,47 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     @Override
     public void onBindViewHolder(@NonNull publicacionesHolder holder, int position) {
 
-        //Toast.makeText(context, "lista Comentarios" + listaComentarios.get(position).getComentario(), Toast.LENGTH_LONG).show();
-
-        holder.txtidPublicacion.setText((listaPublicaiones.get(position).getId_publicaciones()));
-        holder.txtidPublicacion.setVisibility(View.GONE);
-        holder.txttituloPublicacion.setText(listaPublicaiones.get(position).getFtitulo());
-        //holder.txtPublicacion.setText(listaPublicaiones.get(position).getPublicaciones());
-        holder.txtfechaPublicacion.setText(listaPublicaiones.get(position).getFecha_publicacion());
-        holder.txtautor.setText(listaPublicaiones.get(position).getAutor());
-        holder.txtDecripcion.setText(listaPublicaiones.get(position).getDescripcion());
-
-        /*
-        holder.nombre_usuario.setText(listaComentarios.get(position).getEmail());
-        holder.txcomentario.setText(listaComentarios.get(position).getComentario());
-        holder.txtfecha.setText(listaComentarios.get(position).getFecha());
-        holder.txthora.setText(listaComentarios.get(position).getHora());
-*/
-
         if (listaPublicaiones.get(position).getCover() != null) {
             cargarImagenUrl(listaPublicaiones.get(position).getCover(), holder);
         }
 
+        // To set the information of the posts
+        holder.txtidPublicacion.setText((listaPublicaiones.get(position).getId_publicaciones()));
+        holder.txtidPublicacion.setVisibility(View.GONE);
+        holder.txttituloPublicacion.setText(listaPublicaiones.get(position).getFtitulo());
+        holder.txtfechaPublicacion.setText(listaPublicaiones.get(position).getFecha_publicacion());
+        holder.txtautor.setText(listaPublicaiones.get(position).getAutor());
+        holder.txtDecripcion.setText(listaPublicaiones.get(position).getDescripcion());
 
-        //String imagenUser = listaComentarios.get(position).getAvatar();
-        //Toast.makeText(context, "Avatar imagenes" + imagenUser , Toast.LENGTH_LONG).show();
-        String  url_imagen_usuario =(SharedPrefManager.getInstance(context).getUseAvatar());
+        // To set the information of the comments
+        holder.nombre_usuario.setText(listaComentarios.get(position).getEmail());
+        holder.txcomentario.setText(listaComentarios.get(position).getComentario());
+        holder.txtfecha.setText(listaComentarios.get(position).getFecha());
+        holder.txthora.setText(listaComentarios.get(position).getHora());
 
-/*
+
+        // To get and set the image from the comments
+        String imagenUser = listaComentarios.get(position).getAvatar();
         Picasso.get().load(imagenUser)
                 .fit()
                 .centerCrop()
                 .transform(new CircleTransform())
                 .into(holder.imagen_usuario);
-*/
 
+
+        // To get and set the image from the logged  user
+        String  url_imagen_usuario =(SharedPrefManager.getInstance(context).getUseAvatar());
 
         if (SharedPrefManager.getInstance(context).isLoggedIn()) {
-
-
-
             Picasso.get().load(url_imagen_usuario)
                     .fit()
                     .centerCrop()
                     .transform(new CircleTransform())
                     .into(holder.img_avatar_comentario);
-
         } else {
             holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
 

@@ -288,7 +288,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             progress.hide();
 
             // To create an instace of my adapter and send my list with some information to start the process
-            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, getContext(),interfaceComunicaFragments);
+            publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, listaComentarios, getContext(), interfaceComunicaFragments);
             //commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
 
             recyclerPublicaciones.setAdapter(adapter);
