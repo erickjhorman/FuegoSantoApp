@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="activities.ProfileActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/toolbar_layout_profile" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
+
+
+            <Button
+
+                android:id="@+id/btnEditarPerfil"
+                android:layout_width="369dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginLeft="22dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="125dp"
+                android:backgroundTint="@color/white"
+                android:text="Editar Perfil"
+                android:textColor="@color/Black">
+
+            </Button>
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="163dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="268dp"
+                android:background="@drawable/sample_1" />
+
+            <ImageView
+                android:id="@+id/imageViewUserAvatar"
+                android:layout_width="117dp"
+                android:layout_height="71dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="279dp"
+                android:layout_marginRight="279dp"
+                android:layout_marginBottom="271dp"
+                android:gravity="bottom" />
+
+
+
+            <TextView
+                android:id="@+id/textViewUserCorreo"
+                android:layout_width="165dp"
+                android:layout_height="33dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="228dp"
+                android:layout_marginRight="228dp"
+                android:layout_marginBottom="184dp"
+                android:text="correo"
+                android:textAlignment="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="279dp"
+                android:layout_marginRight="279dp"
+                android:layout_marginBottom="230dp"
+                android:text="Bienvendido" />
+
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

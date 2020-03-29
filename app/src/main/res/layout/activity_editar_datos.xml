@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activities.editarDatos">
+
+
+  <androidx.appcompat.widget.LinearLayoutCompat
+      android:layout_width="match_parent"
+      android:layout_height="50dp">
+    <include layout="@layout/tlb_edt_profile"/>
+
+  </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="670dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp">
+
+         <TextView
+             android:id="@+id/txtIdUsuario"
+             android:layout_width="match_parent"
+             android:layout_height="52dp"/>
+
+        <EditText
+            android:id="@+id/editTextNombre"
+            android:layout_width="176dp"
+            android:layout_height="47dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="224dp"
+            android:inputType="" />
+
+        <ImageView
+            android:id="@+id/ImagenEditarDatos"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="138dp"
+            android:layout_marginRight="138dp"
+            android:layout_marginBottom="388dp"
+            android:src="@mipmap/ic_launcher"
+            tools:layout_editor_absoluteX="168dp"
+            tools:layout_editor_absoluteY="215dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCargarImagen"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="333dp"
+            android:backgroundTint="@color/white"
+            android:text="Cambiar imagen de perfil"
+            android:textColor="@color/Black"
+            android:onClick="onClick"
+
+            />
+
+        <TextView
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="193dp"
+            android:layout_marginRight="193dp"
+            android:layout_marginBottom="285dp"
+            android:text="Nombre"></TextView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="136dp"
+            android:backgroundTint="@color/white"
+            android:text="Update"
+            android:textColor="@color/Black"
+
+
+            />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

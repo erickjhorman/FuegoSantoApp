@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.loginActivity">
+
+    <RelativeLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+
+        <include layout="@layout/toolbar_layout_profile" />
+
+        <TextView
+
+            android:layout_width="306dp"
+            android:layout_height="123dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginBottom="480dp"
+            android:textAlignment="center"
+            android:text="¡Hola! para seguir, ingresa tu correo para poder comentar las publicaciones " />
+
+
+        <EditText
+            android:id="@+id/editTextCorreo"
+            android:layout_width="338dp"
+            android:layout_height="85dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="39dp"
+            android:layout_marginRight="39dp"
+            android:layout_marginBottom="307dp"
+            android:gravity="center"
+            android:hint="Ingresa tu correo"
+            android:inputType="textEmailAddress"
+            android:orientation="horizontal" />
+
+        <TextView
+            android:id="@+id/textViewLogin"
+            android:layout_width="310dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="239dp"
+            android:text="No se mi correo"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonlogin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="27dp"
+            android:layout_marginTop="443dp"
+            android:layout_marginRight="27dp"
+            android:text="Ingresar"
+            android:textAlignment="center" />
+
+
+    </RelativeLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
