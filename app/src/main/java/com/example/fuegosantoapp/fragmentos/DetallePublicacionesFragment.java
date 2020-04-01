@@ -98,7 +98,7 @@ public class DetallePublicacionesFragment extends Fragment {
         txtAutorPublicacion = (TextView) vista.findViewById(R.id.autorPublicacion);
         txtFechaPublicacion = (TextView) vista.findViewById(R.id.fechaPublicacion);
 
-       Bundle objetoPublicacion = getArguments();
+        Bundle objetoPublicacion = getArguments();
         Publicacion publicacion = null;
 
         if(objetoPublicacion != null){

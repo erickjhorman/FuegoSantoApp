@@ -3,7 +3,6 @@ package com.example.fuegosantoapp.fragmentos;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,14 +20,12 @@ import android.widget.Toast;
 
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.RequestHandler;
-import com.example.fuegosantoapp.adapter.commentsAdapter;
+import com.example.fuegosantoapp.activities.DetailsCommentsPost;
 import com.example.fuegosantoapp.adapter.publicacionesAdapter;
 import com.example.fuegosantoapp.entidades.Comentarios;
 import com.example.fuegosantoapp.entidades.Publicacion;
@@ -72,8 +69,11 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
     private EditText editTextComentario;
 
-    Activity activity;
+    Activity activity; // To get the context of my application
+
+    DetailsCommentsPost detailActivity;
     IComunicaFragments interfaceComunicaFragments;  //To create an variable of my interface
+
 
     ProgressDialog progress;
 
@@ -128,6 +128,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         recyclerPublicaciones.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
 
         recycleComentarios = (RecyclerView) vista.findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
+        Log.i("Recycle","Comentarios" + recycleComentarios);
         //recycleComentarios.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
 
         recyclerPublicaciones.setHasFixedSize(true);
@@ -147,8 +148,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         progress.setMessage("Consultando");
         progress.show();
 
-        //String url = "http://192.168.0.74/Android/v1/publications.php";
-        //String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/publications.php";
+
 
 
         jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL_GETPUBLICACIONFS, null, this, this);
@@ -204,7 +204,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
     @Override
     public void onResponse(JSONObject response) {
-        Publicacion publicacion = null;
+            Publicacion publicacion = null;
             Comentarios comentarios = null;
 
             JSONArray json = response.optJSONArray("publicacion");
@@ -224,16 +224,6 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                     id_publicacion = jsonObject.optInt("id");
                     //Toast.makeText(getContext(), "Publicacion: " + id_publicacion, Toast.LENGTH_SHORT).show();
 
-                    publicacion.setId_publicaciones(jsonObject.optString("id"));
-                    publicacion.setFtitulo(jsonObject.optString("titulo"));
-                    publicacion.setDescripcion(jsonObject.optString("descripcion"));
-                    publicacion.setCover((jsonObject.optString("cover")));
-                    publicacion.setPublicaciones(jsonObject.optString("publicacion"));
-                    publicacion.setFecha_publicacion(jsonObject.optString("fecha_publicacion"));
-                    publicacion.setAutor(jsonObject.optString("autor"));
-
-
-
                     for (int j = 0; j < json2.length(); j++) {
                         comentarios = new Comentarios();
                         JSONObject jsonObject2 = null;
@@ -242,10 +232,6 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
 
                         id_publicacion_comentarios = jsonObject2.optInt("publicacion_id");
-
-
-                        //Toast.makeText(getContext(), "Publicacion en Comentario: " +id_publicacion_comentarios, Toast.LENGTH_SHORT).show();
-
 
                         if (id_publicacion == id_publicacion_comentarios) {
 
@@ -256,34 +242,27 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                             comentarios.setHora(jsonObject2.optString("hora"));
                             comentarios.setFecha(jsonObject2.optString("fecha"));
 
-                            Log.i("id", String.valueOf(id_publicacion));
-                            Log.i("id_publication", String.valueOf(id_publicacion_comentarios));
-                            listaComentarios.add(comentarios);
-                            Log.i("Comments", comentarios.getComentario());
+
                         }
 
-                        /*
-                            comentarios.setId(jsonObject2.optInt("publicacion_id"));
-                            comentarios.setComentario(jsonObject2.optString("comentario"));
-                            comentarios.setEmail(jsonObject2.optString("email"));
-                            comentarios.setAvatar(jsonObject2.optString("avatar"));
-                            comentarios.setHora(jsonObject2.optString("hora"));
-                            comentarios.setFecha(jsonObject2.optString("fecha"));
-
-                            Log.i("id", String.valueOf(id_publicacion));
-                            Log.i("id_publication", String.valueOf(id_publicacion_comentarios));
-                            listaComentarios.add(comentarios);
-                            Log.i("Comments", comentarios.getComentario());
-
-*/
-
-
-                        //Toast.makeText(getContext(), "Comentario: " + jsonObject.optString("comentario"), Toast.LENGTH_SHORT).show();
+                        listaComentarios.add(comentarios);
                     }
 
-                    Log.i("publications", publicacion.getId_publicaciones());
+
+
+                    publicacion.setId_publicaciones(jsonObject.optString("id"));
+                    publicacion.setFtitulo(jsonObject.optString("titulo"));
+                    publicacion.setDescripcion(jsonObject.optString("descripcion"));
+                    publicacion.setCover((jsonObject.optString("cover")));
+                    publicacion.setPublicaciones(jsonObject.optString("publicacion"));
+                    publicacion.setFecha_publicacion(jsonObject.optString("fecha_publicacion"));
+                    publicacion.setAutor(jsonObject.optString("autor"));
+
+
                     listaPublicaciones.add(publicacion);
                 }
+
+
 
             progress.hide();
 
@@ -342,7 +321,18 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         if (context instanceof Activity) {
             this.activity = (Activity) context;
             interfaceComunicaFragments = (IComunicaFragments) this.activity;
+
         }
+
+        if (context instanceof DetailsCommentsPost) {
+            this.activity = (DetailsCommentsPost) context;
+            interfaceComunicaFragments = (IComunicaFragments) this.activity;
+
+        }
+
+
+
+
 
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

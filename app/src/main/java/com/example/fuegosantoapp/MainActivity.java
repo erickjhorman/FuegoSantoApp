@@ -10,9 +10,10 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,9 +43,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
+import com.example.fuegosantoapp.activities.DetailsCommentsPost;
 import com.example.fuegosantoapp.activities.ProfileActivity;
 import com.example.fuegosantoapp.activities.loginActivity;
 import com.example.fuegosantoapp.adapter.ViewPagerAdapter;
+import com.example.fuegosantoapp.adapter.commentsAdapter;
+import com.example.fuegosantoapp.entidades.Comentarios;
 import com.example.fuegosantoapp.entidades.Imagenes;
 import com.example.fuegosantoapp.entidades.Publicacion;
 import com.example.fuegosantoapp.entidades.VersoOfTheDay;
@@ -76,7 +80,6 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.example.fuegosantoapp.Constants.URL_COMENTAR_PUBLICACION;
 
 
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView imageViewUserAvatar;
     private TextView textViewUserCorreo;
     ArrayList<Imagenes> listaImagenes;
-
+    ArrayList<Comentarios> listaComentarios; // To create a variable of the list
 
     ProgressDialog progress;
     CarouselView carouselView;
@@ -113,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     VersoOfTheDay versoOfTheDay = null;
     loginActivity Login = new loginActivity();
 
+    RecyclerView recycleComentarios;  //  To create a variable of my recycleView
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,11 +129,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
 
+
         listaImagenes = new ArrayList<>();
+        listaComentarios = new ArrayList<>();  //To create an instance of my list
+        recycleComentarios = (RecyclerView) findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
+       Log.i("Recycle","Re" + recycleComentarios);
 
 
         getImagenes();
-
 
         if (listaImagenes != null) {
             Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes, Toast.LENGTH_LONG).show();
@@ -178,15 +186,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //toggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.white));
 
         toggle.syncState();
-
-        //Code for showing the articulos fragment at the start of the app
-
-        /*if (savedInstanceState == null) {
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new Fragmento_articulo()).commit();
-
-        }*/
 
 
         //Inflate the nav_header
@@ -268,6 +267,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
+
 
 
     @Override
@@ -445,77 +446,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 */
     }
 
-    /*
-    public class MyTimerTask extends TimerTask{
-
-        @Override
-        public void run() {
-
-            MainActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                 int tamañolista  = listaImagenes.size();
-
-                   for ( int i = 0; i < tamañolista; i++){
-                       if(viewPager.getCurrentItem() == i ){
-                           viewPager.setCurrentItem(i++);
-                       }
-                   }
-                }
-            });
-        }
-    }
-
-    */
-
-
     public void getDailyVers() {
 
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, Constants.URL_GET_VERSO_DIARIO, null, response -> {
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.GET, Constants.URL_GET_VERSO_DIARIO, null, new Response.Listener<JSONObject>() {
-
-
-            @Override
-            public void onResponse(JSONObject response) {
-
-                //Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
-                JSONArray versos = response.optJSONArray("verso");
+                    //Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
+                    JSONArray versos = response.optJSONArray("verso");
 
 
-                VersoOfTheDay versoOfTheDay = new VersoOfTheDay();
+                    VersoOfTheDay versoOfTheDay = new VersoOfTheDay();
 
 
-                try {
+                    try {
+                        JSONObject jsonObject = null;
+                        jsonObject = versos.getJSONObject(0);
+                        Toast.makeText(getApplicationContext(), "Json" + jsonObject, Toast.LENGTH_LONG).show();
+
+                        versoOfTheDay.setBook(jsonObject.optString("Book"));
+                        versoOfTheDay.setVerso(jsonObject.optString("Vers"));
+
+                        Toast.makeText(getApplicationContext(), "Objeto" + versoOfTheDay, Toast.LENGTH_LONG).show();
+
+                        txtVerso.setText(versoOfTheDay.getVerso());
+                        txtVersiculo.setText(versoOfTheDay.getBook());
 
 
-                    JSONObject jsonObject = null;
-                    jsonObject = versos.getJSONObject(0);
-                    Toast.makeText(getApplicationContext(), "Json" + jsonObject, Toast.LENGTH_LONG).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
+                        //System.out.println();
+                        Log.d("error : ", response.toString());
+                        progress.hide();
 
-                    versoOfTheDay.setBook(jsonObject.optString("Book"));
-                    versoOfTheDay.setVerso(jsonObject.optString("Vers"));
-
-                    Toast.makeText(getApplicationContext(), "Objeto" + versoOfTheDay, Toast.LENGTH_LONG).show();
-
-                    txtVerso.setText(versoOfTheDay.getVerso());
-                    txtVersiculo.setText(versoOfTheDay.getBook());
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
-                    //System.out.println();
-                    Log.d("error : ", response.toString());
-                    progress.hide();
-
-                    //Log.d("error : ", error.toString());
-                    progress.hide();
-                }
+                        //Log.d("error : ", error.toString());
+                        progress.hide();
+                    }
 
 
-            }
-        }, new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.hide();
@@ -638,10 +607,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             }
                         });
-
-
-
-
                         Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                         editTextCorreo.getText().clear();
 
@@ -742,28 +707,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void comentarPublicacion(String comentario, String publicacion_id, String subscriptor_id) {
-        Toast.makeText(getApplicationContext(), "Comentar desde Main activity" + comentario + "Publicacion id" + publicacion_id + "Subcriptor id" + subscriptor_id, Toast.LENGTH_SHORT).show();
-
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                URL_COMENTAR_PUBLICACION, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+                URL_COMENTAR_PUBLICACION, response -> {
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                    //editTextCorreo.getText().clear();
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        //editTextCorreo.getText().clear();
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
         }) {
@@ -782,7 +741,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void sharePublicacion() {
-        Toast.makeText(getApplicationContext(), "Boton detalle  desde Main activity", Toast.LENGTH_LONG).show();
+
     }
 
 
@@ -791,17 +750,92 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
-    /*
     @Override
-    public void onErrorResponse(VolleyError error) {
-        Toast.makeText(context, "No se consultar" + error.toString(), Toast.LENGTH_LONG).show();
-        System.out.println();
-        Log.d("error : ", error.toString());
-        progressDialog.hide();
+    public void sendIdPublication(String position) {
+        Toast.makeText(this,"Position"+ position ,Toast.LENGTH_SHORT).show();
+        // To get the comments
+        getComments(position);
+        //Intent intent = new Intent(this, CommentsPost.class);
+        //startActivity(intent);
+
     }
 
-     */
+    private void getComments(String pos) {
+        Toast.makeText(this,"Position desde getComments"+ pos ,Toast.LENGTH_SHORT).show();
+
+        String  url = "http://192.168.0.74/Android/v1/getComments.php?publication_id=" + pos;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                           Request.Method.GET, url,null, Response -> {
+
+
+                               JSONArray comentarioArray = Response.optJSONArray("comments");
+
+
+                               int  arrayLength = comentarioArray.length();
+                       //Toast.makeText(this,"Lista comentarios"+ arrayLength ,Toast.LENGTH_SHORT).show();
+                Log.e("Tamaño ", "Array"+ arrayLength);
+
+
+                       try {
+
+                        for (int i = 0; i < arrayLength; i++) {
+
+                             JSONObject jsonObject = null;
+                             jsonObject = comentarioArray.getJSONObject(i);
+
+
+
+                               Comentarios comentarios =  new Comentarios();
+
+                                  comentarios.setId(jsonObject.optInt("publicacion_id"));
+                                  comentarios.setComentario(jsonObject.optString("comentario"));
+                                  comentarios.setEmail(jsonObject.optString("email"));
+                                  comentarios.setAvatar(jsonObject.optString("avatar"));
+                                  comentarios.setHora(jsonObject.optString("hora"));
+                                  comentarios.setFecha(jsonObject.optString("fecha"));
+
+                                  listaComentarios.add(comentarios);
+
+                        }
+
+                        // To start my recicleView
+                        commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
+                        recycleComentarios.setLayoutManager(new LinearLayoutManager(this));
+                        recycleComentarios.setHasFixedSize(true);
+                        recycleComentarios.setAdapter(commentsAdapter);
+
+
+                       } catch (JSONException e) {
+                         e.printStackTrace();
+                         Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + Response.toString(), Toast.LENGTH_LONG).show();
+                         //System.out.println();
+                         Log.d("error : ", Response.toString());
+                         progress.hide();
+
+                         //Log.d("error : ", error.toString());
+                         progress.hide();
+                     }
+
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("Error Response", error.toString());
+                }
+            }) {
+                  @Override
+                       protected Map<String, String> getParams() throws AuthFailureError {
+                           Map<String, String> params = new HashMap<>();
+                           params.put("publication_id", pos);
+                           return params;
+                       }
+                   };
+
+        RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+
+        }
+
+
 
     @Override
     protected void onNewIntent(Intent intent) {

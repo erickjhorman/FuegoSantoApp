@@ -3,11 +3,14 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.fuegosantoapp">
-
     <!-- To read the local storage of the mobile to upload images -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <dist:module dist:instant="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,9 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".activities.DetailsCommentsPost"></activity>
         <activity
-            android:name=".activities.pantallaInicio" android:noHistory="true"
+            android:name=".activities.pantallaInicio"
+            android:noHistory="true"
             android:theme="@style/pantalla_bienvenido">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +35,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".activities.loginActivity" /> <!-- <activity android:name=".activities.pantallaInicio" android:theme="@style/Theme.AppCompat.Light.NoActionBar"> -->
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.editarDatos"></activity>
+        <activity android:name=".activities.editarDatos" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -39,8 +44,9 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
         <service
             android:name=".FCM.FirebaseMessagingService"
             android:exported="false">
@@ -48,22 +54,20 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher"/>
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+            android:resource="@drawable/ic_launcher" />
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <dist:module dist:instant="true" />
 
 </manifest>

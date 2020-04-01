@@ -16,6 +16,7 @@ public static final String URL_UPDATE = ROOT_URL + "updateSuscriptor.php";
 public static final String URL_COMENTAR_PUBLICACION = ROOT_URL + "register_Publicacion_Comentario.php";
 public static final String URL_GET_VERSO_DIARIO = ROOT_URL + "getVersOfTheDay.php";
 public static final String URL_ADD_TOKEN = ROOT_URL + "registerToken.php";
+public static final String GET_COMENTARIOS = ROOT_URL + "getComments.php";
 
 }
 

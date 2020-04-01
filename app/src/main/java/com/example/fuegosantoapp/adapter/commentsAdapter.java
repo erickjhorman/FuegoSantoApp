@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.entidades.Comentarios;
+import com.example.fuegosantoapp.picasso.CircleTransform;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -44,7 +46,13 @@ public class commentsAdapter extends RecyclerView.Adapter<commentsAdapter.ViewHo
         holder.txtfecha.setText(listaComentarios.get(position).getFecha());
         holder.txthora.setText(listaComentarios.get(position).getHora());
 
-
+        // To get and set the image from the comments
+        String imgCommentsUser = listaComentarios.get(position).getAvatar();
+        Picasso.get().load(imgCommentsUser)
+                .fit()
+                .centerCrop()
+                .transform(new CircleTransform())
+                .into(holder.imagen_usuario);
     }
 
     @Override

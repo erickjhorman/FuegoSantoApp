@@ -12,5 +12,7 @@ public interface IComunicaFragments {
 
     public void detallePublicacion();
 
+    public void sendIdPublication(String position);
+
 
 }

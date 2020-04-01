@@ -2,14 +2,12 @@ package com.example.fuegosantoapp.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
@@ -30,12 +27,9 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.fuegosantoapp.Constants;
-import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.RequestHandler;
 import com.example.fuegosantoapp.SharedPrefManager;
-import com.example.fuegosantoapp.activities.loginActivity;
 import com.example.fuegosantoapp.entidades.Comentarios;
 import com.example.fuegosantoapp.entidades.Publicacion;
 import com.example.fuegosantoapp.interfaces.IComunicaFragments;
@@ -45,14 +39,13 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.example.fuegosantoapp.Constants.URL_COMENTAR_PUBLICACION;
 
-public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdapter.publicacionesHolder> implements View.OnClickListener, Response.Listener, ErrorListener {
+public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdapter.publicacionesHolder> implements  Response.Listener, ErrorListener {
 
 
     List<Publicacion> listaPublicaiones;
@@ -65,16 +58,21 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     private OnItemClickListener mlistener;
     ProgressDialog progreso;
 
+    // Reference of the context of my adapter
+    Context contextAdapter;
 
     ProgressDialog progressDialog;
     IComunicaFragments interfaceComunicaFragments;
 
 
+     // To get the position of the adapter
+    int position;
 
     private View.OnClickListener listener;
 
 
-    public publicacionesAdapter(List<Publicacion> listaPublicaiones, List<Comentarios> listaComentarios,    Context context, IComunicaFragments interfaceComunicaFragments) {
+    public publicacionesAdapter(List<Publicacion> listaPublicaiones, List<Comentarios> listaComentarios, Context context, IComunicaFragments interfaceComunicaFragments) {
+
         this.listaPublicaiones = listaPublicaiones;
         this.listaComentarios = listaComentarios;
         this.context = context;
@@ -90,8 +88,6 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
     public publicacionesAdapter.publicacionesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.publicaciones, parent, false);
-        vista.setOnClickListener(this);
-
 
         // Instantiate the RequestQueue.
         request = Volley.newRequestQueue(context);
@@ -102,6 +98,9 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         vista.setLayoutParams(layoutParams);
         return new publicacionesAdapter.publicacionesHolder(vista);
     }
+
+
+
 
 
     public interface OnItemClickListener{
@@ -159,29 +158,6 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         RequestHandler.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-    /*
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        Toast.makeText(context, "No se consultar" + error.toString(), Toast.LENGTH_LONG).show();
-        System.out.println();
-        Log.d("error : ", error.toString());
-        progressDialog.hide();
-    }
-
-     */
-
-
-/*
-    public void onResponse(JSONObject response) {
-        editTextComentario.getText().clear();
-        progressDialog.hide();
-        Toast.makeText(context, "Mensaje:" + response, Toast.LENGTH_SHORT).show();
-
-    }
-
- */
-
-
     @Override
     public void onBindViewHolder(@NonNull publicacionesHolder holder, int position) {
 
@@ -226,8 +202,12 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
             holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
 
         }
-    }
 
+        // To create a method to the events
+        //holder.setOnClickListeners();
+
+
+    }
 
     private void cargarImagenUrl(String getCover, final publicacionesHolder holder) {
 
@@ -250,38 +230,6 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
     }
 
     @Override
-    public void onClick(View view) {
-
-        if (listener != null) {
-            listener.onClick(view);
-        }
-
-
-        switch (view.getId()) {
-            case R.id.verDetalle:
-                Toast.makeText(context, "Ver detalle", Toast.LENGTH_SHORT).show();
-
-
-                break;
-            case R.id.txtComentar:
-
-                break;
-
-            case R.id.txtShare:
-                break;
-
-            case R.id.btnSendComentario:
-
-                break;
-
-
-        }
-
-
-    }
-
-
-    @Override
     public int getItemCount() {
         return listaPublicaiones.size();
     }
@@ -299,14 +247,13 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
 
     //Only changed public by static
-    public class publicacionesHolder extends RecyclerView.ViewHolder {
-
+    public class publicacionesHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
         //text views
         TextView txtidPublicacion, txttituloPublicacion, txtPublicacion, txtDecripcion, txtfechaPublicacion, txtautor, txcomentario, verDetalle, comentar, share,
-                txtfecha,txthora,nombre_usuario;
+                txtfecha, txthora, nombre_usuario;
 
-        ImageView Imagecover, imagen_usuario,img_avatar_comentario;
+        ImageView Imagecover, imagen_usuario, img_avatar_comentario;
 
         //image buttons
         ImageButton btnComentar;
@@ -315,8 +262,14 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         EditText txtTextComentario;
 
 
+
+
         public publicacionesHolder(@NonNull View itemView) {
             super(itemView);
+
+            // Taking the reference of the context to start An activity from the adapter
+            contextAdapter = itemView.getContext();
+
             txtidPublicacion = itemView.findViewById(R.id.idPublicacion);
             txttituloPublicacion = itemView.findViewById(R.id.tituloPublicacion);
             Imagecover = itemView.findViewById(R.id.idImagenPublicacion);
@@ -335,45 +288,16 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
             imagen_usuario = itemView.findViewById(R.id.imgAvatar);
             nombre_usuario = itemView.findViewById(R.id.txt_nombre_usuario);
 
+            btnComentar.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (SharedPrefManager.getInstance(context).isLoggedIn()) {
 
 
-
-            /*
-            if (SharedPrefManager.getInstance(context).isLoggedIn()) {
-
-
-                nombre_usuario.setText(SharedPrefManager.getInstance(context).getUserEmail());
-
-                Picasso.get().load(url_imagen_usuario)
-                        .fit()
-                        .centerCrop()
-                        .transform(new CircleTransform())
-                        .into(imagen_usuario);
-
-                Picasso.get().load(url_imagen_usuario)
-                        .fit()
-                        .centerCrop()
-                        .transform(new CircleTransform())
-                        .into(img_avatar_comentario);
-
-            } else {
-                imagen_usuario.setImageResource(R.mipmap.ic_launcher);
-
-            }
-*/
-
-
-                btnComentar.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (SharedPrefManager.getInstance(context).isLoggedIn()) {
-
-
-
-                            progreso = new ProgressDialog(context);
-                            progreso.setMessage("Cargando...");
-                            progreso.show();
+                        progreso = new ProgressDialog(context);
+                        progreso.setMessage("Cargando...");
+                        progreso.show();
 
                         final String comentario = txtTextComentario.getText().toString().trim();
                         final String publicacion_id = txtidPublicacion.getText().toString().trim();
@@ -382,7 +306,7 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
                         if (comentario.isEmpty()) {
                             Toast.makeText(context, "Ingrese un comentario", Toast.LENGTH_SHORT).show();
                         } else {
-                            //Toast.makeText(itemView.getContext(), "Ver comentario" + comentario + "Publicacion id" + publicacion_id + "Sucriptir id" + subscriptor_id, Toast.LENGTH_SHORT).show();
+
                             interfaceComunicaFragments.comentarPublicacion(comentario, publicacion_id, subscriptor_id);
                             txtTextComentario.getText().clear();
                         }
@@ -390,38 +314,61 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
                         progreso.hide();
 
 
+                    } else {
+                        Toast.makeText(context, "Debes logearte para poder comentar", Toast.LENGTH_SHORT).show();
                     }
-                        else {
-                            Toast.makeText(context, "Debes logearte para poder comentar", Toast.LENGTH_SHORT).show();
-                        }
-
-
-            }
-                });
-
-
-
-            verDetalle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                        int position = getAdapterPosition();
-                        Toast.makeText(context, "Mensaje desde MainActivity:" + position, Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(context, "Desde publicaciones adapater", Toast.LENGTH_SHORT).show();
-                        interfaceComunicaFragments.enviarPublicacion(listaPublicaiones.get(position));
 
 
                 }
             });
 
+
+
+            share.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+
+                    interfaceComunicaFragments.sharePublicacion();
+
+                }
+            });
+
+            verDetalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                     position = getAdapterPosition();
+
+
+                    //Toast.makeText(context, "Desde publicaciones adapater", Toast.LENGTH_SHORT).show();
+                    interfaceComunicaFragments.enviarPublicacion(listaPublicaiones.get(position));
+                }
+            });
+
+           comentar.setOnClickListener(new OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                int po = getAdapterPosition();
+
+                String publication_id = listaPublicaiones.get(po).getId_publicaciones();
+                   Log.e("Position publicacion", "positios" + publication_id);
+                   commments(publication_id);
+               }
+           });
+
+
         }
 
 
+        @Override
+        public void onClick(View v) {
+
+        }
     }
 
 
-
+    public void commments(String position){
+        interfaceComunicaFragments.sendIdPublication(position);
+    }
 
 
 

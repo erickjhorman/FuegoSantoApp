@@ -14,8 +14,6 @@ public class SharedPrefManager {
 
     private SharedPrefManager(Context context) {
         ctx = context;
-
-
     }
 
 
