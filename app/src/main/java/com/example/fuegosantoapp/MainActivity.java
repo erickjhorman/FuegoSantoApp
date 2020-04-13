@@ -5,16 +5,22 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -45,6 +51,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.Slide_images.CustomSwipeAdapter;
 import com.example.fuegosantoapp.activities.DetailsCommentsPost;
 import com.example.fuegosantoapp.activities.ProfileActivity;
+import com.example.fuegosantoapp.activities.editarDatos;
 import com.example.fuegosantoapp.activities.loginActivity;
 import com.example.fuegosantoapp.adapter.ViewPagerAdapter;
 import com.example.fuegosantoapp.adapter.commentsAdapter;
@@ -118,6 +125,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     RecyclerView recycleComentarios;  //  To create a variable of my recycleView
 
+    Activity activity = null; // To declare a variable of type fragment
+    Fragment fragment = null;// To declare a variable of type activity
+
+
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,13 +139,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        System.out.println(activity instanceof MainActivity);
 
         listaImagenes = new ArrayList<>();
         listaComentarios = new ArrayList<>();  //To create an instance of my list
         recycleComentarios = (RecyclerView) findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
-       Log.i("Recycle","Re" + recycleComentarios);
+        Log.i("Recycle","Re" + recycleComentarios);
+
 
 
         getImagenes();
@@ -276,10 +288,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+
+        if (activity instanceof MainActivity) {
             super.onBackPressed();
+        } else {
+            showHome();
         }
 
+        if (fragment instanceof DetallePublicacionesFragment) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new Fragmento_publicaciones()).commit();
+        }  else {
+            showHome();
+        }
+        if (activity instanceof DetailsCommentsPost) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new Fragmento_publicaciones()).commit();
+        } else{
+            showHome();
+        }
 
+    }
+
+
+    }
+
+    private void showHome(){
+       Intent mainActivity = new Intent(this,MainActivity.class);
+       startActivity(mainActivity);
     }
 
     @Override

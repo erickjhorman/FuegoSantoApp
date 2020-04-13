@@ -119,6 +119,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
 
         View vista = inflater.inflate(R.layout.fragment_fragmento_publicaciones, container, false);
+        View vista2 = inflater.inflate(R.layout.comments, container, false);
 
 
         listaPublicaciones = new ArrayList<>(); //To create an instance of my list
@@ -127,7 +128,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         recyclerPublicaciones = (RecyclerView) vista.findViewById(R.id.idRecycler);   //To create an instance of of my recycleView
         recyclerPublicaciones.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
 
-        recycleComentarios = (RecyclerView) vista.findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
+        //recycleComentarios = (RecyclerView) vista.findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
         Log.i("Recycle","Comentarios" + recycleComentarios);
         //recycleComentarios.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
 

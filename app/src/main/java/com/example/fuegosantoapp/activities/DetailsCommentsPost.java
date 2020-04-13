@@ -2,6 +2,7 @@ package com.example.fuegosantoapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.TextViewCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
@@ -62,7 +63,9 @@ public class DetailsCommentsPost extends  AppCompatActivity implements Fragmento
     private String publicacion_id;
     private String subscriptor_id;
 
-    // Declare the footer nav_bar at the bottom of my screen
+
+    // I declare the field for my publications_fragment
+    Fragment Fragmento_publicaciones;
 
 
     @Override
@@ -70,7 +73,10 @@ public class DetailsCommentsPost extends  AppCompatActivity implements Fragmento
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_comments);
 
+        Fragmento_publicaciones = new Fragmento_publicaciones();
 
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new Fragmento_publicaciones()).commit();
 
         // Gets linearlayout
         layout = findViewById(R.id.commentsLayout);
