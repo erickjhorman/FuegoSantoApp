@@ -3,6 +3,7 @@ package com.example.fuegosantoapp.fragmentos;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.RequestHandler;
 import com.example.fuegosantoapp.activities.DetailsCommentsPost;
@@ -372,6 +374,10 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+
+
 
 
 }

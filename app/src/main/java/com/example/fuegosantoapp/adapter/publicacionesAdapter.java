@@ -3,6 +3,7 @@ package com.example.fuegosantoapp.adapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,11 +185,15 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
 
 
-        if (imagenUser == null) {
-            Toast.makeText(context, "Avatar imagenes"  , Toast.LENGTH_LONG).show();
+        if (TextUtils.isEmpty(imagenUser)) {
+
+            Toast.makeText(context, "Avatar imagenes" ,Toast.LENGTH_LONG).show();
             holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
+
+
+
         } else {
-                    Picasso.get().load(imagenUser.isEmpty() ? null : imagenUser)
+                    Picasso.get().load(imagenUser)
                     .fit()
                     .centerCrop()
                     .transform(new CircleTransform())
@@ -198,14 +203,14 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         // To get and set the image from the logged  user
         String  url_imagen_usuario =(SharedPrefManager.getInstance(context).getUseAvatar());
 
-        if (SharedPrefManager.getInstance(context).isLoggedIn() && url_imagen_usuario != null ){
-           
+        if (SharedPrefManager.getInstance(context).isLoggedIn() && TextUtils.isEmpty(url_imagen_usuario) != true){
+            Log.e("imagen", "Imagen usuario"+ TextUtils.isEmpty(url_imagen_usuario));
             Picasso.get().load(url_imagen_usuario)
                     .fit()
                     .centerCrop()
                     .transform(new CircleTransform())
                     .into(holder.img_avatar_comentario);
-        }  else  {
+          } else {
             holder.img_avatar_comentario.setImageResource(R.mipmap.ic_launcher);
 
         }

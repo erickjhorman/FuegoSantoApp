@@ -81,6 +81,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Activity activity = null; // To declare a variable of type fragment
     Fragment fragment = null;// To declare a variable of type activity
 
-
+    private Activity mCurrentActivity = null;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -139,13 +140,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println(activity instanceof MainActivity);
+
 
         listaImagenes = new ArrayList<>();
         listaComentarios = new ArrayList<>();  //To create an instance of my list
         recycleComentarios = (RecyclerView) findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
-        Log.i("Recycle","Re" + recycleComentarios);
-
+        Log.i("Recycle", "Re" + recycleComentarios);
 
 
         getImagenes();
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
 
         //To change color of option menu
-        toolbar.getOverflowIcon().setColorFilter(Color.WHITE , PorterDuff.Mode.SRC_ATOP);
+        toolbar.getOverflowIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
 
         //Crar funcionalidad del toolbar que abre y cierra la barra de navegacion
@@ -282,41 +282,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
-
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
+
         } else {
 
-        if (activity instanceof MainActivity) {
-            super.onBackPressed();
-        } else {
-            showHome();
-        }
+            if (MainActivity.this instanceof MainActivity) {
+                Toast.makeText(getApplicationContext(), "Estoy en mainActivity", Toast.LENGTH_LONG).show();
+                super.onBackPressed();
+            } else {
+                showHome();
+            }
 
-        if (fragment instanceof DetallePublicacionesFragment) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new Fragmento_publicaciones()).commit();
-        }  else {
-            showHome();
-        }
-        if (activity instanceof DetailsCommentsPost) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new Fragmento_publicaciones()).commit();
-        } else{
-            showHome();
+
         }
 
     }
 
 
-    }
-
-    private void showHome(){
-       Intent mainActivity = new Intent(this,MainActivity.class);
-       startActivity(mainActivity);
+    private void showHome() {
+        Intent mainActivity = new Intent(this, MainActivity.class);
+        startActivity(mainActivity);
     }
 
     @Override
@@ -375,21 +364,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             case R.id.nav_mensajes:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new Fragmento_Mensaje()).commit();
+                Fragmento_Mensaje fragmentoMensaje;
+                //fragmentoMensaje = new Fragmento_Mensaje();
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_Mensaje()).addToBackStack(null).commit();
                 break;
             case R.id.nav_publicaciones:
+                Fragmento_publicaciones fragmentPublicaciones;
+                //fragmentPublicaciones = new Fragmento_publicaciones();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_publicaciones()).addToBackStack(null).commit();
+                /*
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new Fragmento_publicaciones()).commit();
+
+                 */
                 break;
             case R.id.favoritos:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new Fragmento_favoritos()).commit();
+
+                Fragmento_favoritos fragmentoFavoritos;
+                //fragmentoFavoritos = new Fragmento_favoritos();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_favoritos()).addToBackStack(null).commit();
                 break;
 
             case R.id.biblia:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new Fragmento_biblia()).commit();
+                Fragmento_biblia fragmentoBiblia;
+                //fragmentoBiblia = new Fragmento_biblia();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_biblia()).addToBackStack(null).commit();
                 break;
 
             case R.id.nav_share:
@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //JSONObject jsonObject = new JSONObject(response);
 
                 JSONArray json = response.optJSONArray("imagenes");
-                Log.e("ima","Imagenes"+json );
+                Log.e("ima", "Imagenes" + json);
                 //Toast.makeText(getApplicationContext(),"Mensaje:" + json, Toast.LENGTH_SHORT).show();
                 //To create Carousel
                 //carouselView.setPageCount(json.length());
@@ -486,43 +486,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getDailyVers() {
 
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, Constants.URL_GET_VERSO_DIARIO, null, response -> {
 
-                    //Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
-                    JSONArray versos = response.optJSONArray("verso");
+            //Toast.makeText(getApplicationContext(), "Mensaje:" + response, Toast.LENGTH_SHORT).show();
+            JSONArray versos = response.optJSONArray("verso");
 
 
-                    VersoOfTheDay versoOfTheDay = new VersoOfTheDay();
+            VersoOfTheDay versoOfTheDay = new VersoOfTheDay();
 
 
-                    try {
-                        JSONObject jsonObject = null;
-                        jsonObject = versos.getJSONObject(0);
-                        //Toast.makeText(getApplicationContext(), "Json" + jsonObject, Toast.LENGTH_LONG).show();
+            try {
+                JSONObject jsonObject = null;
+                jsonObject = versos.getJSONObject(0);
+                //Toast.makeText(getApplicationContext(), "Json" + jsonObject, Toast.LENGTH_LONG).show();
 
-                        versoOfTheDay.setBook(jsonObject.optString("Book"));
-                        versoOfTheDay.setVerso(jsonObject.optString("Vers"));
+                versoOfTheDay.setBook(jsonObject.optString("Book"));
+                versoOfTheDay.setVerso(jsonObject.optString("Vers"));
 
-                        //Toast.makeText(getApplicationContext(), "Objeto" + versoOfTheDay, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Objeto" + versoOfTheDay, Toast.LENGTH_LONG).show();
 
-                        txtVerso.setText(versoOfTheDay.getVerso());
-                        txtVersiculo.setText(versoOfTheDay.getBook());
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
-                        //System.out.println();
-                        Log.d("error : ", response.toString());
-                        progress.hide();
-
-                        //Log.d("error : ", error.toString());
-                        progress.hide();
-                    }
+                txtVerso.setText(versoOfTheDay.getVerso());
+                txtVersiculo.setText(versoOfTheDay.getBook());
 
 
-                }, new Response.ErrorListener() {
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
+                //System.out.println();
+                Log.d("error : ", response.toString());
+                progress.hide();
+
+                //Log.d("error : ", error.toString());
+                progress.hide();
+            }
+
+
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.hide();
@@ -636,7 +636,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Log.v("JSON", response);
 
                         //To create the token
-                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this,new OnSuccessListener<InstanceIdResult>() {
+                        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this, new OnSuccessListener<InstanceIdResult>() {
                             @Override
                             public void onSuccess(InstanceIdResult instanceIdResult) {
                                 String token = instanceIdResult.getToken();
@@ -706,7 +706,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     //To get the accion of the button
     @Override
     public void onClick(View view) {
@@ -749,16 +748,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 URL_COMENTAR_PUBLICACION, response -> {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                        //editTextCorreo.getText().clear();
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                //editTextCorreo.getText().clear();
 
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }, new Response.ErrorListener() {
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
@@ -790,7 +789,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void sendIdPublication(String position) {
-        Toast.makeText(this,"Position"+ position ,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         // To get the comments
         getComments(position);
         //Intent intent = new Intent(this, CommentsPost.class);
@@ -799,80 +798,79 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void getComments(String pos) {
-        Toast.makeText(this,"Position desde getComments"+ pos ,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Position desde getComments" + pos, Toast.LENGTH_SHORT).show();
 
-        String  url = "http://192.168.0.74/Android/v1/getComments.php?publication_id=" + pos;
+        //String url = "http://192.168.0.74/Android/v1/getComments.php?publication_id=" + pos;
+        String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/getComments.php?publication_id=" + pos;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                           Request.Method.GET, url,null, Response -> {
+                Request.Method.GET, url, null, Response -> {
 
 
-                               JSONArray comentarioArray = Response.optJSONArray("comments");
+            JSONArray comentarioArray = Response.optJSONArray("comments");
 
 
-                               int  arrayLength = comentarioArray.length();
-                       //Toast.makeText(this,"Lista comentarios"+ arrayLength ,Toast.LENGTH_SHORT).show();
-                Log.e("Tamaño ", "Array"+ arrayLength);
+            int arrayLength = comentarioArray.length();
+            //Toast.makeText(this,"Lista comentarios"+ arrayLength ,Toast.LENGTH_SHORT).show();
+            Log.e("Tamaño ", "Array" + arrayLength);
 
 
-                       try {
+            try {
 
-                        for (int i = 0; i < arrayLength; i++) {
+                for (int i = 0; i < arrayLength; i++) {
 
-                             JSONObject jsonObject = null;
-                             jsonObject = comentarioArray.getJSONObject(i);
-
-
-
-                               Comentarios comentarios =  new Comentarios();
-
-                                  comentarios.setId(jsonObject.optInt("publicacion_id"));
-                                  comentarios.setComentario(jsonObject.optString("comentario"));
-                                  comentarios.setEmail(jsonObject.optString("email"));
-                                  comentarios.setAvatar(jsonObject.optString("avatar"));
-                                  comentarios.setHora(jsonObject.optString("hora"));
-                                  comentarios.setFecha(jsonObject.optString("fecha"));
-
-                                  listaComentarios.add(comentarios);
-
-                        }
-
-                        // To start my recicleView
-                        commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
-                        recycleComentarios.setLayoutManager(new LinearLayoutManager(this));
-                        recycleComentarios.setHasFixedSize(true);
-                        recycleComentarios.setAdapter(commentsAdapter);
+                    JSONObject jsonObject = null;
+                    jsonObject = comentarioArray.getJSONObject(i);
 
 
-                       } catch (JSONException e) {
-                         e.printStackTrace();
-                         Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + Response.toString(), Toast.LENGTH_LONG).show();
-                         //System.out.println();
-                         Log.d("error : ", Response.toString());
-                         progress.hide();
+                    Comentarios comentarios = new Comentarios();
 
-                         //Log.d("error : ", error.toString());
-                         progress.hide();
-                     }
+                    comentarios.setId(jsonObject.optInt("publicacion_id"));
+                    comentarios.setComentario(jsonObject.optString("comentario"));
+                    comentarios.setEmail(jsonObject.optString("email"));
+                    comentarios.setAvatar(jsonObject.optString("avatar"));
+                    comentarios.setHora(jsonObject.optString("hora"));
+                    comentarios.setFecha(jsonObject.optString("fecha"));
 
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d("Error Response", error.toString());
+                    listaComentarios.add(comentarios);
+
                 }
-            }) {
-                  @Override
-                       protected Map<String, String> getParams() throws AuthFailureError {
-                           Map<String, String> params = new HashMap<>();
-                           params.put("publication_id", pos);
-                           return params;
-                       }
-                   };
+
+                // To start my recicleView
+                commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
+                recycleComentarios.setLayoutManager(new LinearLayoutManager(this));
+                recycleComentarios.setHasFixedSize(true);
+                recycleComentarios.setAdapter(commentsAdapter);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "No se ha podido establecer una relacion con el servidor  " + Response.toString(), Toast.LENGTH_LONG).show();
+                //System.out.println();
+                Log.d("error : ", Response.toString());
+                progress.hide();
+
+                //Log.d("error : ", error.toString());
+                progress.hide();
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error Response", error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("publication_id", pos);
+                return params;
+            }
+        };
 
         RequestHandler.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
 
-        }
-
+    }
 
 
     @Override
