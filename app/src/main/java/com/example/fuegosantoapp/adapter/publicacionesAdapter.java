@@ -179,27 +179,34 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         holder.txtfecha.setText(listaComentarios.get(position).getFecha());
         holder.txthora.setText(listaComentarios.get(position).getHora());
 
-
-        // To get and set the image from the comments
         String imagenUser = listaComentarios.get(position).getAvatar();
-        Picasso.get().load(imagenUser)
-                .fit()
-                .centerCrop()
-                .transform(new CircleTransform())
-                .into(holder.imagen_usuario);
+        Log.e("i","ImagenUser" + imagenUser);
 
+
+
+        if (imagenUser == null) {
+            Toast.makeText(context, "Avatar imagenes"  , Toast.LENGTH_LONG).show();
+            holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
+        } else {
+                    Picasso.get().load(imagenUser.isEmpty() ? null : imagenUser)
+                    .fit()
+                    .centerCrop()
+                    .transform(new CircleTransform())
+                    .into(holder.imagen_usuario);
+        }
 
         // To get and set the image from the logged  user
         String  url_imagen_usuario =(SharedPrefManager.getInstance(context).getUseAvatar());
 
-        if (SharedPrefManager.getInstance(context).isLoggedIn()) {
+        if (SharedPrefManager.getInstance(context).isLoggedIn() && url_imagen_usuario != null ){
+           
             Picasso.get().load(url_imagen_usuario)
                     .fit()
                     .centerCrop()
                     .transform(new CircleTransform())
                     .into(holder.img_avatar_comentario);
-        } else {
-            holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
+        }  else  {
+            holder.img_avatar_comentario.setImageResource(R.mipmap.ic_launcher);
 
         }
 

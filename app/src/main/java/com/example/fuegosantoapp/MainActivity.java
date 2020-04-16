@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getImagenes();
 
+
         if (listaImagenes != null) {
             Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes, Toast.LENGTH_LONG).show();
         }
@@ -415,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //JSONObject jsonObject = new JSONObject(response);
 
                 JSONArray json = response.optJSONArray("imagenes");
+                Log.e("ima","Imagenes"+json );
                 //Toast.makeText(getApplicationContext(),"Mensaje:" + json, Toast.LENGTH_SHORT).show();
                 //To create Carousel
                 //carouselView.setPageCount(json.length());
@@ -497,12 +499,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         JSONObject jsonObject = null;
                         jsonObject = versos.getJSONObject(0);
-                        Toast.makeText(getApplicationContext(), "Json" + jsonObject, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "Json" + jsonObject, Toast.LENGTH_LONG).show();
 
                         versoOfTheDay.setBook(jsonObject.optString("Book"));
                         versoOfTheDay.setVerso(jsonObject.optString("Vers"));
 
-                        Toast.makeText(getApplicationContext(), "Objeto" + versoOfTheDay, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), "Objeto" + versoOfTheDay, Toast.LENGTH_LONG).show();
 
                         txtVerso.setText(versoOfTheDay.getVerso());
                         txtVersiculo.setText(versoOfTheDay.getBook());

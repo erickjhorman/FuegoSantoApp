@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FuegoSantoApp-master.iml" filepath="$PROJECT_DIR$/FuegoSantoApp-master.iml" group="FuegoSantoApp-master" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="FuegoSantoApp-master/app" />
+      <module fileurl="file://$PROJECT_DIR$/FuegoSantoApp-master.iml" filepath="$PROJECT_DIR$/FuegoSantoApp-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FuegoSantoApp-master.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FuegoSantoApp-master.app.iml" />
     </modules>
   </component>
 </project>

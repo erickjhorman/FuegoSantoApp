@@ -212,7 +212,11 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             JSONArray json2 = response.optJSONArray("comments");
             Integer id_publicacion = null;
             Integer id_publicacion_comentarios = null;
-            //Toast.makeText(getContext(),"Maria: " + json2, Toast.LENGTH_SHORT).show();
+
+            Log.e("pu","Publicaciones" + json);
+            Log.e("array","comments" + json.length());
+            Log.e("co","Comentarios" + json2);
+
 
             try {
                 for (int i = 0; i < json.length(); i++) {
@@ -224,6 +228,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                     //id_publicacion = 1;
                     id_publicacion = jsonObject.optInt("id");
                     //Toast.makeText(getContext(), "Publicacion: " + id_publicacion, Toast.LENGTH_SHORT).show();
+
 
                     for (int j = 0; j < json2.length(); j++) {
                         comentarios = new Comentarios();
@@ -248,6 +253,8 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
                         listaComentarios.add(comentarios);
                     }
+
+
 
 
 
@@ -289,6 +296,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             });
 
 */
+
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "No se ha podido establecer una relacion con el servidor  " + response.toString(), Toast.LENGTH_LONG).show();
