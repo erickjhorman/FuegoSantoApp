@@ -59,6 +59,7 @@ import com.example.fuegosantoapp.entidades.Comentarios;
 import com.example.fuegosantoapp.entidades.Imagenes;
 import com.example.fuegosantoapp.entidades.Publicacion;
 import com.example.fuegosantoapp.entidades.VersoOfTheDay;
+import com.example.fuegosantoapp.fragmentos.ComentariosFragment;
 import com.example.fuegosantoapp.fragmentos.DetallePublicacionesFragment;
 import com.example.fuegosantoapp.fragmentos.Fragmento_Mensaje;
 import com.example.fuegosantoapp.fragmentos.Fragmento_biblia;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView txtVersiculo;
 
     DetallePublicacionesFragment detalleFragment;
+    ComentariosFragment comentariosFragment;
     private Button btnloginNavbar;
     private TextView navHeaderComentario;
     private ImageView imageViewUserAvatar;
@@ -145,14 +147,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         listaImagenes = new ArrayList<>();
         listaComentarios = new ArrayList<>();  //To create an instance of my list
         recycleComentarios = (RecyclerView) findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
-        Log.i("Recycle", "Re" + recycleComentarios);
+        //Log.i("Recycle", "Re" + recycleComentarios);
 
 
-        getImagenes();
+
 
 
         if (listaImagenes != null) {
-            Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes, Toast.LENGTH_LONG).show();
+            getImagenes();
         }
 
         viewPager = findViewById(R.id.view_pager);
@@ -160,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //pager = findViewById(R.id.view_pager);
         onNewIntent(getIntent());
         Timer timer = new Timer();
+
         //timer.scheduleAtFixedRate(new MyTimerTask(), 2000, 4000);
         /*
         ViewPagerAdapter adapter = new ViewPagerAdapter(this, listaImagenes);
@@ -232,6 +236,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getDailyVers();
 
+        // instance of commentsFragments
+        comentariosFragment = new ComentariosFragment();
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
@@ -289,9 +295,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         } else {
-
             if (MainActivity.this instanceof MainActivity) {
                 Toast.makeText(getApplicationContext(), "Estoy en mainActivity", Toast.LENGTH_LONG).show();
+                listaComentarios.clear();
                 super.onBackPressed();
             } else {
                 showHome();
@@ -355,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.act_cuenta:
                 if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-                    finish();
+
                     startActivity(new Intent(this, ProfileActivity.class));
                 } else {
                     startActivity(new Intent(this, loginActivity.class));
@@ -367,29 +373,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Fragmento_Mensaje fragmentoMensaje;
                 //fragmentoMensaje = new Fragmento_Mensaje();
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_Mensaje()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_Mensaje()).commit();
                 break;
             case R.id.nav_publicaciones:
                 Fragmento_publicaciones fragmentPublicaciones;
                 //fragmentPublicaciones = new Fragmento_publicaciones();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_publicaciones()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_publicaciones()).commit();
                 /*
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new Fragmento_publicaciones()).commit();
 
                  */
+
                 break;
             case R.id.favoritos:
 
                 Fragmento_favoritos fragmentoFavoritos;
                 //fragmentoFavoritos = new Fragmento_favoritos();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_favoritos()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_favoritos()).commit();
                 break;
 
             case R.id.biblia:
                 Fragmento_biblia fragmentoBiblia;
                 //fragmentoBiblia = new Fragmento_biblia();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_biblia()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragmento_biblia()).commit();
                 break;
 
             case R.id.nav_share:
@@ -416,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //JSONObject jsonObject = new JSONObject(response);
 
                 JSONArray json = response.optJSONArray("imagenes");
-                Log.e("ima", "Imagenes" + json);
+                //Log.e("ima", "Imagenes" + json);
                 //Toast.makeText(getApplicationContext(),"Mensaje:" + json, Toast.LENGTH_SHORT).show();
                 //To create Carousel
                 //carouselView.setPageCount(json.length());
@@ -430,6 +437,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         imagenes = new Imagenes();
                         JSONObject jsonObject = null;
                         jsonObject = json.getJSONObject(i);
+                        //Log.e("imagenes","Imagenes"+ jsonObject.optString("Titulo"));
 
 
                         imagenes.setTitulo(jsonObject.optString("Titulo"));
@@ -833,14 +841,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     comentarios.setFecha(jsonObject.optString("fecha"));
 
                     listaComentarios.add(comentarios);
-
                 }
 
                 // To start my recicleView
-                commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
+                //commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
+
+/*
                 recycleComentarios.setLayoutManager(new LinearLayoutManager(this));
                 recycleComentarios.setHasFixedSize(true);
                 recycleComentarios.setAdapter(commentsAdapter);
+*/
+
+                // Instance of ComentariosFragments
+
+                //Cargar el fragment en el activity
+                Bundle bundleComentario = new Bundle();
+                bundleComentario.putSerializable("lista",listaComentarios);
+                comentariosFragment.setArguments(bundleComentario);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, comentariosFragment).addToBackStack(null).commit();
 
 
             } catch (JSONException e) {

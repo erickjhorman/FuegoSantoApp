@@ -22,11 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/idRecycler_comments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:ignore="MissingConstraints" />
+
 
 
         </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.fuegosantoapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 public class SharedPrefManager {
     private static SharedPrefManager instance;
@@ -32,6 +33,8 @@ public class SharedPrefManager {
         editor.putInt(KEY_SUBSCRIPTOR_ID, id_correos);
         editor.putString(KEY_SUBSCRIPTOR_EMAIL, email);
         editor.putString(KEY_SUBSCRIPTOR_NAME, nombre);
+
+
         editor.putString(KEY_SUBSCRIPTOR_AVATAR, avatar);
 
         editor.apply();

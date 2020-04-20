@@ -8,20 +8,29 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="info" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="imagenes" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f823bb-7d2b-43d3-9f29-ebb9fa663909" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/SharedPrefManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/SharedPrefManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/adapter/commentsAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/adapter/commentsAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/fragmentos/ComentariosFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/fragmentos/ComentariosFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/fragmentos/Fragmento_publicaciones.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fuegosantoapp/fragmentos/Fragmento_publicaciones.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_comentarios.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_comentarios.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[ce12160ca8e698730c]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Test_API_29]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -59,6 +68,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="ce12160ca8e698730c" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-04-19T19:25:16.046Z" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -229,7 +240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587075320261</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="I'm organizing the final project and fix the back button V2">
+      <created>1587095149982</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1587095149982</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -244,42 +262,61 @@
         </entry>
       </map>
     </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="I went back to the initial project" />
     <MESSAGE value="I created the code for my  comments" />
     <MESSAGE value="I'm organizing the final project" />
     <MESSAGE value="I'm organizing the final project and fix the back button" />
-    <option name="LAST_COMMIT_MESSAGE" value="I'm organizing the final project and fix the back button" />
+    <MESSAGE value="I'm organizing the final project and fix the back button V2" />
+    <option name="LAST_COMMIT_MESSAGE" value="I'm organizing the final project and fix the back button V2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="1703" y="114" key="CommitChangelistDialog2" timestamp="1587075316323">
+    <state x="2045" y="163" key="#FuegoSantoApp-master.app" timestamp="1587340025799">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
-    <state x="1703" y="114" key="CommitChangelistDialog2/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587075316323" />
-    <state width="1877" height="527" key="GridCell.Tab.0.bottom" timestamp="1587093233312">
+    <state x="2045" y="163" key="#FuegoSantoApp-master.app/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587340025799" />
+    <state x="1703" y="114" key="CommitChangelistDialog2" timestamp="1587095147697">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="527" key="GridCell.Tab.0.bottom/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587093233312" />
-    <state width="1877" height="527" key="GridCell.Tab.0.center" timestamp="1587093233312">
+    <state x="1703" y="114" key="CommitChangelistDialog2/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587095147697" />
+    <state width="1877" height="401" key="GridCell.Tab.0.bottom" timestamp="1587342199110">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="527" key="GridCell.Tab.0.center/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587093233312" />
-    <state width="1877" height="527" key="GridCell.Tab.0.left" timestamp="1587093233312">
+    <state width="1877" height="401" key="GridCell.Tab.0.bottom/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587342199110" />
+    <state width="1877" height="401" key="GridCell.Tab.0.center" timestamp="1587342199110">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="527" key="GridCell.Tab.0.left/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587093233312" />
-    <state width="1877" height="527" key="GridCell.Tab.0.right" timestamp="1587093233312">
+    <state width="1877" height="401" key="GridCell.Tab.0.center/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587342199110" />
+    <state width="1877" height="401" key="GridCell.Tab.0.left" timestamp="1587342199110">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="527" key="GridCell.Tab.0.right/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587093233312" />
-    <state x="1458" y="92" width="1736" height="856" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1587078010666">
+    <state width="1877" height="401" key="GridCell.Tab.0.left/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587342199110" />
+    <state width="1877" height="401" key="GridCell.Tab.0.right" timestamp="1587342199110">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
-    <state x="1458" y="92" width="1736" height="856" key="com.android.tools.idea.avdmanager.AvdListDialog/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587078010666" />
-    <state x="2022" y="343" key="com.intellij.ide.util.TipDialog" timestamp="1587085922598">
+    <state width="1877" height="401" key="GridCell.Tab.0.right/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587342199110" />
+    <state x="1458" y="92" width="1736" height="856" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1587227598756">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
-    <state x="2022" y="343" key="com.intellij.ide.util.TipDialog/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587085922598" />
+    <state x="1458" y="92" width="1736" height="856" key="com.android.tools.idea.avdmanager.AvdListDialog/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587227598756" />
+    <state x="2022" y="343" key="com.intellij.ide.util.TipDialog" timestamp="1587337986367">
+      <screen x="1366" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2022" y="343" key="com.intellij.ide.util.TipDialog/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1587337986367" />
   </component>
 </project>

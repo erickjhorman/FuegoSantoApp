@@ -131,7 +131,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
         recyclerPublicaciones.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
 
         //recycleComentarios = (RecyclerView) vista.findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
-        Log.i("Recycle","Comentarios" + recycleComentarios);
+        //Log.i("Recycle","Comentarios" + recycleComentarios);
         //recycleComentarios.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
 
         recyclerPublicaciones.setHasFixedSize(true);
@@ -148,8 +148,8 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
     private void cargarWebServicesPublicaciones() {
 
         progress = new ProgressDialog(getContext());
-        progress.setMessage("Consultando");
-        progress.show();
+        //progress.setMessage("Consultando");
+        //progress.show();
 
 
 
@@ -215,9 +215,9 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
             Integer id_publicacion = null;
             Integer id_publicacion_comentarios = null;
 
-            Log.e("pu","Publicaciones" + json);
-            Log.e("array","comments" + json.length());
-            Log.e("co","Comentarios" + json2);
+            //Log.e("pu","Publicaciones" + json);
+            //Log.e("array","comments" + json.length());
+            //Log.e("co","Comentarios" + json2);
 
 
             try {
@@ -274,7 +274,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
 
 
-            progress.hide();
+
 
             // To create an instace of my adapter and send my list with some information to start the process
             publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, listaComentarios, getContext(), interfaceComunicaFragments);
