@@ -4,6 +4,7 @@ package com.example.fuegosantoapp.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +29,7 @@ public class navHeaderActivity extends loginActivity  implements View.OnClickLis
 
     private ImageView imageViewUserAvatar;
     private Button buttonlogin;
+    private TextView textViewUserCorreo;
     private TextView navHeaderComentario;
     RequestQueue request;
 
@@ -39,10 +41,13 @@ public class navHeaderActivity extends loginActivity  implements View.OnClickLis
 
         navHeaderComentario = (TextView) findViewById(R.id.navHeaderComentario);
 
+
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             navHeaderComentario.setVisibility(View.GONE);
             return;
         }
+
+
 
 
         buttonlogin = (Button) findViewById(R.id.btnlogin);

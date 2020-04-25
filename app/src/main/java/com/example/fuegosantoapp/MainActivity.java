@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,11 +68,13 @@ import com.example.fuegosantoapp.fragmentos.Fragmento_favoritos;
 import com.example.fuegosantoapp.fragmentos.Fragmento_publicaciones;
 import com.example.fuegosantoapp.interfaces.IComunicaFragments;
 import com.example.fuegosantoapp.interfaces.IFragments;
+import com.example.fuegosantoapp.picasso.CircleTransform;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 
 
@@ -130,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     Activity activity = null; // To declare a variable of type fragment
     Fragment fragment = null;// To declare a variable of type activity
+
+    Menu optionsMenu;
 
     private Activity mCurrentActivity = null;
 
@@ -209,15 +214,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.inflateHeaderView(R.layout.nav_header);
         headerView.findViewById(R.id.nav_header);
 
+
+
+
         //Declaring the variables for the nav_header
-
-
         //imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.imageViewUserAvatar);
 
         btnloginNavbar = (Button) headerView.findViewById(R.id.btnlogin);
         navHeaderComentario = (TextView) headerView.findViewById(R.id.navHeaderComentario);
         textViewUserCorreo = (TextView) headerView.findViewById(R.id.textViewUserCorreo);
-        textViewUserCorreo.setVisibility(View.GONE);
+
         imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
 
         btnloginNavbar.setOnClickListener(this);
@@ -236,16 +242,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getDailyVers();
 
+        textViewUserCorreo.setText("Invitado");
+
         // instance of commentsFragments
         comentariosFragment = new ComentariosFragment();
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
-            textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
+
             textViewUserCorreo.setVisibility(View.VISIBLE);
             String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
-            //Toast.makeText(getApplicationContext(), "Url" + urlImagen, Toast.LENGTH_LONG).show();
+            String nameUser = SharedPrefManager.getInstance(this).getUserEmail();
 
+            if(TextUtils.isEmpty(urlImagen) ||  TextUtils.isEmpty(nameUser)) {
+                textViewUserCorreo.setText("Invitado");
+                imageViewUserAvatar.setImageResource(R.mipmap.ic_launcher);
+
+
+            }  if (!TextUtils.isEmpty(urlImagen) && !TextUtils.isEmpty(nameUser))  {
+                Picasso.get().load(urlImagen)
+                        .fit()
+                        .centerCrop()
+                        .transform(new CircleTransform())
+                        .into(imageViewUserAvatar);
+                textViewUserCorreo.setText(nameUser);
+
+            }  else {
+                Picasso.get().load(urlImagen)
+                        .fit()
+                        .centerCrop()
+                        .transform(new CircleTransform())
+                        .into(imageViewUserAvatar);
+                textViewUserCorreo.setText(nameUser);
+
+
+            }
 
             navHeaderComentario.setVisibility(View.GONE);
             btnloginNavbar.setVisibility(View.GONE);
@@ -296,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else {
             if (MainActivity.this instanceof MainActivity) {
-                Toast.makeText(getApplicationContext(), "Estoy en mainActivity", Toast.LENGTH_LONG).show();
+
                 listaComentarios.clear();
                 super.onBackPressed();
             } else {
@@ -316,9 +347,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_main, menu);  //To add the menu to the toolbar
+
+        optionsMenu = menu;
+
+        if (optionsMenu != null && SharedPrefManager.getInstance(this).isLoggedIn()) {
+            optionsMenu.findItem(R.id.menuLogout).setVisible(true);
+        }  else {
+            optionsMenu.findItem(R.id.menuLogout).setVisible(false);
+        }
+
         return true;
     }
+
 
 
     @Override
@@ -808,8 +850,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void getComments(String pos) {
         Toast.makeText(this, "Position desde getComments" + pos, Toast.LENGTH_SHORT).show();
 
-        //String url = "http://192.168.0.74/Android/v1/getComments.php?publication_id=" + pos;
-        String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/getComments.php?publication_id=" + pos;
+        String url = "http://192.168.0.74/Android/v1/getComments.php?publication_id=" + pos;
+        //String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/getComments.php?publication_id=" + pos;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null, Response -> {

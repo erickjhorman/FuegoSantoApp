@@ -85,6 +85,9 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
             @Override
             public void onClick(View v) {
                 finish();
+
+                Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(mainActivity);
                 //onBackPressed();
             }
         });
@@ -116,10 +119,7 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
                                                 obj.getString("avatar")
 
                                         );
-
-
-
-                               startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                                finish();
                             } else {
                                 Toast.makeText(
@@ -138,12 +138,14 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                    progressDialog.dismiss();
+                        progressDialog.dismiss();
                         Toast.makeText(
                                 getApplicationContext(),
                                 error.getMessage(),
                                 Toast.LENGTH_LONG
                         ).show();
+
+
                     }
                 }
         ){

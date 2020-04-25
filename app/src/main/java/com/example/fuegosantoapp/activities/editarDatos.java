@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -62,6 +63,8 @@ import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.RequestHandler;
 import com.example.fuegosantoapp.SharedPrefManager;
 import com.example.fuegosantoapp.mCloud.Myconfiguration;
+import com.example.fuegosantoapp.picasso.CircleTransform;
+import com.squareup.picasso.Picasso;
 
 import org.cloudinary.json.JSONException;
 import org.json.JSONObject;
@@ -126,8 +129,6 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
             // media player is not initialized
         }
 
-
-
         /*
         Map config = new HashMap();
         config.put("cloud_name", "dequvdgav");
@@ -135,14 +136,11 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
          */
 
-
         textViewUsername = (TextView) findViewById(R.id.editTextNombre);
 
-
-
         getTextViewId = (TextView) findViewById(R.id.txtIdUsuario);
+        getTextViewId.setVisibility(View.INVISIBLE);
         imageViewUserAvatar = (ImageView) findViewById(R.id.ImagenEditarDatos);
-
 
         botonCargar = (Button) findViewById(R.id.btnCargarImagen);
         btnUpdate = (Button) findViewById(R.id.btnUpdate);
@@ -179,11 +177,44 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
 
         request = Volley.newRequestQueue(getApplicationContext());
-        textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
+
+
+        // A condition to check if the name of the user is null in the navHeader{
+        /*
+        if(!TextUtils.isEmpty(SharedPrefManager.getInstance(this).getUserEmail())){
+            textViewUsername.setText("Invitado");
+
+
+        } else{
+            textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
+
+        }
+
+         */
+
+        // Get user's id
         getTextViewId.setText(Integer.toString(SharedPrefManager.getInstance(this).getUserId()));
+
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
         initializeToolbar();
-        setearUrlImagen(urlImagen);
+
+        if (SharedPrefManager.getInstance(context).isLoggedIn() && !TextUtils.isEmpty(SharedPrefManager.getInstance(this).getUserEmail()) &&
+                !TextUtils.isEmpty(urlImagen)){
+
+            textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
+
+            Picasso.get().load(urlImagen)
+                    .fit()
+                    .centerCrop()
+                    .transform(new CircleTransform())
+                    .into(imageViewUserAvatar);
+
+        } else {
+            textViewUsername.setText("Invitado");
+            imageViewUserAvatar.setImageResource(R.mipmap.ic_launcher);
+
+        }
+
     }
 
 
@@ -391,12 +422,6 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
     }
 
 
-/*
-    public void onClick(View view) {
-
-        cargarImagen();
-    }
-*/
 
     @Override
     public void onClick(View view) {
@@ -443,7 +468,7 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
         boolean iscreada = fileImagen.exists();
 
 
-        //String nombreImagen = "";
+
 
         if (iscreada == false) {
             iscreada = fileImagen.mkdirs();
@@ -451,14 +476,13 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
         if (iscreada == true) {
             nombreImagen = (System.currentTimeMillis() / 1000) + ".jpg";
-
         }
 
         //Route to save the image
         path = Environment.getExternalStorageDirectory() + File.separator + RUTA_IMAGEN + File.separator + nombreImagen; // we  indicate the path of the storage
 
         File imagen = new File(path);
-        Toast.makeText(getApplicationContext(), "Path inicial" + imagen, Toast.LENGTH_LONG).show();
+
 
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -489,18 +513,10 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                 case COD_SELECCIONA:
                     Uri uri = data.getData();
 
-
-                    //imageViewUserAvatar.setImageURI(uri);
-                    Log.i("Ruta de almacenamiento", "Path:" + uri);
-
-                    //MediaManager.get().upload(Uri.fromFile(filePath)).dispatch();
-
                     try {
-
                         //Here i need to do the same as Bitmap with a file
-
                         bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), uri);
-                        //rotateimage(bitmap);
+
 
                         filePath = new File(getRealPathFromURI(uri));
                         Log.i("File creado", "Path:" + filePath);
@@ -508,7 +524,7 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
                         rotateImageGallery(bitmap);
 
-                        Toast.makeText(getApplicationContext(), "Path inicial" + bitmap, Toast.LENGTH_LONG).show();
+
 
 
                     } catch (IOException e) {
@@ -519,16 +535,6 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                     break;
 
                 case COD_FOTO:
-                   /*
-                    MediaScannerConnection.scanFile(this, new String[]{path}, null, new MediaScannerConnection.OnScanCompletedListener() {
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
-                            Log.i("Ruta de almacenamiento", "Path:" + path);
-
-
-                        }
-                    });
-*/
                     MediaScannerConnection.scanFile(this, new String[]{path}, null, new MediaScannerConnection.OnScanCompletedListener() {
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
@@ -539,25 +545,12 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
                         }
                     });
 
-                    //Uri uri = Uri.parse(path);
-
-
-                    // filePath = new File(getRealPathFromURI(_mipath,Photo));
-                    //Log.i("File creado", "Path:" + filePath);
-
-
                     Uri uri_camara = Uri.fromFile(new File(path));
-                    Log.i("URI ","Uri de la camara" + uri_camara);
-                    Toast.makeText(getApplicationContext(), "uri desde camara" + uri_camara, Toast.LENGTH_LONG).show();
+
+
 
                     bitmap = decodeFile(path);
                     rotateimage(bitmap);
-
-                    /*
-                    filePath = new File(getRealPathFromURI(uri_camara));
-                    btnUpdate.setEnabled(true);
-*/
-                    //imageViewUserAvatar.setImageBitmap(bitmap);
 
 
                     break;
@@ -635,49 +628,6 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
         } catch (JSONException e) {
 
         }
-
-        /*
-
-        try {
-            String requestId = MediaManager.get().upload(Uri.fromFile(filePath))
-                    .option("resource_type", "image")
-                    .option("folder", "FuegoSanto/avatar/")
-                    .option("use_filename", "true")
-                    //.option("public_id",  nombreImagen)
-
-                    .option("overwrite", true)
-
-                    .dispatch();
-        } catch (JSONException e) {
-
-        }
-*/
-
-
-        //Log.i("Response", "Path:" + Url);
-        //https://res.cloudinary.com/dequvdgav/image/upload/v1577411853/fahutrqpm7oixw2jrf4n.jpg
-
-
-
-       /*
-        String Url = MediaManager.get().url().generate("my_dog");
-        Log.i("Url final", "Path:" + Url);
-*/
-
-
-
-
-
-        /*
-        MediaManager.get().upload(R.drawable.sample_1)
-                .option("resource_type", "imagen")
-                .option("folder", "FuegoSanto/avatar/")
-                .option("public_id", "avatar")
-                .option("overwrite", true)
-                .option("notification_url", "https://mysite.example.com/notify_endpoint")
-                .dispatch();
-*/
-
     }
 
 
@@ -703,6 +653,17 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
        */
 
+      /*
+        if (nombre.isEmpty()){
+            Toast.makeText(this, "Ingrese un nombre", Toast.LENGTH_SHORT).show();
+        } else if (imageViewUserAvatar.getDrawable() == null) {
+            Toast.makeText(this, "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show();
+
+        }
+
+       */
+
+
         if (nombre.isEmpty()){
             Toast.makeText(this, "Ingrese un nombre", Toast.LENGTH_SHORT).show();
         } else if (imageViewUserAvatar.getDrawable() == null) {
@@ -710,16 +671,14 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
         } else {
 
-
             if(filePath != null){
-                Toast.makeText(this, "FilePath existe", Toast.LENGTH_SHORT).show();
+
 
                 try {
 
-
-                progreso = new ProgressDialog(editarDatos.this);
-                progreso.setMessage("Cargando...");
-                progreso.show();
+                    progreso = new ProgressDialog(editarDatos.this);
+                    progreso.setMessage("Cargando...");
+                    progreso.show();
 
 
 
@@ -772,7 +731,7 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
             }
 
         } else{
-                Toast.makeText(this, "FilePath nulo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show();
                 updateSubscriptor(nombre, documento, currentUrl);
             }
         }

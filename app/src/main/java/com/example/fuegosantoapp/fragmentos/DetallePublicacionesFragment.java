@@ -6,12 +6,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,6 +29,7 @@ import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.adapter.publicacionesAdapter;
 import com.example.fuegosantoapp.entidades.Publicacion;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +57,7 @@ public class DetallePublicacionesFragment extends Fragment {
     TextView txtAutorPublicacion;
     TextView txtFechaPublicacion;
     ImageView imageDetalle;
+
     RequestQueue request;
 
     public DetallePublicacionesFragment() {
@@ -100,6 +104,10 @@ public class DetallePublicacionesFragment extends Fragment {
         txtAutorPublicacion = (TextView) vista.findViewById(R.id.autorPublicacion);
         txtFechaPublicacion = (TextView) vista.findViewById(R.id.fechaPublicacion);
 
+        BottomNavigationView bottomNav = vista.findViewById(R.id.botton_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+
         Bundle objetoPublicacion = getArguments();
         Publicacion publicacion = null;
 
@@ -122,6 +130,26 @@ public class DetallePublicacionesFragment extends Fragment {
 
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                   switch (item.getItemId()){
+                       case R.id.nav_back:
+                           Fragmento_publicaciones fragmentPublicaciones = new Fragmento_publicaciones();
+                            getFragmentManager().beginTransaction().replace(R.id.fragment_container,fragmentPublicaciones).commit();
+
+                           break;
+                       case R.id.nav_share:
+                           Toast.makeText(getContext(), "Share" , Toast.LENGTH_SHORT).show();
+                           break;
+
+                   }
+                    return true;
+                }
+            };
 
     private void cargarImagenUrl(String imagen) {
 

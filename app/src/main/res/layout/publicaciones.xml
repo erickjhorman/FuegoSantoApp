@@ -155,7 +155,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="153dp"
+            android:layout_height="152dp"
             android:layout_gravity="bottom">
 
             <LinearLayout
@@ -168,7 +168,7 @@
 
                 <ImageView
                     android:id="@+id/imgAvatar"
-                    android:layout_width="35dp"
+                    android:layout_width="48dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="top"
                     android:src="@mipmap/ic_launcher">
@@ -176,7 +176,7 @@
                 </ImageView>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="336dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="top
 "
@@ -190,13 +190,13 @@
 
                     <TextView
                         android:id="@+id/Comentarios"
-                        android:layout_width="153dp"
+                        android:layout_width="142dp"
                         android:layout_height="wrap_content"
                         android:text="Comentarios" />
 
 
                     <LinearLayout
-                        android:layout_width="125dp"
+                        android:layout_width="138dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 

@@ -185,35 +185,23 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
 
 
-        if (TextUtils.isEmpty(imagenUser)) {
-
-            Toast.makeText(context, "Avatar imagenes" ,Toast.LENGTH_LONG).show();
-            holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
-
-
-
-        } else {
-                    Picasso.get().load(imagenUser)
-                    .fit()
-                    .centerCrop()
-                    .transform(new CircleTransform())
-                    .into(holder.imagen_usuario);
-        }
-
         // To get and set the image from the logged  user
         String  url_imagen_usuario =(SharedPrefManager.getInstance(context).getUseAvatar());
 
-        if (SharedPrefManager.getInstance(context).isLoggedIn() && TextUtils.isEmpty(url_imagen_usuario) != true){
-            Log.e("imagen", "Imagen usuario"+ TextUtils.isEmpty(url_imagen_usuario));
+
+        if (SharedPrefManager.getInstance(context).isLoggedIn() && !TextUtils.isEmpty(url_imagen_usuario)){
+
             Picasso.get().load(url_imagen_usuario)
                     .fit()
                     .centerCrop()
                     .transform(new CircleTransform())
                     .into(holder.img_avatar_comentario);
           } else {
+            holder.txcomentario.setText("Comentarios");
+            holder.nombre_usuario.setText("Invitado");
             holder.img_avatar_comentario.setImageResource(R.mipmap.ic_launcher);
-
         }
+
 
         // To create a method to the events
         //holder.setOnClickListeners();

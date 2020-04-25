@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,13 +57,20 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, loginActivity.class));
         }
 
-        if (SharedPrefManager.getInstance(this).isUpdated()) {
-            textViewUserCorreo.setHint("Erick");
+        if(SharedPrefManager.getInstance(this).isUpdated()) {
             imageViewUserAvatar.setImageResource(R.drawable.ic_android_black_navbar);
         }
 
+         if(!TextUtils.isEmpty(SharedPrefManager.getInstance(this).getUserEmail())){
+             textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
 
-        textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
+         } else {
+             textViewUserCorreo.setText("Invitado");
+
+         }
+
+
+
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
         //Toast.makeText(getApplicationContext(), "Url en profile Activity" + urlImagen, Toast.LENGTH_LONG).show();
         setearUrlImagen(urlImagen);
