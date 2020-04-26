@@ -175,32 +175,56 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         holder.txtDecripcion.setText(listaPublicaiones.get(position).getDescripcion());
 
         // To set the information of the comments
-        holder.nombre_usuario.setText(listaComentarios.get(position).getEmail());
         holder.txcomentario.setText(listaComentarios.get(position).getComentario());
         holder.txtfecha.setText(listaComentarios.get(position).getFecha());
         holder.txthora.setText(listaComentarios.get(position).getHora());
 
-        String imagenUser = listaComentarios.get(position).getAvatar();
-        Log.e("i","ImagenUser" + imagenUser);
+        String imagenUserComentario = listaComentarios.get(position).getAvatar();
+        String nameUserComentario = listaComentarios.get(position).getEmail();
+
+        String urlImagen = SharedPrefManager.getInstance(context).getUseAvatar();
 
 
-
-        // To get and set the image from the logged  user
-        String  url_imagen_usuario =(SharedPrefManager.getInstance(context).getUseAvatar());
-
-
-        if (SharedPrefManager.getInstance(context).isLoggedIn() && !TextUtils.isEmpty(url_imagen_usuario)){
-
-            Picasso.get().load(url_imagen_usuario)
+        if (!TextUtils.isEmpty(nameUserComentario)  && !TextUtils.isEmpty(imagenUserComentario)) {
+            Picasso.get().load(imagenUserComentario)
                     .fit()
                     .centerCrop()
                     .transform(new CircleTransform())
-                    .into(holder.img_avatar_comentario);
-          } else {
-            holder.txcomentario.setText("Comentarios");
+                    .into(holder.imagen_usuario);
+            holder.nombre_usuario.setText(nameUserComentario);
+
+        }  else {
             holder.nombre_usuario.setText("Invitado");
-            holder.img_avatar_comentario.setImageResource(R.mipmap.ic_launcher);
+            holder.txcomentario.setText("Comentarios");
+            holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
         }
+
+        if (TextUtils.isEmpty(urlImagen)) {
+
+            holder.img_avatar_comentario.setImageResource(R.mipmap.ic_launcher);
+
+
+        } else  {
+            String  compare = "null";
+
+            String  userImagen = urlImagen;
+
+
+            if(userImagen.equals(compare)){
+
+                holder.img_avatar_comentario.setImageResource(R.mipmap.ic_launcher);
+
+
+            } else {
+                
+                Picasso.get().load(urlImagen)
+                        .fit()
+                        .centerCrop()
+                        .transform(new CircleTransform())
+                        .into(holder.img_avatar_comentario);
+            }
+        }
+
 
 
         // To create a method to the events

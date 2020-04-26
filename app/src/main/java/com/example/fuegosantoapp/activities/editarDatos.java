@@ -121,11 +121,11 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_editar_datos);
 
 
-
-            //MediaManager.init(this, Myconfiguration.getMyconfigs());
+        //MediaManager.init(this, Myconfiguration.getMyconfigs());
         try {
-            MediaManager.init(this, Myconfiguration.getMyconfigs());;
-        } catch(IllegalStateException e) {
+            MediaManager.init(this, Myconfiguration.getMyconfigs());
+            ;
+        } catch (IllegalStateException e) {
             // media player is not initialized
         }
 
@@ -151,15 +151,15 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
         textViewUsername.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event != null){
+                if (event != null) {
                     Log.i("Usuario", "Estoy escribiendo:");
                     btnUpdate.setEnabled(true);
-                    return  true;
+                    return true;
                 }
 
                 Log.d("Usuario", "No Estoy escribiendo:");
                 btnUpdate.setEnabled(false);
-                return  false;
+                return false;
             }
 
 
@@ -178,45 +178,44 @@ public class editarDatos extends AppCompatActivity implements View.OnClickListen
 
         request = Volley.newRequestQueue(getApplicationContext());
 
-
-        // A condition to check if the name of the user is null in the navHeader{
-        /*
-        if(!TextUtils.isEmpty(SharedPrefManager.getInstance(this).getUserEmail())){
-            textViewUsername.setText("Invitado");
-
-
-        } else{
-            textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
-
-        }
-
-         */
-
-        // Get user's id
         getTextViewId.setText(Integer.toString(SharedPrefManager.getInstance(this).getUserId()));
 
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
         initializeToolbar();
 
-        if (SharedPrefManager.getInstance(context).isLoggedIn() && !TextUtils.isEmpty(SharedPrefManager.getInstance(this).getUserEmail()) &&
-                !TextUtils.isEmpty(urlImagen)){
+        if (SharedPrefManager.getInstance(context).isLoggedIn()) {
+            if (TextUtils.isEmpty(SharedPrefManager.getInstance(this).getUserEmail()) && TextUtils.isEmpty(urlImagen)) {
 
-            textViewUsername.setText(SharedPrefManager.getInstance(this).getUserEmail());
+                textViewUsername.setText("Invitado");
+                imageViewUserAvatar.setImageResource(R.mipmap.ic_launcher);
+            } else  {
 
-            Picasso.get().load(urlImagen)
-                    .fit()
-                    .centerCrop()
-                    .transform(new CircleTransform())
-                    .into(imageViewUserAvatar);
+                String  compare = "null";
+                String  user = SharedPrefManager.getInstance(this).getUserEmail();
+                String  userImagen = SharedPrefManager.getInstance(this).getUseAvatar();
 
-        } else {
-            textViewUsername.setText("Invitado");
-            imageViewUserAvatar.setImageResource(R.mipmap.ic_launcher);
+               
+
+                if(user.equals(compare) && userImagen.equals(compare)){
+                    textViewUsername.setText("Invitado");
+                    imageViewUserAvatar.setImageResource(R.mipmap.ic_launcher);
+
+
+                } else {
+
+                    textViewUsername.setText(user);
+                    Picasso.get().load(userImagen)
+                            .fit()
+                            .centerCrop()
+                            .transform(new CircleTransform())
+                            .into(imageViewUserAvatar);
+                }
+            }
 
         }
 
-    }
 
+    }
 
     @Override
     public void onDestroy(){

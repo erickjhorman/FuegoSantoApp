@@ -30,6 +30,8 @@ import com.android.volley.toolbox.Volley;
 import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.SharedPrefManager;
+import com.example.fuegosantoapp.picasso.CircleTransform;
+import com.squareup.picasso.Picasso;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -61,25 +63,45 @@ public class ProfileActivity extends AppCompatActivity {
             imageViewUserAvatar.setImageResource(R.drawable.ic_android_black_navbar);
         }
 
-         if(!TextUtils.isEmpty(SharedPrefManager.getInstance(this).getUserEmail())){
-             textViewUserCorreo.setText(SharedPrefManager.getInstance(this).getUserEmail());
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
 
-         } else {
-             textViewUserCorreo.setText("Invitado");
+            if(TextUtils.isEmpty(SharedPrefManager.getInstance(this).getUserEmail())){
+                textViewUserCorreo.setText("Invitado");
+            } else {
 
-         }
+                String  compare = "null";
+                String  user = SharedPrefManager.getInstance(this).getUserEmail();
+                String  userImagen = SharedPrefManager.getInstance(this).getUseAvatar();
 
 
+
+                if(user.equals(compare) && userImagen.equals(compare)){
+                    textViewUserCorreo.setText("Invitado");
+                    imageViewUserAvatar.setImageResource(R.mipmap.ic_launcher);
+
+
+                } else {
+
+                    textViewUserCorreo.setText(user);
+                    Picasso.get().load(userImagen)
+                            .fit()
+                            .centerCrop()
+                            .transform(new CircleTransform())
+                            .into(imageViewUserAvatar);
+                }
+            }
+
+        }
 
         String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
-        //Toast.makeText(getApplicationContext(), "Url en profile Activity" + urlImagen, Toast.LENGTH_LONG).show();
+
         setearUrlImagen(urlImagen);
 
 
         btnEditarPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getApplicationContext(),"Desde button Editar Perfil",Toast.LENGTH_SHORT).show();
+
                 Intent miIntent = new Intent(ProfileActivity.this, editarDatos.class);
                 startActivity(miIntent);
             }

@@ -155,9 +155,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Log.i("Recycle", "Re" + recycleComentarios);
 
 
-
-
-
         if (listaImagenes != null) {
             //Toast.makeText(getApplicationContext(), "Lista on create" + listaImagenes, Toast.LENGTH_LONG).show();
             getImagenes();
@@ -215,8 +212,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headerView.findViewById(R.id.nav_header);
 
 
-
-
         //Declaring the variables for the nav_header
         //imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.imageViewUserAvatar);
 
@@ -249,34 +244,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             imageViewUserAvatar = (ImageView) headerView.findViewById(R.id.avatarUsuario);
+            editTextCorreo.setVisibility(View.GONE);
+            buttonRegistrar.setVisibility(View.GONE);
+            //textViewUserCorreo.setVisibility(View.VISIBLE);
+            //String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
 
-            textViewUserCorreo.setVisibility(View.VISIBLE);
-            String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
+
             String nameUser = SharedPrefManager.getInstance(this).getUserEmail();
+            String urlImagen = SharedPrefManager.getInstance(this).getUseAvatar();
 
-            if(TextUtils.isEmpty(urlImagen) ||  TextUtils.isEmpty(nameUser)) {
+
+            if (TextUtils.isEmpty(urlImagen) && TextUtils.isEmpty(nameUser)) {
+
                 textViewUserCorreo.setText("Invitado");
                 imageViewUserAvatar.setImageResource(R.mipmap.ic_launcher);
 
 
-            }  if (!TextUtils.isEmpty(urlImagen) && !TextUtils.isEmpty(nameUser))  {
-                Picasso.get().load(urlImagen)
-                        .fit()
-                        .centerCrop()
-                        .transform(new CircleTransform())
-                        .into(imageViewUserAvatar);
-                textViewUserCorreo.setText(nameUser);
+            } else  {
 
-            }  else {
-                Picasso.get().load(urlImagen)
-                        .fit()
-                        .centerCrop()
-                        .transform(new CircleTransform())
-                        .into(imageViewUserAvatar);
-                textViewUserCorreo.setText(nameUser);
+                String  compare = "null";
+                String  user = nameUser;
+                String  userImagen = urlImagen;
 
 
+                if(user.equals(compare) && userImagen.equals(compare)){
+                    textViewUserCorreo.setText("Invitado");
+                    imageViewUserAvatar.setImageResource(R.mipmap.ic_launcher);
+
+
+                } else {
+                    textViewUserCorreo.setText(nameUser);
+
+                    Picasso.get().load(urlImagen)
+                            .fit()
+                            .centerCrop()
+                            .transform(new CircleTransform())
+                            .into(imageViewUserAvatar);
+                }
             }
+
+
+
 
             navHeaderComentario.setVisibility(View.GONE);
             btnloginNavbar.setVisibility(View.GONE);
@@ -734,7 +742,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "Token registrado exitosamente", Toast.LENGTH_LONG).show();
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -850,8 +858,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void getComments(String pos) {
         Toast.makeText(this, "Position desde getComments" + pos, Toast.LENGTH_SHORT).show();
 
-        String url = "http://192.168.0.74/Android/v1/getComments.php?publication_id=" + pos;
-        //String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/getComments.php?publication_id=" + pos;
+         //String url = "http://192.168.0.74/Android/v1/getComments.php?publication_id=" + pos;
+        String url = "http://fuegosantoapp.000webhostapp.com/Android/v1/getComments.php?publication_id=" + pos;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null, Response -> {

@@ -25,7 +25,7 @@
         app:showAsAction="never"/>
 
     <item android:id="@+id/menuLogout"
-        android:title="Cerrar sección"
+        android:title="Cerrar sesión"
         android:orderInCategory="100"
 
         app:showAsAction="never"/>

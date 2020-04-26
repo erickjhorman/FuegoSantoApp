@@ -14,18 +14,18 @@
 
     <ImageView
         android:id="@+id/avatarUsuario"
-        android:layout_width="72dp"
-        android:layout_height="50dp"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-
-        android:layout_marginTop="22dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="63dp"
+        android:layout_marginBottom="89dp"
         android:src="@mipmap/ic_launcher_inicio_round" />
 
     <TextView
         android:layout_width="190dp"
         android:layout_height="wrap_content"
-
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="110dp"
@@ -42,7 +42,6 @@
         android:layout_alignParentRight="false"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="50dp"
-        android:text="correo"
         android:textAlignment="center"
         android:textSize="15dp" />
 
@@ -71,7 +70,7 @@
         android:layout_height="wrap_content"
 
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="61dp"
+        android:layout_marginBottom="72dp"
         android:text="CMB FUEGO SANTO "
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/white" />

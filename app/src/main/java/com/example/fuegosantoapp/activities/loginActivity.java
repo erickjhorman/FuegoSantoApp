@@ -131,6 +131,11 @@ public class loginActivity extends AppCompatActivity implements  View.OnClickLis
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    e.getMessage(),
+                                    Toast.LENGTH_LONG
+                            ).show();
                         }
                     }
                 },
