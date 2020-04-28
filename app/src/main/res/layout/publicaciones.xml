@@ -158,6 +158,15 @@
             android:layout_height="152dp"
             android:layout_gravity="bottom">
 
+            <!--
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/commments_publicaciones"
+                android:layout_width="match_parent"
+                android:layout_height="83dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

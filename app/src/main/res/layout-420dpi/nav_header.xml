@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:id="@+id/nav_header"
+    android:layout_width="match_parent"
+    android:layout_height="190dp"
+    android:background="@drawable/main"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+
+
+    <ImageView
+        android:id="@+id/avatarUsuario"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="63dp"
+        android:layout_marginBottom="89dp"
+        android:src="@mipmap/ic_launcher_inicio_round" />
+
+    <TextView
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="16dp"
+        android:text="BIENVENIDO"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/textViewUserCorreo"
+        android:layout_width="294dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="false"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="50dp"
+        android:textAlignment="center"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/navHeaderComentario"
+        android:layout_width="241dp"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textViewUserCorreo"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="94dp"
+        android:layout_marginRight="-52dp"
+        android:paddingTop="10dp"
+        android:text="Ingresa para poder comentar las publicaciones "
+        android:textColor="@color/white"
+        android:textSize="15dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnlogin"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="120dp"
+        android:text="Ingresar a Fuego santo " />
+
+    <TextView
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="72dp"
+        android:text="CMB FUEGO SANTO "
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white" />
+
+
+</RelativeLayout>

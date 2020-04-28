@@ -20,29 +20,28 @@
 
         <TextView
 
-            android:layout_width="340dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="31dp"
-            android:layout_marginRight="31dp"
-            android:layout_marginBottom="610dp"
-            android:text="¡Hola! para seguir, ingresa tu correo para poder comentar las publicaciones "
-            android:textSize="15sp"
-            android:textAlignment="center" />
-
-
-        <EditText
-            android:id="@+id/editTextCorreo"
-            android:layout_width="357dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="25dp"
             android:layout_marginRight="25dp"
-            android:layout_marginBottom="340dp"
+            android:layout_marginBottom="429dp"
+            android:text="¡Hola! para seguir, ingresa tu correo para poder comentar las publicaciones "
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editTextCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginBottom="244dp"
             android:gravity="center"
             android:hint="Ingresa tu correo"
             android:inputType="textEmailAddress"
@@ -51,13 +50,14 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonlogin"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="27dp"
-            android:layout_marginTop="361dp"
+            android:layout_marginTop="332dp"
             android:layout_marginRight="27dp"
             android:text="Ingresar"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="10sp" />
 
 
     </RelativeLayout>

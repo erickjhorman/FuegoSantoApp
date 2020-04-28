@@ -97,10 +97,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
             manager.createNotificationChannel(channel);
 
-
-
-
-
             Intent intent = new Intent(this, MainActivity.class);
 
 
@@ -140,11 +136,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         );
 */
-
-
-
-
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         ImageRequest imageRequest = new ImageRequest(imagen, new Response.Listener<Bitmap>() {
             @Override
@@ -249,7 +240,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 //Code to register token in the database
 
-    /*
+
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed Token" + token);
@@ -263,7 +254,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(), "Token registrado exitosamente", Toast.LENGTH_LONG).show();
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -284,7 +275,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         requestQueue.add(stringRequest);
     }
 
-*/
+
 
 
 

@@ -28,6 +28,7 @@ import com.example.fuegosantoapp.MainActivity;
 import com.example.fuegosantoapp.R;
 import com.example.fuegosantoapp.RequestHandler;
 import com.example.fuegosantoapp.activities.DetailsCommentsPost;
+import com.example.fuegosantoapp.adapter.commentsAdapter;
 import com.example.fuegosantoapp.adapter.publicacionesAdapter;
 import com.example.fuegosantoapp.entidades.Comentarios;
 import com.example.fuegosantoapp.entidades.Publicacion;
@@ -121,7 +122,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
 
         View vista = inflater.inflate(R.layout.fragment_fragmento_publicaciones, container, false);
-        View vista2 = inflater.inflate(R.layout.comments, container, false);
+
 
 
         listaPublicaciones = new ArrayList<>(); //To create an instance of my list
@@ -129,12 +130,18 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
         recyclerPublicaciones = (RecyclerView) vista.findViewById(R.id.idRecycler);   //To create an instance of of my recycleView
         recyclerPublicaciones.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
-
-        //recycleComentarios = (RecyclerView) vista.findViewById(R.id.idRecycler_comments);   //To create an instance of of my recycleView
-        //Log.i("Recycle","Comentarios" + recycleComentarios);
-        //recycleComentarios.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
-
         recyclerPublicaciones.setHasFixedSize(true);
+
+
+        //recycleComentarios = (RecyclerView) vista.findViewById(R.id.commments_publicaciones);   //To create an instance of of my recycleView of comments
+
+        //recycleComentarios.setLayoutManager(new LinearLayoutManager(this.getContext())); // To create a instance of my recycle view with some configurations
+        //recycleComentarios.setHasFixedSize(true);
+
+
+
+
+
         editTextComentario = (EditText) vista.findViewById(R.id.txtComentario);
 
 
@@ -212,6 +219,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
             JSONArray json = response.optJSONArray("publicacion");
             JSONArray json2 = response.optJSONArray("comments");
+
             Integer id_publicacion = null;
             Integer id_publicacion_comentarios = null;
 
@@ -249,8 +257,6 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
                             comentarios.setAvatar(jsonObject2.optString("avatar"));
                             comentarios.setHora(jsonObject2.optString("hora"));
                             comentarios.setFecha(jsonObject2.optString("fecha"));
-
-
                         }
 
                         listaComentarios.add(comentarios);
@@ -278,7 +284,7 @@ public class Fragmento_publicaciones extends Fragment implements Response.Listen
 
             // To create an instace of my adapter and send my list with some information to start the process
             publicacionesAdapter adapter = new publicacionesAdapter(listaPublicaciones, listaComentarios, getContext(), interfaceComunicaFragments);
-            //commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
+            commentsAdapter commentsAdapter = new commentsAdapter(listaComentarios);
 
             recyclerPublicaciones.setAdapter(adapter);
             //recycleComentarios.setAdapter(commentsAdapter);

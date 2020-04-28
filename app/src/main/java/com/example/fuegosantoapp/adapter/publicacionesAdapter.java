@@ -164,7 +164,10 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
         if (listaPublicaiones.get(position).getCover() != null) {
             cargarImagenUrl(listaPublicaiones.get(position).getCover(), holder);
+
         }
+
+        Toast.makeText(context, "Lista comentarios" + listaComentarios.get(position).getComentario(), Toast.LENGTH_SHORT).show();
 
         // To set the information of the posts
         holder.txtidPublicacion.setText((listaPublicaiones.get(position).getId_publicaciones()));
@@ -174,10 +177,16 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
         holder.txtautor.setText(listaPublicaiones.get(position).getAutor());
         holder.txtDecripcion.setText(listaPublicaiones.get(position).getDescripcion());
 
-        // To set the information of the comments
-        holder.txcomentario.setText(listaComentarios.get(position).getComentario());
-        holder.txtfecha.setText(listaComentarios.get(position).getFecha());
-        holder.txthora.setText(listaComentarios.get(position).getHora());
+        String UserComentario = listaComentarios.get(position).getComentario();
+
+         if(TextUtils.isEmpty(UserComentario)){
+             holder.txcomentario.setText("Comentarios");
+             holder.nombre_usuario.setText("Invitado");
+         } else {
+             holder.txcomentario.setText(listaComentarios.get(position).getComentario());
+             holder.txtfecha.setText(listaComentarios.get(position).getFecha());
+             holder.txthora.setText(listaComentarios.get(position).getHora());
+         }
 
         String imagenUserComentario = listaComentarios.get(position).getAvatar();
         String nameUserComentario = listaComentarios.get(position).getEmail();
@@ -194,9 +203,8 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
             holder.nombre_usuario.setText(nameUserComentario);
 
         }  else {
-            holder.nombre_usuario.setText("Invitado");
-            holder.txcomentario.setText("Comentarios");
             holder.imagen_usuario.setImageResource(R.mipmap.ic_launcher);
+
         }
 
         if (TextUtils.isEmpty(urlImagen)) {
@@ -206,17 +214,14 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
 
         } else  {
             String  compare = "null";
-
+            Toast.makeText(context,"4",Toast.LENGTH_SHORT).show();
             String  userImagen = urlImagen;
-
 
             if(userImagen.equals(compare)){
 
                 holder.img_avatar_comentario.setImageResource(R.mipmap.ic_launcher);
-
-
             } else {
-                
+                Toast.makeText(context,"6",Toast.LENGTH_SHORT).show();
                 Picasso.get().load(urlImagen)
                         .fit()
                         .centerCrop()
@@ -224,13 +229,6 @@ public class publicacionesAdapter extends RecyclerView.Adapter<publicacionesAdap
                         .into(holder.img_avatar_comentario);
             }
         }
-
-
-
-        // To create a method to the events
-        //holder.setOnClickListeners();
-
-
     }
 
     private void cargarImagenUrl(String getCover, final publicacionesHolder holder) {

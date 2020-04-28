@@ -33,7 +33,8 @@ public class commentsAdapter extends RecyclerView.Adapter<commentsAdapter.ViewHo
     public ViewHolderComments onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         // To inflate the view and return the view
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comments, parent, false);
+        //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comments, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_comments_publications, parent, false);
 
         return new ViewHolderComments(view);
     }
@@ -48,12 +49,17 @@ public class commentsAdapter extends RecyclerView.Adapter<commentsAdapter.ViewHo
         holder.txthora.setText(listaComentarios.get(position).getHora());
 
         // To get and set the image from the comments
+       /*
         String imgCommentsUser = listaComentarios.get(position).getAvatar();
         Picasso.get().load(imgCommentsUser)
                 .fit()
                 .centerCrop()
                 .transform(new CircleTransform())
                 .into(holder.imagen_usuario);
+        */
+
+
+
     }
 
     @Override
